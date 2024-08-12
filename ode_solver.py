@@ -14,6 +14,6 @@ def ode_solver(ic, bc, vector_to_be_solved):
     
     time_span=(0,1)
     # Solve the system of ODEs
-    solution = solve_ivp(vector_to_be_solved, time_span, y0, method='RK45')
+    solution = solve_ivp(vector_to_be_solved, time_span, y0, method='Radau')
     
     return solution

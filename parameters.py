@@ -6,7 +6,7 @@ dt=0.2 # fixed time step
 L = 172  # Length of the spatial domain, m
 N = 200  # Number of spatial points
 dz = L / (N - 1)    # Spatial step size
-V = 4e6             
+V = 4e5             
 D = 0.390016          
 sigma_a =0.0835           
 nu_sigma_f = 3.33029e-2        
@@ -48,7 +48,7 @@ initialG = (bc_g0 + (bc_gL - bc_g0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0
 Nx = N  # Number of spatial points
 L_HX = 2    # length of the spatial domain
 dx = L / (N - 1)    # Spatial step size
-V_s0 = Vc   # Salt velocity in the core m/s
+# V_s0 = Vc   # Salt velocity in the core m/s
 V_he_s = 75.7 * 1e-3 / 23.6 #0.003207627118644068 m/s
 V_he_ss = 53.6 * 1e-3 / 23.6    # 0.002271186440677966 m/s
 U_hx = 82800    # Heat transfer coefficient between primary and secondary salt, W/K
@@ -64,6 +64,23 @@ v_H = 866.45
 u_init = u_L + (u_H - u_L) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L_HX, Nx) / L_HX - 0.5)))
 v_init = v_L + (v_H - v_L) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L_HX, Nx) / L_HX - 0.5)))
 
+# Heat Exchanger 2, TODO: change the parameters
+L_HX2 = 2    # length of the spatial domain
+V_he2_s = 53.6 * 1e-3 / 23.6 #0.003207627118644068 m/s
+V_he2_ss = 33.6 * 1e-3 / 23.6    # 0.002271186440677966 m/s
+U2_hx = 82800    # Heat transfer coefficient between primary and secondary salt, W/K
+M_he2_s = 117    # Mass of salt in the heat exchanger (fuel side), kg
+M_he2_ss = 100   # Mass of salt in the heat exchanger (coolant side), kg
+c_p_sss = 2416   # Specific heat of secondary salt, J/kg/K
+# Initial conditions
+u2_L = 824
+u2_H = 866
+v2_L = 744
+v2_H = 786
+# initial conditions using a sine function
+u2_init = u2_L + (u2_H - u2_L) * (0.5 + 0.7 * np.sin(np.pi * (np.linspace(0, L_HX2, Nx) / L_HX2 - 0.5)))
+v2_init = v2_L + (v2_H - v2_L) * (0.5 + 0.7 * np.sin(np.pi * (np.linspace(0, L_HX2, Nx) / L_HX2 - 0.5)))
+
 # Reactivity
 alpha_f    = -5.904E-5  # U233 (drho/K) fuel salt temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -5.904E-05; % ORNL-TM-0728 p. 101 %
 alpha_g    = -6.624E-5  # U233  (drho/K) graphite temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -6.624E-05; % ORNL-TM-0728 p.101
@@ -76,8 +93,12 @@ tau_hx_c = 9 # (sec) delay from hx to core TDAMSRE p.6
 tau_c_hx = 4 # (sec) subtracted 1 sec for external loop power generation node resident time; delay from core to fuel hx TDAMSRE p.6
 tau_hx_r = 5 # (sec) fertile hx to core TDAMSRE p.6
 tau_r_hx = 8 # (sec) core to fertile hx TDAMSRE p.6
+tau_r_pp = 10 # TODO:delay from HX2 to the power plant, to be fixed
+tau_pp_r = 10 # TODO:delay from the power plant to HX2, to be fixed
 # Initial conditions - DONE
-Ts_in=910
-Ts_out=958.15
+Ts_in=bc_s0
+Ts_out=bc_sL
 Tss_in=v_L
 Tss_out=v_H
+Tsss_in=v2_L
+Tsss_out=v2_H
