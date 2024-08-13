@@ -1,4 +1,5 @@
 import numpy as np
+import os
 from scipy.integrate import solve_ivp
 from scipy.sparse import diags, csc_matrix
 from scipy.sparse.linalg import spsolve
@@ -101,8 +102,10 @@ for step in range (time_span):
 
 # plot phi to axis N
 z = np.linspace(0, L, N)
+os.chdir('plotting')
+
 fig, ax = plt.subplots(2, 2, figsize=(14, 6))
-im1 = ax[0, 0].plot(z, phi)
+ax[0, 0].plot(z, phi)
 ax[0, 0].set_title('Neutron Flux')
 
 for i in range(6):
@@ -115,8 +118,12 @@ ax[1, 0].set_title('Reactivity')
 ax[1, 1].plot(z, temperature_fuel, label='Fuel')
 ax[1, 1].plot(z, temperature_graphite, label='Graphite')
 ax[1, 1].set_title('Temperature in the core')
-plt.show()
 
+plt.tight_layout()
+plt.savefig('neutron_flux_and_precursors.png')  # Save the figure
+plt.close(fig)  # Close the figure to free memory
+
+# Second plot: Temperature in the heat exchangers
 fig, ax = plt.subplots(2, 2, figsize=(14, 6))
 ax[0, 0].plot(z, Ts_HX1, label='Salt')
 ax[0, 0].plot(z, Tss_HX1, label='Coolant')
@@ -131,10 +138,17 @@ ax[1, 0].set_title('Neutron Flux with time in the middle')
 
 ax[1, 1].plot(temperature_fuel_middle_matrix)
 ax[1, 1].set_title('Temperature in the core with time in the middle')
-plt.show()
 
-figsize=(14, 6)
+plt.tight_layout()
+plt.savefig('temperature_in_heat_exchangers.png')  # Save the figure
+plt.close(fig)  # Close the figure to free memory
+
+# Third plot: Delayed Neutron Precursors with time in the middle
+fig, ax = plt.subplots(figsize=(14, 6))
 for i in range(6):
-    ax[1, 1].plot(ci_middle_matrix[i*N:(i+1)*N], label=f'Ci{i+1}')
-ax[1, 1].set_title('Delayed Neutron Precursors with time in the middle')
-plt.show()
+    ax.plot(ci_middle_matrix[i*N:(i+1)*N], label=f'Ci{i+1}')
+ax.set_title('Delayed Neutron Precursors with time in the middle')
+
+plt.tight_layout()
+plt.savefig('precursors_with_time_middle.png')  # Save the figure
+plt.close(fig)  # Close the figure
