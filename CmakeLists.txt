@@ -1,0 +1,19 @@
+cmake_minimum_required(VERSION 3.10)
+
+# Project name
+project(MSR1DCPP)
+
+# Set the C++ standard
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+# Add include directory to the compiler's search path
+include_directories("${CMAKE_SOURCE_DIR}/include")
+
+# Collect all source files in the src directory
+file(GLOB SOURCES "src/*.cpp")
+
+# Add the executable
+add_executable(test ${SOURCES})
+
+
