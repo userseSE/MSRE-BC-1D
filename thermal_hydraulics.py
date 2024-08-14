@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.integrate import solve_ivp
+from scipy.sparse.linalg import spsolve
 
 from parameters import *
 from ode_solver import ode_solver
@@ -20,6 +21,7 @@ AT[0, 0] = 1
 AT[-1, -1] = -1
 AT=AT/dz**2
 # print(AT)
+AT_sparse = csc_matrix(AT)
 
 def thermal_hydraulics(y_th, q_prime, Ts_core_0, step):
     # print(y_th.shape)
@@ -30,7 +32,7 @@ def thermal_hydraulics(y_th, q_prime, Ts_core_0, step):
         temperature_fuel = y[:N]
         temperature_graphite = y[N:]
         
-        temperature_fuel_dt = a_th * (AT @ temperature_fuel) + b_th * (temperature_graphite-temperature_fuel)+d_th*q_prime.T
+        temperature_fuel_dt = a_th * (AT_sparse @ temperature_fuel) + b_th * (temperature_graphite-temperature_fuel)+d_th*q_prime.T
         temperature_graphite_dt = c_th * (temperature_fuel-temperature_graphite) + e_th * q_prime.T
         
         # Apply time-varying boundary conditions
