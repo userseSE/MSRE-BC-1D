@@ -12,8 +12,8 @@ d_th = L * gamma / (Ms * c_p_s)
 e_th = L * (1 - gamma) / (Mg * c_p_g)
 
 # discretize the spatial domain
-# AT=np.diag(-np.ones(N))+ np.diag(np.ones(N-1), 1)
-AT=np.diag(-np.ones(N))+ np.diag(np.ones(N-1), 1)+ np.diag(np.ones(N-1), -1)
+AT=np.diag(-np.ones(N))+ np.diag(np.ones(N-1), 1)
+# AT=np.diag(-np.ones(N))+ np.diag(np.ones(N-1), 1)+ np.diag(np.ones(N-1), -1)
 AT[0, :] = 0
 AT[-1,:] = 0
 AT[0, 0] = 1

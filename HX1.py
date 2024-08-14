@@ -13,7 +13,8 @@ C3 = V_he_ss
 C4 = U_hx / (M_he_ss * c_p_ss)
 
 # Discretize the spatial domain
-A_HX = (-2*np.diag(np.ones(Nx)) + np.diag(np.ones(Nx - 1), 1) + np.diag(np.ones(Nx - 1), -1)) / dx
+A_HX=np.diag(-np.ones(Nx))+ np.diag(np.ones(Nx-1), 1) / dx
+# A_HX = (-2*np.diag(np.ones(Nx)) + np.diag(np.ones(Nx - 1), 1) + np.diag(np.ones(Nx - 1), -1)) / dx
 A_HX[0, 0] = 1 / dx
 A_HX[-1, -1] = 1 / dx
 
