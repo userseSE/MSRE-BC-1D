@@ -60,14 +60,19 @@ const double U_hx = 82800;
 const double M_he_s = 342;
 const double M_he_ss = 117;
 const double c_p_ss = 2416;
+// Initial conditions
+const double u_L = 908.15;
+const double u_H = 958;
+const double v_L = 824.85;
+const double v_H = 866.45;
 double u_init[Nx];
 double v_init[Nx];
 
 void initialize_heat_exchanger_1() {
     for (int i = 0; i < Nx; ++i) {
         double position = static_cast<double>(i) * L_HX / (Nx - 1);
-        u_init[i] = bc_s0 + (bc_sL - bc_s0) * (0.5 + 0.5 * std::sin(M_PI * (position / L_HX - 0.5)));
-        v_init[i] = bc_g0 + (bc_gL - bc_g0) * (0.5 + 0.5 * std::sin(M_PI * (position / L_HX - 0.5)));
+        u_init[i] = u_L + (u_L - u_H) * (0.5 + 0.5 * std::sin(M_PI * (position / L_HX - 0.5)));
+        v_init[i] = v_L + (v_L - v_H) * (0.5 + 0.5 * std::sin(M_PI * (position / L_HX - 0.5)));
     }
 }
 
@@ -79,14 +84,19 @@ const double U2_hx = 82800;
 const double M_he2_s = 117;
 const double M_he2_ss = 100;
 const double c_p_sss = 2416;
+// Initial conditions
+const double u2_L = 824;
+const double u2_H = 866;
+const double v2_L = 744;
+const double v2_H = 786;
 double u2_init[Nx];
 double v2_init[Nx];
 
 void initialize_heat_exchanger_2() {
     for (int i = 0; i < Nx; ++i) {
         double position = static_cast<double>(i) * L_HX2 / (Nx - 1);
-        u2_init[i] = bc_s0 + (bc_sL - bc_s0) * (0.5 + 0.7 * std::sin(M_PI * (position / L_HX2 - 0.5)));
-        v2_init[i] = bc_g0 + (bc_gL - bc_g0) * (0.5 + 0.7 * std::sin(M_PI * (position / L_HX2 - 0.5)));
+        u2_init[i] = u2_L + (u2_H - u2_L) * (0.5 + 0.7 * std::sin(M_PI * (position / L_HX2 - 0.5)));
+        v2_init[i] = v2_L + (v2_H - v2_L) * (0.5 + 0.7 * std::sin(M_PI * (position / L_HX2 - 0.5)));
     }
 }
 

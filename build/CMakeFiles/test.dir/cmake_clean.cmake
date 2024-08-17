@@ -11,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/test.dir/src/ode_solver.cpp.o.d"
   "CMakeFiles/test.dir/src/parameters.cpp.o"
   "CMakeFiles/test.dir/src/parameters.cpp.o.d"
+  "CMakeFiles/test.dir/src/plotting.cpp.o"
+  "CMakeFiles/test.dir/src/plotting.cpp.o.d"
   "CMakeFiles/test.dir/src/power_plant.cpp.o"
   "CMakeFiles/test.dir/src/power_plant.cpp.o.d"
   "CMakeFiles/test.dir/src/reactivity.cpp.o"

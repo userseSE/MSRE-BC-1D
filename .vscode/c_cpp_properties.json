@@ -4,7 +4,9 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/include",
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/thirdparty/eigen",
+                "${workspaceFolder}/thirdparty/matplotlibcpp"
             ],
             "defines": [],
             "macFrameworkPath": [

@@ -47,6 +47,10 @@ extern const double U_hx;
 extern const double M_he_s;
 extern const double M_he_ss;
 extern const double c_p_ss;
+extern const double u_L;
+extern const double u_H;
+extern const double v_L;
+extern const double v_H;
 extern double u_init[Nx];
 extern double v_init[Nx];
 
@@ -58,6 +62,10 @@ extern const double U2_hx;
 extern const double M_he2_s;
 extern const double M_he2_ss;
 extern const double c_p_sss;
+extern const double u2_L;
+extern const double u2_H;
+extern const double v2_L;
+extern const double v2_H;
 extern double u2_init[Nx];
 extern double v2_init[Nx];
 
