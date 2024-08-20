@@ -3,8 +3,8 @@
 
 #include <array>
 
-constexpr int N = 200;  // spatial descretization
-constexpr int Nx = N;  // spatial descretization
+const int N = 200;  // spatial descretization
+const int Nx = N;  // spatial descretization
 
 // Neutronics
 extern const double dt;
@@ -90,5 +90,7 @@ extern const double Tss_in;
 extern const double Tss_out;
 extern const double Tsss_in;
 extern const double Tsss_out;
+
+void initialize_parameters();
 
 #endif // PARAMETERS_HPP

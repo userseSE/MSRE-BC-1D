@@ -11,8 +11,10 @@ def plot_csv(filename, title, xlabel='', ylabel=''):
     if len(data.shape) == 1:
         plt.plot(data)
     else:
+        print(title)
+        print(data.shape)
         for i in range(data.shape[1]):
-            plt.plot(data[:, i], label=f'Column {i+1}')
+            plt.plot(data[:,i], label=f'Column {i+1}')
         plt.legend()
     plt.title(title)
     plt.xlabel(xlabel)
@@ -26,9 +28,9 @@ plot_csv('temperature_fuel_middle_matrix.csv', 'Temperature in the Core Middle')
 
 plot_csv('phi.csv', 'Neutron Flux')
 plot_csv('ci.csv', 'Delayed Neutron Precursors')
-plot_csv('temperature_fuel.csv', 'Temperature in the Fuel')
-plot_csv('temperature_graphite.csv', 'Temperature in the Graphite')
-plot_csv('Ts_HX1.csv', 'Temperature in Heat Exchanger 1 (Ts_HX1)')
-plot_csv('Tss_HX1.csv', 'Temperature in Heat Exchanger 1 (Tss_HX1)')
-plot_csv('Tss_HX2.csv', 'Temperature in Heat Exchanger 2 (Tss_HX2)')
-plot_csv('Tsss_HX2.csv', 'Temperature in Heat Exchanger 2 (Tsss_HX2)')
+plot_csv('temperature_core.csv', 'Temperature in the core')
+# plot_csv('temperature_graphite.csv', 'Temperature in the Graphite')
+plot_csv('temperature_HX1.csv', 'Temperature in Heat Exchanger 1')
+# plot_csv('Tss_HX1.csv', 'Temperature in Heat Exchanger 1 (Tss_HX1)')
+plot_csv('temperature_HX2.csv', 'Temperature in Heat Exchanger 2')
+# plot_csv('Tsss_HX2.csv', 'Temperature in Heat Exchanger 2 (Tsss_HX2)')

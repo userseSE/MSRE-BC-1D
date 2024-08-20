@@ -17,13 +17,13 @@
 #include "data_saving.hpp"
 
 int main() {
-    int time_span = 100;
+    int time_span = 100000;
 
     double rho_insertion = 0.0;  // pcm
 
     // Initialization
     double rho = 0.0;
-    
+    initialize_parameters();
     std::vector<double> y_n(7 * N, 0.0);
     std::vector<double> q_prime(N, 0.0);
     std::vector<double> y_th(2 * N, 0.0);

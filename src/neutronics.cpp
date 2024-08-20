@@ -90,7 +90,7 @@ std::pair<std::vector<double>, std::vector<double>> neutronics(const std::vector
     } else {
         y0 = y_n;
     }
-    // std::cout << y0.size() << std::endl;
+    // std::cout << y0.back() << std::endl;
     // Solve the system of ODEs
     std::vector<double> solution_y_n = ode_solver(y0, {}, pde_to_ode_neutronics);
     // std::cout << solution_y_n.size() << std::endl;

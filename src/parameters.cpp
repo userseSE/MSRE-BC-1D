@@ -2,6 +2,8 @@
 #include <cmath>    // for sin function
 #include <numeric>  // for accumulate function
 #include <algorithm> // for fill_n
+#include <vector>
+#include <iostream>
 
 // Neutronics
 const double dt = 0.2;
