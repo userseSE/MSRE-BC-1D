@@ -14,8 +14,8 @@
                 "/Library/Frameworks"
             ],
             "compilerPath": "/usr/bin/clang++ -I${workspaceFolder}/include",
-            "cStandard": "c11",
-            "cppStandard": "c++11",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
             "intelliSenseMode": "macos-clang-x64"
         }
     ],

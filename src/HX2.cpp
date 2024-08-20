@@ -86,8 +86,8 @@ std::vector<double> HX2(std::vector<double>& y_hx2, double Ts_HX2_L, double Tss_
     }
 
     // Solve the ODE system
-    std::vector<std::vector<double>> solution_y_hx2 = ode_solver(y0, {}, pde_to_ode_hx2);
+    std::vector<double> solution_y_hx2 = ode_solver(y0, {}, pde_to_ode_hx2);
     
     // Return the solution at the last time step
-    return solution_y_hx2.back();
+    return solution_y_hx2;
 }

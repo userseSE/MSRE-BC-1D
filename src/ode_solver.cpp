@@ -9,13 +9,13 @@
 // Here we'll assume a simple Euler method for demonstration. You would need to implement
 // or use a library for Radau if required.
 
-std::vector<std::vector<double>> ode_solver(const std::vector<double>& ic, 
+std::vector<double> ode_solver(const std::vector<double>& ic, 
                                             const std::vector<double>& bc, 
                                             ODEFunction vector_to_be_solved) {
     // Initial condition vector
     std::vector<double> y = ic;
     std::vector<std::vector<double>> solution;
-    
+    std::vector<double> results;
     // Time vector
     int time_steps = static_cast<int>(1.0 / dt);
     double t = 0.0;
@@ -33,6 +33,7 @@ std::vector<std::vector<double>> ode_solver(const std::vector<double>& ic,
         t += dt;
         solution.push_back(y);
     }
-    
-    return solution;
+
+    results=solution.back();
+    return results;
 }

@@ -3,12 +3,13 @@
 
 #include <vector>
 #include <functional>
+#include <functional>
 
 // Function signature for the ODE system to be solved
 using ODEFunction = std::function<std::vector<double>(double, const std::vector<double>&)>;
 
 // Solver function declaration
-std::vector<std::vector<double>> ode_solver(const std::vector<double>& ic, 
+std::vector<double> ode_solver(const std::vector<double>& ic, 
                                             const std::vector<double>& bc, 
                                             ODEFunction vector_to_be_solved);
 

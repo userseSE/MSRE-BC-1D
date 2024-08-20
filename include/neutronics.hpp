@@ -5,7 +5,7 @@
 #include <functional>
 
 // Function to solve the neutronics problem
-std::pair<std::vector<double>, std::vector<double>> neutronics(const std::vector<double>& y_n, 
+std::pair<std::vector<double>, std::vector<double> > neutronics(const std::vector<double>& y_n, 
                                                                double rho, int step);
 
 #endif // NEUTRONICS_HPP
