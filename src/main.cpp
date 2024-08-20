@@ -106,7 +106,7 @@ int main() {
     // Plotting
     // std::cout << "Plotting results..." << std::endl;
     save_results(rho_matrix, phi_middle_matrix, ci_middle_matrix, temperature_fuel_middle_matrix);
-    std::cout << "Results have been plotted." << std::endl;
+    // std::cout << "Results have been plotted." << std::endl;
     save_spacial_results(phi, ci, temperature_fuel, temperature_graphite, Ts_HX1, Tss_HX1, Tss_HX2, Tsss_HX2);
     return 0;
 }

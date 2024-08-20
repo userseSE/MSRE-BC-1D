@@ -4,7 +4,7 @@
 # compile CXX with /Users/ouuyou/miniforge/bin/arm64-apple-darwin20.0.0-clang++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen -I/Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/matplotlibcpp -I/Users/ouuyou/miniforge/include/python3.10 -I/Users/ouuyou/miniforge/lib/python3.10/site-packages/numpy/core/include -I/Users/ouuyou/Project/Projects_development/MSR1DCpp/include
+CXX_INCLUDES = -I/Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen -I/Users/ouuyou/Project/Projects_development/MSR1DCpp/include -I/Users/ouuyou/Project/Projects_development/MSR1DCpp/dataset
 
 CXX_FLAGSarm64 = -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -fmessage-length=0 -isystem /Users/ouuyou/miniforge/include -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
 

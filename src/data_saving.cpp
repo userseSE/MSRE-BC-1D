@@ -3,14 +3,16 @@
 
 #include <filesystem> // C++17
 #include <fstream>
+#include <iostream>
 #include <vector>
 #include <string>
 
 namespace fs = std::filesystem;
 
 void export_to_csv(const std::vector<double>& data, const std::string& filename) {
+    // std::cout << "Exporting to CSV file: " << filename << std::endl;
     fs::create_directories("dataset");  // Create "dataset" folder if it doesn't exist
-    std::ofstream file("dataset/" + filename);
+    std::ofstream file("../dataset/" + filename);
     for (const auto& value : data) {
         file << value << "\n";
     }
@@ -19,7 +21,7 @@ void export_to_csv(const std::vector<double>& data, const std::string& filename)
 
 void export_matrix_to_csv(const std::vector<std::vector<double>>& matrix, const std::string& filename) {
     fs::create_directories("dataset");  // Create "dataset" folder if it doesn't exist
-    std::ofstream file("dataset/" + filename);
+    std::ofstream file("../dataset/" + filename);
     for (const auto& row : matrix) {
         for (size_t i = 0; i < row.size(); ++i) {
             file << row[i];
@@ -30,6 +32,7 @@ void export_matrix_to_csv(const std::vector<std::vector<double>>& matrix, const 
         file << "\n";
     }
     file.close();
+    // std::cout << "Current working directory: " << std::filesystem::current_path() << std::endl;
 }
 
 void save_results(const std::vector<double>& rho_matrix, 
@@ -41,6 +44,7 @@ void save_results(const std::vector<double>& rho_matrix,
     export_to_csv(phi_middle_matrix, "phi_middle_matrix.csv");
     export_matrix_to_csv(ci_middle_matrix, "ci_middle_matrix.csv");
     export_to_csv(temperature_fuel_middle_matrix, "temperature_fuel_middle_matrix.csv");
+    // std::cout << "Results saved to CSV files." << std::endl;
 }
 
 void save_spacial_results(const std::vector<double>& phi, 

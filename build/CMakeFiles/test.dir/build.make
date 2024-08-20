@@ -97,10 +97,24 @@ CMakeFiles/test.dir/src/HX2.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/test.dir/src/HX2.cpp.s"
 	/Users/ouuyou/miniforge/bin/arm64-apple-darwin20.0.0-clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/HX2.cpp -o CMakeFiles/test.dir/src/HX2.cpp.s
 
+CMakeFiles/test.dir/src/data_saving.cpp.o: CMakeFiles/test.dir/flags.make
+CMakeFiles/test.dir/src/data_saving.cpp.o: /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/data_saving.cpp
+CMakeFiles/test.dir/src/data_saving.cpp.o: CMakeFiles/test.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ouuyou/Project/Projects_development/MSR1DCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/test.dir/src/data_saving.cpp.o"
+	/Users/ouuyou/miniforge/bin/arm64-apple-darwin20.0.0-clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/test.dir/src/data_saving.cpp.o -MF CMakeFiles/test.dir/src/data_saving.cpp.o.d -o CMakeFiles/test.dir/src/data_saving.cpp.o -c /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/data_saving.cpp
+
+CMakeFiles/test.dir/src/data_saving.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/test.dir/src/data_saving.cpp.i"
+	/Users/ouuyou/miniforge/bin/arm64-apple-darwin20.0.0-clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/data_saving.cpp > CMakeFiles/test.dir/src/data_saving.cpp.i
+
+CMakeFiles/test.dir/src/data_saving.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/test.dir/src/data_saving.cpp.s"
+	/Users/ouuyou/miniforge/bin/arm64-apple-darwin20.0.0-clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/data_saving.cpp -o CMakeFiles/test.dir/src/data_saving.cpp.s
+
 CMakeFiles/test.dir/src/main.cpp.o: CMakeFiles/test.dir/flags.make
 CMakeFiles/test.dir/src/main.cpp.o: /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/main.cpp
 CMakeFiles/test.dir/src/main.cpp.o: CMakeFiles/test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ouuyou/Project/Projects_development/MSR1DCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/test.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ouuyou/Project/Projects_development/MSR1DCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/test.dir/src/main.cpp.o"
 	/Users/ouuyou/miniforge/bin/arm64-apple-darwin20.0.0-clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/test.dir/src/main.cpp.o -MF CMakeFiles/test.dir/src/main.cpp.o.d -o CMakeFiles/test.dir/src/main.cpp.o -c /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/main.cpp
 
 CMakeFiles/test.dir/src/main.cpp.i: cmake_force
@@ -114,7 +128,7 @@ CMakeFiles/test.dir/src/main.cpp.s: cmake_force
 CMakeFiles/test.dir/src/neutronics.cpp.o: CMakeFiles/test.dir/flags.make
 CMakeFiles/test.dir/src/neutronics.cpp.o: /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/neutronics.cpp
 CMakeFiles/test.dir/src/neutronics.cpp.o: CMakeFiles/test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ouuyou/Project/Projects_development/MSR1DCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/test.dir/src/neutronics.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ouuyou/Project/Projects_development/MSR1DCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/test.dir/src/neutronics.cpp.o"
 	/Users/ouuyou/miniforge/bin/arm64-apple-darwin20.0.0-clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/test.dir/src/neutronics.cpp.o -MF CMakeFiles/test.dir/src/neutronics.cpp.o.d -o CMakeFiles/test.dir/src/neutronics.cpp.o -c /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/neutronics.cpp
 
 CMakeFiles/test.dir/src/neutronics.cpp.i: cmake_force
@@ -128,7 +142,7 @@ CMakeFiles/test.dir/src/neutronics.cpp.s: cmake_force
 CMakeFiles/test.dir/src/ode_solver.cpp.o: CMakeFiles/test.dir/flags.make
 CMakeFiles/test.dir/src/ode_solver.cpp.o: /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/ode_solver.cpp
 CMakeFiles/test.dir/src/ode_solver.cpp.o: CMakeFiles/test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ouuyou/Project/Projects_development/MSR1DCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/test.dir/src/ode_solver.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ouuyou/Project/Projects_development/MSR1DCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/test.dir/src/ode_solver.cpp.o"
 	/Users/ouuyou/miniforge/bin/arm64-apple-darwin20.0.0-clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/test.dir/src/ode_solver.cpp.o -MF CMakeFiles/test.dir/src/ode_solver.cpp.o.d -o CMakeFiles/test.dir/src/ode_solver.cpp.o -c /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/ode_solver.cpp
 
 CMakeFiles/test.dir/src/ode_solver.cpp.i: cmake_force
@@ -142,7 +156,7 @@ CMakeFiles/test.dir/src/ode_solver.cpp.s: cmake_force
 CMakeFiles/test.dir/src/parameters.cpp.o: CMakeFiles/test.dir/flags.make
 CMakeFiles/test.dir/src/parameters.cpp.o: /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/parameters.cpp
 CMakeFiles/test.dir/src/parameters.cpp.o: CMakeFiles/test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ouuyou/Project/Projects_development/MSR1DCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/test.dir/src/parameters.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ouuyou/Project/Projects_development/MSR1DCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/test.dir/src/parameters.cpp.o"
 	/Users/ouuyou/miniforge/bin/arm64-apple-darwin20.0.0-clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/test.dir/src/parameters.cpp.o -MF CMakeFiles/test.dir/src/parameters.cpp.o.d -o CMakeFiles/test.dir/src/parameters.cpp.o -c /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/parameters.cpp
 
 CMakeFiles/test.dir/src/parameters.cpp.i: cmake_force
@@ -152,20 +166,6 @@ CMakeFiles/test.dir/src/parameters.cpp.i: cmake_force
 CMakeFiles/test.dir/src/parameters.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/test.dir/src/parameters.cpp.s"
 	/Users/ouuyou/miniforge/bin/arm64-apple-darwin20.0.0-clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/parameters.cpp -o CMakeFiles/test.dir/src/parameters.cpp.s
-
-CMakeFiles/test.dir/src/plotting.cpp.o: CMakeFiles/test.dir/flags.make
-CMakeFiles/test.dir/src/plotting.cpp.o: /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/plotting.cpp
-CMakeFiles/test.dir/src/plotting.cpp.o: CMakeFiles/test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/ouuyou/Project/Projects_development/MSR1DCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/test.dir/src/plotting.cpp.o"
-	/Users/ouuyou/miniforge/bin/arm64-apple-darwin20.0.0-clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/test.dir/src/plotting.cpp.o -MF CMakeFiles/test.dir/src/plotting.cpp.o.d -o CMakeFiles/test.dir/src/plotting.cpp.o -c /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/plotting.cpp
-
-CMakeFiles/test.dir/src/plotting.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/test.dir/src/plotting.cpp.i"
-	/Users/ouuyou/miniforge/bin/arm64-apple-darwin20.0.0-clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/plotting.cpp > CMakeFiles/test.dir/src/plotting.cpp.i
-
-CMakeFiles/test.dir/src/plotting.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/test.dir/src/plotting.cpp.s"
-	/Users/ouuyou/miniforge/bin/arm64-apple-darwin20.0.0-clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/plotting.cpp -o CMakeFiles/test.dir/src/plotting.cpp.s
 
 CMakeFiles/test.dir/src/power_plant.cpp.o: CMakeFiles/test.dir/flags.make
 CMakeFiles/test.dir/src/power_plant.cpp.o: /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/power_plant.cpp
@@ -227,11 +227,11 @@ CMakeFiles/test.dir/src/transport_delay.cpp.s: cmake_force
 test_OBJECTS = \
 "CMakeFiles/test.dir/src/HX1.cpp.o" \
 "CMakeFiles/test.dir/src/HX2.cpp.o" \
+"CMakeFiles/test.dir/src/data_saving.cpp.o" \
 "CMakeFiles/test.dir/src/main.cpp.o" \
 "CMakeFiles/test.dir/src/neutronics.cpp.o" \
 "CMakeFiles/test.dir/src/ode_solver.cpp.o" \
 "CMakeFiles/test.dir/src/parameters.cpp.o" \
-"CMakeFiles/test.dir/src/plotting.cpp.o" \
 "CMakeFiles/test.dir/src/power_plant.cpp.o" \
 "CMakeFiles/test.dir/src/reactivity.cpp.o" \
 "CMakeFiles/test.dir/src/thermal_hydraulics.cpp.o" \
@@ -242,17 +242,16 @@ test_EXTERNAL_OBJECTS =
 
 test: CMakeFiles/test.dir/src/HX1.cpp.o
 test: CMakeFiles/test.dir/src/HX2.cpp.o
+test: CMakeFiles/test.dir/src/data_saving.cpp.o
 test: CMakeFiles/test.dir/src/main.cpp.o
 test: CMakeFiles/test.dir/src/neutronics.cpp.o
 test: CMakeFiles/test.dir/src/ode_solver.cpp.o
 test: CMakeFiles/test.dir/src/parameters.cpp.o
-test: CMakeFiles/test.dir/src/plotting.cpp.o
 test: CMakeFiles/test.dir/src/power_plant.cpp.o
 test: CMakeFiles/test.dir/src/reactivity.cpp.o
 test: CMakeFiles/test.dir/src/thermal_hydraulics.cpp.o
 test: CMakeFiles/test.dir/src/transport_delay.cpp.o
 test: CMakeFiles/test.dir/build.make
-test: /Users/ouuyou/miniforge/lib/libpython3.10.dylib
 test: CMakeFiles/test.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/ouuyou/Project/Projects_development/MSR1DCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable test"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/test.dir/link.txt --verbose=$(VERBOSE)

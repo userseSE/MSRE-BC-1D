@@ -177,6 +177,30 @@ src/HX2.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/HX2.cpp.s
 .PHONY : src/HX2.cpp.s
 
+src/data_saving.o: src/data_saving.cpp.o
+.PHONY : src/data_saving.o
+
+# target to build an object file
+src/data_saving.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/data_saving.cpp.o
+.PHONY : src/data_saving.cpp.o
+
+src/data_saving.i: src/data_saving.cpp.i
+.PHONY : src/data_saving.i
+
+# target to preprocess a source file
+src/data_saving.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/data_saving.cpp.i
+.PHONY : src/data_saving.cpp.i
+
+src/data_saving.s: src/data_saving.cpp.s
+.PHONY : src/data_saving.s
+
+# target to generate assembly for a file
+src/data_saving.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/data_saving.cpp.s
+.PHONY : src/data_saving.cpp.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -272,30 +296,6 @@ src/parameters.s: src/parameters.cpp.s
 src/parameters.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/parameters.cpp.s
 .PHONY : src/parameters.cpp.s
-
-src/plotting.o: src/plotting.cpp.o
-.PHONY : src/plotting.o
-
-# target to build an object file
-src/plotting.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/plotting.cpp.o
-.PHONY : src/plotting.cpp.o
-
-src/plotting.i: src/plotting.cpp.i
-.PHONY : src/plotting.i
-
-# target to preprocess a source file
-src/plotting.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/plotting.cpp.i
-.PHONY : src/plotting.cpp.i
-
-src/plotting.s: src/plotting.cpp.s
-.PHONY : src/plotting.s
-
-# target to generate assembly for a file
-src/plotting.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/plotting.cpp.s
-.PHONY : src/plotting.cpp.s
 
 src/power_plant.o: src/power_plant.cpp.o
 .PHONY : src/power_plant.o
@@ -408,6 +408,9 @@ help:
 	@echo "... src/HX2.o"
 	@echo "... src/HX2.i"
 	@echo "... src/HX2.s"
+	@echo "... src/data_saving.o"
+	@echo "... src/data_saving.i"
+	@echo "... src/data_saving.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
@@ -420,9 +423,6 @@ help:
 	@echo "... src/parameters.o"
 	@echo "... src/parameters.i"
 	@echo "... src/parameters.s"
-	@echo "... src/plotting.o"
-	@echo "... src/plotting.i"
-	@echo "... src/plotting.s"
 	@echo "... src/power_plant.o"
 	@echo "... src/power_plant.i"
 	@echo "... src/power_plant.s"
