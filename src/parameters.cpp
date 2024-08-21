@@ -21,7 +21,7 @@ double phi_0[N];
 double c0[N];
 
 void initialize_neutronics() {
-    std::fill_n(phi_0, N, 522654);  // Initialize phi_0 with 522654
+    std::fill_n(phi_0, N, 5226.54);  // Initialize phi_0 with 522654
 
     double lambda_sum = std::accumulate(lambda_i.begin(), lambda_i.end(), 0.0);
 

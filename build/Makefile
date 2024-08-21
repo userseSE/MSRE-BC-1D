@@ -321,6 +321,30 @@ src/power_plant.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/power_plant.cpp.s
 .PHONY : src/power_plant.cpp.s
 
+src/radau.o: src/radau.cpp.o
+.PHONY : src/radau.o
+
+# target to build an object file
+src/radau.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/radau.cpp.o
+.PHONY : src/radau.cpp.o
+
+src/radau.i: src/radau.cpp.i
+.PHONY : src/radau.i
+
+# target to preprocess a source file
+src/radau.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/radau.cpp.i
+.PHONY : src/radau.cpp.i
+
+src/radau.s: src/radau.cpp.s
+.PHONY : src/radau.s
+
+# target to generate assembly for a file
+src/radau.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/radau.cpp.s
+.PHONY : src/radau.cpp.s
+
 src/reactivity.o: src/reactivity.cpp.o
 .PHONY : src/reactivity.o
 
@@ -344,6 +368,54 @@ src/reactivity.s: src/reactivity.cpp.s
 src/reactivity.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/reactivity.cpp.s
 .PHONY : src/reactivity.cpp.s
+
+src/rkf45.o: src/rkf45.cpp.o
+.PHONY : src/rkf45.o
+
+# target to build an object file
+src/rkf45.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/rkf45.cpp.o
+.PHONY : src/rkf45.cpp.o
+
+src/rkf45.i: src/rkf45.cpp.i
+.PHONY : src/rkf45.i
+
+# target to preprocess a source file
+src/rkf45.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/rkf45.cpp.i
+.PHONY : src/rkf45.cpp.i
+
+src/rkf45.s: src/rkf45.cpp.s
+.PHONY : src/rkf45.s
+
+# target to generate assembly for a file
+src/rkf45.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/rkf45.cpp.s
+.PHONY : src/rkf45.cpp.s
+
+src/solve_ivp.o: src/solve_ivp.cpp.o
+.PHONY : src/solve_ivp.o
+
+# target to build an object file
+src/solve_ivp.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/solve_ivp.cpp.o
+.PHONY : src/solve_ivp.cpp.o
+
+src/solve_ivp.i: src/solve_ivp.cpp.i
+.PHONY : src/solve_ivp.i
+
+# target to preprocess a source file
+src/solve_ivp.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/solve_ivp.cpp.i
+.PHONY : src/solve_ivp.cpp.i
+
+src/solve_ivp.s: src/solve_ivp.cpp.s
+.PHONY : src/solve_ivp.s
+
+# target to generate assembly for a file
+src/solve_ivp.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/solve_ivp.cpp.s
+.PHONY : src/solve_ivp.cpp.s
 
 src/thermal_hydraulics.o: src/thermal_hydraulics.cpp.o
 .PHONY : src/thermal_hydraulics.o
@@ -426,9 +498,18 @@ help:
 	@echo "... src/power_plant.o"
 	@echo "... src/power_plant.i"
 	@echo "... src/power_plant.s"
+	@echo "... src/radau.o"
+	@echo "... src/radau.i"
+	@echo "... src/radau.s"
 	@echo "... src/reactivity.o"
 	@echo "... src/reactivity.i"
 	@echo "... src/reactivity.s"
+	@echo "... src/rkf45.o"
+	@echo "... src/rkf45.i"
+	@echo "... src/rkf45.s"
+	@echo "... src/solve_ivp.o"
+	@echo "... src/solve_ivp.i"
+	@echo "... src/solve_ivp.s"
 	@echo "... src/thermal_hydraulics.o"
 	@echo "... src/thermal_hydraulics.i"
 	@echo "... src/thermal_hydraulics.s"

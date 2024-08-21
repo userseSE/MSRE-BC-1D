@@ -17,7 +17,7 @@
 #include "data_saving.hpp"
 
 int main() {
-    int time_span = 100000;
+    int time_span = 10;
 
     double rho_insertion = 0.0;  // pcm
 

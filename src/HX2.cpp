@@ -56,25 +56,43 @@ std::vector<double> HX2(std::vector<double>& y_hx2, double Ts_HX2_L, double Tss_
     v.front() = Tss_HX2_0;
 
     // Define the ODE system for the heat exchanger
-    auto pde_to_ode_hx2 = [&](double t, const std::vector<double>& y) {
-        VectorXd u = Eigen::Map<const VectorXd>(y.data(), Nx);
-        VectorXd v = Eigen::Map<const VectorXd>(y.data() + Nx, Nx);
+    // auto pde_to_ode_hx2 = [&](double t, const std::vector<double>& y) {
+    //     VectorXd u = Eigen::Map<const VectorXd>(y.data(), Nx);
+    //     VectorXd v = Eigen::Map<const VectorXd>(y.data() + Nx, Nx);
 
-        VectorXd du_dt = C1 * (A_HX2 * u) + C2 * (u - v);
-        VectorXd dv_dt = C3 * (A_HX2 * v) + C4 * (u - v);
+    //     VectorXd du_dt = C1 * (A_HX2 * u) + C2 * (u - v);
+    //     VectorXd dv_dt = C3 * (A_HX2 * v) + C4 * (u - v);
 
-        // Apply time-varying boundary conditions
-        du_dt[0] = u2_L - u[0];
-        du_dt[Nx - 1] = u2_H - u[Nx - 1];
-        dv_dt[0] = v2_L - v[0];
-        dv_dt[Nx - 1] = v2_H - v[Nx - 1];
+    //     // Apply time-varying boundary conditions
+    //     du_dt[0] = u2_L - u[0];
+    //     du_dt[Nx - 1] = u2_H - u[Nx - 1];
+    //     dv_dt[0] = v2_L - v[0];
+    //     dv_dt[Nx - 1] = v2_H - v[Nx - 1];
 
-        std::vector<double> dydt(2 * Nx);
-        std::copy(du_dt.data(), du_dt.data() + Nx, dydt.begin());
-        std::copy(dv_dt.data(), dv_dt.data() + Nx, dydt.begin() + Nx);
+    //     std::vector<double> dydt(2 * Nx);
+    //     std::copy(du_dt.data(), du_dt.data() + Nx, dydt.begin());
+    //     std::copy(dv_dt.data(), dv_dt.data() + Nx, dydt.begin() + Nx);
 
-        return dydt;
-    };
+    //     return dydt;
+    // };
+
+    auto pde_to_ode_hx2 = [&](double t, const std::vector<double>& y, std::vector<double>& dydt) {
+    VectorXd u = Eigen::Map<const VectorXd>(y.data(), Nx);
+    VectorXd v = Eigen::Map<const VectorXd>(y.data() + Nx, Nx);
+
+    VectorXd du_dt = C1 * (A_HX2 * u) + C2 * (u - v);
+    VectorXd dv_dt = C3 * (A_HX2 * v) + C4 * (u - v);
+
+    // Apply time-varying boundary conditions
+    du_dt[0] = u2_L - u[0];
+    du_dt[Nx - 1] = u2_H - u[Nx - 1];
+    dv_dt[0] = v2_L - v[0];
+    dv_dt[Nx - 1] = v2_H - v[Nx - 1];
+
+    std::copy(du_dt.data(), du_dt.data() + Nx, dydt.begin());
+    std::copy(dv_dt.data(), dv_dt.data() + Nx, dydt.begin() + Nx);
+};
+
 
     // Initial condition vector
     std::vector<double> y0(2 * Nx);
@@ -86,7 +104,7 @@ std::vector<double> HX2(std::vector<double>& y_hx2, double Ts_HX2_L, double Tss_
     }
 
     // Solve the ODE system
-    std::vector<double> solution_y_hx2 = ode_solver(y0, {}, pde_to_ode_hx2);
+    std::vector<double> solution_y_hx2 = ode_solver(y0, {}, pde_to_ode_hx2, dt);
     
     // Return the solution at the last time step
     return solution_y_hx2;

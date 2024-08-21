@@ -55,13 +55,35 @@ std::vector<double> HX1(std::vector<double>& y_hx1, double Ts_HX1_L, double Tss_
     u.back() = Ts_HX1_L;
     v.front() = Tss_HX1_0;
 
-    // Define the ODE system for the heat exchanger
-    auto pde_to_ode_hx1 = [&](double t, const std::vector<double>& y) {
-        VectorXd u = Eigen::Map<const VectorXd>(y.data(), Nx);
-        VectorXd v = Eigen::Map<const VectorXd>(y.data() + Nx, Nx);
+    // // Define the ODE system for the heat exchanger
+    // auto pde_to_ode_hx1 = [&](double t, const std::vector<double>& y) {
+    //     VectorXd u = Eigen::Map<const VectorXd>(y.data(), Nx);
+    //     VectorXd v = Eigen::Map<const VectorXd>(y.data() + Nx, Nx);
 
-        VectorXd du_dt = C1 * (A_HX * u) + C2 * (u - v);
-        VectorXd dv_dt = C3 * (A_HX * v) + C4 * (u - v);
+    //     VectorXd du_dt = C1 * (A_HX * u) + C2 * (u - v);
+    //     VectorXd dv_dt = C3 * (A_HX * v) + C4 * (u - v);
+
+    //     // Apply time-varying boundary conditions
+    //     du_dt[0] = u_L - u[0];
+    //     du_dt[Nx - 1] = u_H - u[Nx - 1];
+    //     dv_dt[0] = v_L - v[0];
+    //     dv_dt[Nx - 1] = v_H - v[Nx - 1];
+
+    //     std::vector<double> dydt(2 * Nx);
+    //     std::copy(du_dt.data(), du_dt.data() + Nx, dydt.begin());
+    //     std::copy(dv_dt.data(), dv_dt.data() + Nx, dydt.begin() + Nx);
+
+    //     return dydt;
+    // };
+
+    auto pde_to_ode_hx1 = [&](double t, const std::vector<double>& y, std::vector<double>& dydt) {
+    // Create Eigen vectors from the input state vector
+        Eigen::Map<const Eigen::VectorXd> u(y.data(), Nx);
+        Eigen::Map<const Eigen::VectorXd> v(y.data() + Nx, Nx);
+
+        // Calculate du/dt and dv/dt
+        Eigen::VectorXd du_dt = C1 * (A_HX * u) + C2 * (u - v);
+        Eigen::VectorXd dv_dt = C3 * (A_HX * v) + C4 * (u - v);
 
         // Apply time-varying boundary conditions
         du_dt[0] = u_L - u[0];
@@ -69,11 +91,9 @@ std::vector<double> HX1(std::vector<double>& y_hx1, double Ts_HX1_L, double Tss_
         dv_dt[0] = v_L - v[0];
         dv_dt[Nx - 1] = v_H - v[Nx - 1];
 
-        std::vector<double> dydt(2 * Nx);
+        // Copy the results into the output derivative vector
         std::copy(du_dt.data(), du_dt.data() + Nx, dydt.begin());
         std::copy(dv_dt.data(), dv_dt.data() + Nx, dydt.begin() + Nx);
-
-        return dydt;
     };
 
     // Initial condition vector
@@ -86,8 +106,12 @@ std::vector<double> HX1(std::vector<double>& y_hx1, double Ts_HX1_L, double Tss_
     }
 
     // Solve the ODE system
-    std::vector<double> solution_y_hx1 = ode_solver(y0, {}, pde_to_ode_hx1);
-    
+    // std::vector<double> solution_y_hx1 = ode_solver(y0, {}, pde_to_ode_hx1, dt);
+
+    // std::vector<double> y0_hx1 = { /* initial conditions */ };
+    // double dt_hx1 = 0.01;
+    std::vector<double> solution_y_hx1 = ode_solver(y0, {}, pde_to_ode_hx1, dt);
+
     // Return the solution at the last time step
     return solution_y_hx1;
 }

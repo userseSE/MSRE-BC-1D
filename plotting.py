@@ -11,8 +11,8 @@ def plot_csv(filename, title, xlabel='', ylabel=''):
     if len(data.shape) == 1:
         plt.plot(data)
     else:
-        print(title)
-        print(data.shape)
+        # print(title)
+        # print(data.shape)
         for i in range(data.shape[1]):
             plt.plot(data[:,i], label=f'Column {i+1}')
         plt.legend()

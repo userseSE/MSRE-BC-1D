@@ -49,9 +49,27 @@
 },
 {
   "directory": "/Users/ouuyou/Project/Projects_development/MSR1DCpp/build",
+  "command": "/Users/ouuyou/miniforge/bin/arm64-apple-darwin20.0.0-clang++  -I/Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen -I/Users/ouuyou/Project/Projects_development/MSR1DCpp/include -I/Users/ouuyou/Project/Projects_development/MSR1DCpp/dataset -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -fmessage-length=0 -isystem /Users/ouuyou/miniforge/include -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -o CMakeFiles/test.dir/src/radau.cpp.o -c /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/radau.cpp",
+  "file": "/Users/ouuyou/Project/Projects_development/MSR1DCpp/src/radau.cpp",
+  "output": "CMakeFiles/test.dir/src/radau.cpp.o"
+},
+{
+  "directory": "/Users/ouuyou/Project/Projects_development/MSR1DCpp/build",
   "command": "/Users/ouuyou/miniforge/bin/arm64-apple-darwin20.0.0-clang++  -I/Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen -I/Users/ouuyou/Project/Projects_development/MSR1DCpp/include -I/Users/ouuyou/Project/Projects_development/MSR1DCpp/dataset -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -fmessage-length=0 -isystem /Users/ouuyou/miniforge/include -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -o CMakeFiles/test.dir/src/reactivity.cpp.o -c /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/reactivity.cpp",
   "file": "/Users/ouuyou/Project/Projects_development/MSR1DCpp/src/reactivity.cpp",
   "output": "CMakeFiles/test.dir/src/reactivity.cpp.o"
+},
+{
+  "directory": "/Users/ouuyou/Project/Projects_development/MSR1DCpp/build",
+  "command": "/Users/ouuyou/miniforge/bin/arm64-apple-darwin20.0.0-clang++  -I/Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen -I/Users/ouuyou/Project/Projects_development/MSR1DCpp/include -I/Users/ouuyou/Project/Projects_development/MSR1DCpp/dataset -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -fmessage-length=0 -isystem /Users/ouuyou/miniforge/include -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -o CMakeFiles/test.dir/src/rkf45.cpp.o -c /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/rkf45.cpp",
+  "file": "/Users/ouuyou/Project/Projects_development/MSR1DCpp/src/rkf45.cpp",
+  "output": "CMakeFiles/test.dir/src/rkf45.cpp.o"
+},
+{
+  "directory": "/Users/ouuyou/Project/Projects_development/MSR1DCpp/build",
+  "command": "/Users/ouuyou/miniforge/bin/arm64-apple-darwin20.0.0-clang++  -I/Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen -I/Users/ouuyou/Project/Projects_development/MSR1DCpp/include -I/Users/ouuyou/Project/Projects_development/MSR1DCpp/dataset -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -fmessage-length=0 -isystem /Users/ouuyou/miniforge/include -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk -o CMakeFiles/test.dir/src/solve_ivp.cpp.o -c /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/solve_ivp.cpp",
+  "file": "/Users/ouuyou/Project/Projects_development/MSR1DCpp/src/solve_ivp.cpp",
+  "output": "CMakeFiles/test.dir/src/solve_ivp.cpp.o"
 },
 {
   "directory": "/Users/ouuyou/Project/Projects_development/MSR1DCpp/build",
