@@ -20,7 +20,12 @@ extern const double Beta;
 extern const double delta;
 extern const std::array<double, 6> lambda_i;
 extern double phi_0[N];
-extern double c0[N];
+extern double c1[N];
+extern double c2[N];
+extern double c3[N];
+extern double c4[N];
+extern double c5[N];
+extern double c6[N];
 
 // Thermal-Hydraulics
 extern const double c_p_s;

@@ -111,9 +111,15 @@ std::pair<std::vector<double>, std::vector<double>> neutronics(const std::vector
     if (step == 0) {
         y0.reserve(7 * N);
         y0.insert(y0.end(), phi_0, phi_0 + N);
-        for (int i = 0; i < 6; ++i) {
-            y0.insert(y0.end(), c0, c0 + N);
-        }
+        y0.insert(y0.end(), c1, c1 + N);
+        y0.insert(y0.end(), c2, c2 + N);
+        y0.insert(y0.end(), c3, c3 + N);
+        y0.insert(y0.end(), c4, c4 + N);
+        y0.insert(y0.end(), c5, c5 + N);
+        y0.insert(y0.end(), c6, c6 + N);
+        // for (int i = 0; i < 6; ++i) {
+        //     y0.insert(y0.end(), c0, c0 + N);
+        // }
     } else {
         y0 = y_n;
     }

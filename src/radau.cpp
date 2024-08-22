@@ -11,7 +11,7 @@ using ODEFunction = std::function<std::vector<double>(double t, const std::vecto
 
 // Function to compute the Jacobian matrix numerically
 Eigen::MatrixXd computeJacobian(const ODEFunction& f, double t, const std::vector<double>& y) {
-    double epsilon = 1e-8;
+    double epsilon = 1e-17;
     int n = y.size();
     Eigen::MatrixXd J(n, n);
     std::vector<double> f0 = f(t, y);
@@ -52,8 +52,8 @@ std::vector<double> radau_solver(ODEFunction f, double t0, double tf, std::vecto
     std::vector<double> y = y0;
     double t = t0;
 
-    double tol = 1e-5;
-    int max_iter = 30;
+    double tol = 1e-1;
+    int max_iter = 5;
     
     while (t < tf) {
         // Predict the next step (initial guess for Newton)

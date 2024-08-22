@@ -17,7 +17,7 @@
 #include "data_saving.hpp"
 
 int main() {
-    int time_span = 1000;
+    int time_span = 100;
 
     double rho_insertion = 50.0;  // pcm
 
@@ -60,9 +60,9 @@ int main() {
         phi=std::vector<double>(y_n.begin(), y_n.begin() + N);
         ci=std::vector<double>(y_n.begin() + N, y_n.end());
 
-        phi_middle_matrix[step] = phi[N / 2];
+        phi_middle_matrix[step] = phi[N / 3];
         for (int i = 0; i < 6; ++i) {
-            ci_middle_matrix[step][i] = ci[(i * N + (i + 1) * N) / 2];
+            ci_middle_matrix[step][i] = ci[(i * N + (i + 1) * N) / 3];
         }
         // std::cout<<"test n"<<std::endl;
         double Ts_core_0 = transport_delay(Ts_HX1_0, tau_hx_c, Ts_in, buffer_hx_c, step);
@@ -73,7 +73,7 @@ int main() {
         temperature_graphite=std::vector<double>(y_th.begin() + N, y_th.end());
 
         double Ts_core_L = y_th.back();
-        temperature_fuel_middle_matrix[step] = temperature_fuel[N / 2];
+        temperature_fuel_middle_matrix[step] = temperature_fuel[N / 3];
 
         double Ts_HX1_L = transport_delay(Ts_core_L, tau_c_hx, Ts_out, buffer_c_hx, step);
         Tss_HX1_0 = transport_delay(Tss_HX2_0, tau_r_hx, Tss_in, buffer_r_hx, step);

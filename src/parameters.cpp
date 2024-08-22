@@ -18,15 +18,25 @@ const double Beta = std::accumulate(beta.begin(), beta.end(), 0.0);
 const double delta = Beta * nu_sigma_f;
 const std::array<double, 6> lambda_i = {0.0126, 0.0337, 0.139, 0.325, 1.13, 2.5};
 double phi_0[N];
-double c0[N];
+double c1[N];
+double c2[N];
+double c3[N];
+double c4[N];
+double c5[N];
+double c6[N];
 
 void initialize_neutronics() {
-    std::fill_n(phi_0, N, 522654);  // Initialize phi_0 with 522654
-
+    // std::fill_n(phi_0, N, 522654);  // Initialize phi_0 with 522654
     double lambda_sum = std::accumulate(lambda_i.begin(), lambda_i.end(), 0.0);
 
     for (int i = 0; i < N; ++i) {
-        c0[i] = (delta / lambda_sum) * phi_0[i];
+        phi_0[i] = 522654 * sin(M_PI * i / (N - 1));
+        c1[i] = (beta[0] * nu_sigma_f / lambda_i[0]) * phi_0[i];
+        c2[i] = (beta[1] * nu_sigma_f / lambda_i[1]) * phi_0[i];
+        c3[i] = (beta[2] * nu_sigma_f / lambda_i[2]) * phi_0[i];
+        c4[i] = (beta[3] * nu_sigma_f / lambda_i[3]) * phi_0[i];
+        c5[i] = (beta[4] * nu_sigma_f / lambda_i[4]) * phi_0[i];
+        c6[i] = (beta[5] * nu_sigma_f / lambda_i[5]) * phi_0[i];
     }
 }
 
@@ -109,12 +119,19 @@ const double tau_l = 16.73;
 const double tau_c = 8.46;
 
 // Transport Delays
-const double tau_hx_c = 9;
-const double tau_c_hx = 4;
-const double tau_hx_r = 5;
-const double tau_r_hx = 8;
-const double tau_r_pp = 10;
-const double tau_pp_r = 10;
+// const double tau_hx_c = 9;
+// const double tau_c_hx = 4;
+// const double tau_hx_r = 5;
+// const double tau_r_hx = 8;
+// const double tau_r_pp = 10;
+// const double tau_pp_r = 10;
+
+const double tau_hx_c = 5;
+const double tau_c_hx = 2;
+const double tau_hx_r = 3;
+const double tau_r_hx = 4;
+const double tau_r_pp = 5;
+const double tau_pp_r = 5;
 
 // Initial Conditions
 const double Ts_in = bc_s0;
