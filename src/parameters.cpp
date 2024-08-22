@@ -6,10 +6,10 @@
 #include <iostream>
 
 // Neutronics
-const double dt = 0.2;
+const double dt = 0.3;
 const double L = 172;
 const double dz = L / (N - 1);
-const double V = 4e5;
+const double V = 4e7;
 const double D = 0.390016;
 const double sigma_a = 0.0835;
 const double nu_sigma_f = 3.33029e-2;

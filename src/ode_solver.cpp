@@ -3,6 +3,7 @@
 // #include "rkf45.hpp"
 // #include "solve_ivp.hpp"
 #include "radau.hpp"
+#include "sundials.hpp"
 
 #include <vector>
 // #include <cmath>
@@ -221,7 +222,7 @@ std::vector<double> ode_solver(const std::vector<double>& y0,
     // std::vector<std::vector<double>> solution;
 
     result = radau_solver(vector_to_be_solved, 0.0, 1.0, y0);
-
+    // result= sundials(y0, {}, vector_to_be_solved, dt);
     return result;
 }
 

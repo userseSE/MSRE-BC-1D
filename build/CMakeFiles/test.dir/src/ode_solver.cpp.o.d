@@ -1013,4 +1013,5 @@ CMakeFiles/test.dir/src/ode_solver.cpp.o: \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen/src/Eigenvalues/./RealQZ.h \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
+  /Users/ouuyou/Project/Projects_development/MSR1DCpp/include/sundials.hpp \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/iostream

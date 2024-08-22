@@ -13,7 +13,7 @@ double reactivity(const std::vector<double>& temperature_fuel,
     }
     
     // Determine the reactivity insertion based on the step
-    std::vector<double> reactdata = {0, rho_insertion * 1e-5};
+    std::vector<double> reactdata = {50, rho_insertion * 1e-5};
     double react;
     if (step < time_span / 2) {
         react = reactdata[0];

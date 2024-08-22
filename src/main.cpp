@@ -22,7 +22,7 @@ int main() {
     double rho_insertion = 50.0;  // pcm
 
     // Initialization
-    double rho = 0.0;
+    double rho = 50.0;
     initialize_parameters();
     std::vector<double> y_n(7 * N, 0.0);
     std::vector<double> q_prime(N, 0.0);

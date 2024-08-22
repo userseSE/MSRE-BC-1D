@@ -5130,6 +5130,7 @@ CMakeFiles/test.dir/src/ode_solver.cpp.o: /Users/ouuyou/Project/Projects_develop
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/include/ode_solver.hpp \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/include/parameters.hpp \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/include/radau.hpp \
+  /Users/ouuyou/Project/Projects_development/MSR1DCpp/include/sundials.hpp \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen/Cholesky \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen/Core \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen/Dense \
@@ -7690,6 +7691,7 @@ CMakeFiles/test.dir/src/radau.cpp.o: /Users/ouuyou/Project/Projects_development/
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/xlocale/_time.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/xlocale/_wchar.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/xlocale/_wctype.h \
+  /Users/ouuyou/Project/Projects_development/MSR1DCpp/include/parameters.hpp \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/include/radau.hpp \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen/Cholesky \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen/Core \
@@ -12837,6 +12839,8 @@ CMakeFiles/test.dir/src/transport_delay.cpp.o: /Users/ouuyou/Project/Projects_de
 /Users/ouuyou/Project/Projects_development/MSR1DCpp/include/rkf45.hpp:
 
 /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/power_plant.cpp:
+
+/Users/ouuyou/Project/Projects_development/MSR1DCpp/include/sundials.hpp:
 
 /Users/ouuyou/Project/Projects_development/MSR1DCpp/include/radau.hpp:
 

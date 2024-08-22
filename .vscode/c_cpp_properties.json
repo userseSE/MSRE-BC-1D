@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/include",
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/thirdparty/eigen"
+                "${workspaceFolder}/thirdparty/eigen",
+                "${workspaceFolder}/thirdparty/sundials"
             ],
             "defines": [],
             "macFrameworkPath": [

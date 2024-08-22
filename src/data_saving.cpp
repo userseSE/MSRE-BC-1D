@@ -57,11 +57,11 @@ void save_spacial_results(const std::vector<double>& phi,
                           const std::vector<double>& Tsss_HX2) {
     // Export each spatial data vector to a CSV file
     export_to_csv(phi, "phi.csv");
-    std::vector<std::vector<double>> segmented_ci(6, std::vector<double>(200));
+    std::vector<std::vector<double>> segmented_ci(6, std::vector<double>(N));
     for (int i = 0; i < 6; ++i) {
-        std::copy(ci.begin() + i * 200, ci.begin() + (i + 1) * 200, segmented_ci[i].begin());
+        std::copy(ci.begin() + i * N, ci.begin() + (i + 1) * N, segmented_ci[i].begin());
     }
-    std::vector<std::vector<double>> transposed_ci(200, std::vector<double>(6));
+    std::vector<std::vector<double>> transposed_ci(N, std::vector<double>(6));
     for (size_t i = 0; i < segmented_ci.size(); ++i) {
         for (size_t j = 0; j < segmented_ci[0].size(); ++j) {
             transposed_ci[j][i] = segmented_ci[i][j];
@@ -70,7 +70,7 @@ void save_spacial_results(const std::vector<double>& phi,
     export_matrix_to_csv(transposed_ci, "ci.csv");
 
     std::vector<std::vector<double>> temperature_core = {temperature_fuel, temperature_graphite};
-    std::vector<std::vector<double>> transposed_temperature_core(200, std::vector<double>(2));
+    std::vector<std::vector<double>> transposed_temperature_core(Nx, std::vector<double>(2));
     for (size_t i = 0; i < temperature_core.size(); ++i) {
         for (size_t j = 0; j < temperature_core[0].size(); ++j) {
             transposed_temperature_core[j][i] = temperature_core[i][j];
@@ -79,7 +79,7 @@ void save_spacial_results(const std::vector<double>& phi,
     export_matrix_to_csv(transposed_temperature_core, "temperature_core.csv");
 
     std::vector<std::vector<double>> temperature_HX1 = {Ts_HX1, Tss_HX1};
-    std::vector<std::vector<double>> transposed_temperature_HX1(200, std::vector<double>(2));
+    std::vector<std::vector<double>> transposed_temperature_HX1(Nx, std::vector<double>(2));
     for (size_t i = 0; i < temperature_HX1.size(); ++i) {
         for (size_t j = 0; j < temperature_HX1[0].size(); ++j) {
             transposed_temperature_HX1[j][i] = temperature_HX1[i][j];
@@ -88,7 +88,7 @@ void save_spacial_results(const std::vector<double>& phi,
     export_matrix_to_csv(transposed_temperature_HX1, "temperature_HX1.csv");
 
     std::vector<std::vector<double>> temperature_HX2 = {Tss_HX2, Tsss_HX2};
-    std::vector<std::vector<double>> transposed_temperature_HX2(200, std::vector<double>(2));
+    std::vector<std::vector<double>> transposed_temperature_HX2(Nx, std::vector<double>(2));
     for (size_t i = 0; i < temperature_HX2.size(); ++i) {
         for (size_t j = 0; j < temperature_HX2[0].size(); ++j) {
             transposed_temperature_HX2[j][i] = temperature_HX2[i][j];
