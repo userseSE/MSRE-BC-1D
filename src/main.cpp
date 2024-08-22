@@ -17,9 +17,9 @@
 #include "data_saving.hpp"
 
 int main() {
-    int time_span = 10;
+    int time_span = 1000;
 
-    double rho_insertion = 0.0;  // pcm
+    double rho_insertion = 50.0;  // pcm
 
     // Initialization
     double rho = 0.0;

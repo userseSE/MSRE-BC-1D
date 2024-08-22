@@ -49,62 +49,62 @@ std::pair<std::vector<double>, std::vector<double>> neutronics(const std::vector
     SparseMatrix<double> B = I + 0.5 * dt * V * D * D2_sparse;
     
     // Function to solve the ODE system
-    // auto pde_to_ode_neutronics = [&](double t, const std::vector<double>& y) {
-    //     VectorXd phi = Eigen::Map<const VectorXd>(y.data(), N);
-    //     VectorXd lambda_ci = VectorXd::Zero(N);
+    auto pde_to_ode_neutronics = [&](double t, const std::vector<double>& y) {
+        VectorXd phi = Eigen::Map<const VectorXd>(y.data(), N);
+        VectorXd lambda_ci = VectorXd::Zero(N);
         
-    //     for (int i = 0; i < 6; ++i) {
-    //         lambda_ci += lambda_i[i] * Eigen::Map<const VectorXd>(&y[(i+1)*N], N);
-    //     }
-
-    //     VectorXd rhs_phi = B * phi + dt * V * ((-sigma_a + (1.0 - Beta) * nu_sigma_f / Keff) * phi + lambda_ci);
-    //     // std::cout << "Matrix B size: " << B.rows() << "x" << B.cols() << std::endl;
-    //     // std::cout << "Vector phi size: " << phi.size() << std::endl;
-    //     SparseLU<SparseMatrix<double>> solver;
-    //     solver.compute(A);
-    //     VectorXd phi_new = solver.solve(rhs_phi);
-        
-    //     VectorXd dphi_dt = (phi_new - phi) / dt;
-        
-    //     std::vector<double> dci_dt(6 * N);
-    //     for (int i = 0; i < 6; ++i) {
-    //         for (int j = 0; j < N; ++j) {
-    //             dci_dt[i * N + j] = beta[i] * (nu_sigma_f / Keff) * phi[j] - lambda_i[i] * y[(i+1)*N + j];
-    //         }
-    //     }
-        
-    //     std::vector<double> result(dphi_dt.data(), dphi_dt.data() + dphi_dt.size());
-    //     result.insert(result.end(), dci_dt.begin(), dci_dt.end());
-
-    //     return result;
-    // };
-
-    auto pde_to_ode_neutronics = [&](double t, const std::vector<double>& y, std::vector<double>& dydt) {
-    VectorXd phi = Eigen::Map<const VectorXd>(y.data(), N);
-    VectorXd lambda_ci = VectorXd::Zero(N);
-    
-    for (int i = 0; i < 6; ++i) {
-        lambda_ci += lambda_i[i] * Eigen::Map<const VectorXd>(&y[(i + 1) * N], N);
-    }
-
-    VectorXd rhs_phi = B * phi + dt * V * ((-sigma_a + (1.0 - Beta) * nu_sigma_f / Keff) * phi + lambda_ci);
-
-    SparseLU<SparseMatrix<double>> solver;
-    solver.compute(A);
-    VectorXd phi_new = solver.solve(rhs_phi);
-    
-    VectorXd dphi_dt = (phi_new - phi) / dt;
-    
-    std::vector<double> dci_dt(6 * N);
-    for (int i = 0; i < 6; ++i) {
-        for (int j = 0; j < N; ++j) {
-            dci_dt[i * N + j] = beta[i] * (nu_sigma_f / Keff) * phi[j] - lambda_i[i] * y[(i + 1) * N + j];
+        for (int i = 0; i < 6; ++i) {
+            lambda_ci += lambda_i[i] * Eigen::Map<const VectorXd>(&y[(i+1)*N], N);
         }
-    }
+
+        VectorXd rhs_phi = B * phi + dt * V * ((-sigma_a + (1.0 - Beta) * nu_sigma_f / Keff) * phi + lambda_ci);
+        // std::cout << "Matrix B size: " << B.rows() << "x" << B.cols() << std::endl;
+        // std::cout << "Vector phi size: " << phi.size() << std::endl;
+        SparseLU<SparseMatrix<double>> solver;
+        solver.compute(A);
+        VectorXd phi_new = solver.solve(rhs_phi);
+        
+        VectorXd dphi_dt = (phi_new - phi) / dt;
+        
+        std::vector<double> dci_dt(6 * N);
+        for (int i = 0; i < 6; ++i) {
+            for (int j = 0; j < N; ++j) {
+                dci_dt[i * N + j] = beta[i] * (nu_sigma_f / Keff) * phi[j] - lambda_i[i] * y[(i+1)*N + j];
+            }
+        }
+        
+        std::vector<double> result(dphi_dt.data(), dphi_dt.data() + dphi_dt.size());
+        result.insert(result.end(), dci_dt.begin(), dci_dt.end());
+
+        return result;
+    };
+
+//     auto pde_to_ode_neutronics = [&](double t, const std::vector<double>& y, std::vector<double>& dydt) {
+//     VectorXd phi = Eigen::Map<const VectorXd>(y.data(), N);
+//     VectorXd lambda_ci = VectorXd::Zero(N);
     
-    std::copy(dphi_dt.data(), dphi_dt.data() + dphi_dt.size(), dydt.begin());
-    std::copy(dci_dt.begin(), dci_dt.end(), dydt.begin() + dphi_dt.size());
-};
+//     for (int i = 0; i < 6; ++i) {
+//         lambda_ci += lambda_i[i] * Eigen::Map<const VectorXd>(&y[(i + 1) * N], N);
+//     }
+
+//     VectorXd rhs_phi = B * phi + dt * V * ((-sigma_a + (1.0 - Beta) * nu_sigma_f / Keff) * phi + lambda_ci);
+
+//     SparseLU<SparseMatrix<double>> solver;
+//     solver.compute(A);
+//     VectorXd phi_new = solver.solve(rhs_phi);
+    
+//     VectorXd dphi_dt = (phi_new - phi) / dt;
+    
+//     std::vector<double> dci_dt(6 * N);
+//     for (int i = 0; i < 6; ++i) {
+//         for (int j = 0; j < N; ++j) {
+//             dci_dt[i * N + j] = beta[i] * (nu_sigma_f / Keff) * phi[j] - lambda_i[i] * y[(i + 1) * N + j];
+//         }
+//     }
+    
+//     std::copy(dphi_dt.data(), dphi_dt.data() + dphi_dt.size(), dydt.begin());
+//     std::copy(dci_dt.begin(), dci_dt.end(), dydt.begin() + dphi_dt.size());
+// };
     
     // Initial condition vector
     std::vector<double> y0;

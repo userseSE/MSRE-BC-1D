@@ -213,23 +213,16 @@
 //     // Return the last computed value (at the final time step)
 //     return solution.back();
 // }
-std::vector<double> ode_solver(const std::vector<double>& ic, 
+std::vector<double> ode_solver(const std::vector<double>& y0, 
                                const std::vector<double>& bc, 
                                ODEFunction vector_to_be_solved, 
                                double dt) {
-    const std::string& method="Radau";
-    std::vector<double> results;
-    std::vector<std::vector<double>> solution;
+    std::vector<double> result;
+    // std::vector<std::vector<double>> solution;
 
-    if (method == "Radau") {
-        solution = radau_solver(vector_to_be_solved, 0.0, 1.0, ic, dt);
-    } else {
-        // Default to RK45 or other methods
-        // solution = rk45_solver(vector_to_be_solved, 0.0, 1.0, ic, dt);
-    }
+    result = radau_solver(vector_to_be_solved, 0.0, 1.0, y0);
 
-    results = solution.back();
-    return results;
+    return result;
 }
 
 

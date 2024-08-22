@@ -61,49 +61,49 @@ std::vector<double> thermal_hydraulics(std::vector<double>& y_th,
     }
 
     // Define the ODE system for the thermal hydraulics
-    // auto pde_to_ode_th = [&](double t, const std::vector<double>& y) {
+    auto pde_to_ode_th = [&](double t, const std::vector<double>& y) {
        
-    //     VectorXd temperature_fuel = Eigen::Map<const VectorXd>(y.data(), N);
-    //     VectorXd temperature_graphite = Eigen::Map<const VectorXd>(y.data() + N, N);
+        VectorXd temperature_fuel = Eigen::Map<const VectorXd>(y.data(), N);
+        VectorXd temperature_graphite = Eigen::Map<const VectorXd>(y.data() + N, N);
         
-    //     // std::cout<<(AT * temperature_fuel).size()<<std::endl;
-    //     // std::cout<<VectorXd::Map(q_prime.data(), N).size()<<std::endl;
-    //     // std::cout<<"test pde_to_ode_th"<<std::endl;
-    //     VectorXd temperature_fuel_dt = a_th * (AT * temperature_fuel) + b_th * (temperature_graphite - temperature_fuel) + d_th * VectorXd::Map(q_prime.data(), N);
-    //     // std::cout << "Matrix AT size: " << AT.rows() << "x" << AT.cols() << std::endl;
-    //     // std::cout << "Vector temperature_fuel size: " << temperature_fuel.size() << std::endl;
-    //     VectorXd temperature_graphite_dt = c_th * (temperature_fuel - temperature_graphite) + e_th * VectorXd::Map(q_prime.data(), N);
-    //     // std::cout<<"test pde_to_ode_th"<<std::endl;
-    //     // Apply time-varying boundary conditions
-    //     temperature_fuel_dt[0] = bc_s0 - temperature_fuel[0];
-    //     temperature_fuel_dt[N - 1] = bc_sL - temperature_fuel[N - 1];
-    //     temperature_graphite_dt[0] = bc_g0 - temperature_graphite[0];
-    //     temperature_graphite_dt[N - 1] = bc_gL - temperature_graphite[N - 1];
+        // std::cout<<(AT * temperature_fuel).size()<<std::endl;
+        // std::cout<<VectorXd::Map(q_prime.data(), N).size()<<std::endl;
+        // std::cout<<"test pde_to_ode_th"<<std::endl;
+        VectorXd temperature_fuel_dt = a_th * (AT * temperature_fuel) + b_th * (temperature_graphite - temperature_fuel) + d_th * VectorXd::Map(q_prime.data(), N);
+        // std::cout << "Matrix AT size: " << AT.rows() << "x" << AT.cols() << std::endl;
+        // std::cout << "Vector temperature_fuel size: " << temperature_fuel.size() << std::endl;
+        VectorXd temperature_graphite_dt = c_th * (temperature_fuel - temperature_graphite) + e_th * VectorXd::Map(q_prime.data(), N);
+        // std::cout<<"test pde_to_ode_th"<<std::endl;
+        // Apply time-varying boundary conditions
+        temperature_fuel_dt[0] = bc_s0 - temperature_fuel[0];
+        temperature_fuel_dt[N - 1] = bc_sL - temperature_fuel[N - 1];
+        temperature_graphite_dt[0] = bc_g0 - temperature_graphite[0];
+        temperature_graphite_dt[N - 1] = bc_gL - temperature_graphite[N - 1];
 
-    //     std::vector<double> dydt(2 * N);
-    //     std::copy(temperature_fuel_dt.data(), temperature_fuel_dt.data() + N, dydt.begin());
-    //     std::copy(temperature_graphite_dt.data(), temperature_graphite_dt.data() + N, dydt.begin() + N);
+        std::vector<double> dydt(2 * N);
+        std::copy(temperature_fuel_dt.data(), temperature_fuel_dt.data() + N, dydt.begin());
+        std::copy(temperature_graphite_dt.data(), temperature_graphite_dt.data() + N, dydt.begin() + N);
         
-    //     return dydt;
-    // };
+        return dydt;
+    };
 
     // Define the ODE system for the thermal hydraulics
-auto pde_to_ode_th = [&](double t, const std::vector<double>& y, std::vector<double>& dydt) {
-    VectorXd temperature_fuel = Eigen::Map<const VectorXd>(y.data(), N);
-    VectorXd temperature_graphite = Eigen::Map<const VectorXd>(y.data() + N, N);
+// auto pde_to_ode_th = [&](double t, const std::vector<double>& y, std::vector<double>& dydt) {
+//     VectorXd temperature_fuel = Eigen::Map<const VectorXd>(y.data(), N);
+//     VectorXd temperature_graphite = Eigen::Map<const VectorXd>(y.data() + N, N);
 
-    VectorXd temperature_fuel_dt = a_th * (AT * temperature_fuel) + b_th * (temperature_graphite - temperature_fuel) + d_th * VectorXd::Map(q_prime.data(), N);
-    VectorXd temperature_graphite_dt = c_th * (temperature_fuel - temperature_graphite) + e_th * VectorXd::Map(q_prime.data(), N);
+//     VectorXd temperature_fuel_dt = a_th * (AT * temperature_fuel) + b_th * (temperature_graphite - temperature_fuel) + d_th * VectorXd::Map(q_prime.data(), N);
+//     VectorXd temperature_graphite_dt = c_th * (temperature_fuel - temperature_graphite) + e_th * VectorXd::Map(q_prime.data(), N);
 
-    // Apply time-varying boundary conditions
-    temperature_fuel_dt[0] = bc_s0 - temperature_fuel[0];
-    temperature_fuel_dt[N - 1] = bc_sL - temperature_fuel[N - 1];
-    temperature_graphite_dt[0] = bc_g0 - temperature_graphite[0];
-    temperature_graphite_dt[N - 1] = bc_gL - temperature_graphite[N - 1];
+//     // Apply time-varying boundary conditions
+//     temperature_fuel_dt[0] = bc_s0 - temperature_fuel[0];
+//     temperature_fuel_dt[N - 1] = bc_sL - temperature_fuel[N - 1];
+//     temperature_graphite_dt[0] = bc_g0 - temperature_graphite[0];
+//     temperature_graphite_dt[N - 1] = bc_gL - temperature_graphite[N - 1];
 
-    std::copy(temperature_fuel_dt.data(), temperature_fuel_dt.data() + N, dydt.begin());
-    std::copy(temperature_graphite_dt.data(), temperature_graphite_dt.data() + N, dydt.begin() + N);
-};
+//     std::copy(temperature_fuel_dt.data(), temperature_fuel_dt.data() + N, dydt.begin());
+//     std::copy(temperature_graphite_dt.data(), temperature_graphite_dt.data() + N, dydt.begin() + N);
+// };
 
     // Initial condition vector
     std::vector<double> y0(2 * N);
