@@ -1,5 +1,7 @@
-from scipy.integrate import solve_ivp
+# from scipy.integrate import solve_ivp
 import numpy as np
+
+from ivp import solve_ivp
 
 from parameters import *
 # TODO: ic, bc, vector to be solved (by pde_to_ode function), ode solving time span, solving method

@@ -1,5 +1,5 @@
 from scipy.sparse.linalg import spsolve
-from scipy.integrate import solve_ivp
+# from scipy.integrate import solve_ivp
 import numpy as np
 
 from parameters import *
@@ -13,8 +13,8 @@ D2 = (np.diag(main_diag) + np.diag(off_diag, 1) + np.diag(off_diag, -1)) / dz**2
 # Boundary conditions: Dirichlet boundary conditions for zero flux at boundaries
 D2[0, :] = 0
 D2[-1,:] = 0
-D2[0, 0] = 1
-D2[-1, -1] = 1
+D2[0, 0] = -1
+D2[-1, -1] = -1
 # Convert to sparse matrix format
 D2_sparse = csc_matrix(D2)
 I = np.eye(N)

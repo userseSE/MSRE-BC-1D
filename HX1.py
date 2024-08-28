@@ -13,12 +13,15 @@ C3 = V_he_ss
 C4 = U_hx / (M_he_ss * c_p_ss)
 
 # Discretize the spatial domain
-A_HX=np.diag(-np.ones(Nx))+ np.diag(np.ones(Nx-1), 1) / dx
-# A_HX = (-2*np.diag(np.ones(Nx)) + np.diag(np.ones(Nx - 1), 1) + np.diag(np.ones(Nx - 1), -1)) / dx
-A_HX[0, 0] = 1 / dx
-A_HX[-1, -1] = 1 / dx
-
-
+# A_HX=np.diag(-np.ones(Nx))+ np.diag(np.ones(Nx-1), 1) / dx
+# # A_HX = (-2*np.diag(np.ones(Nx)) + np.diag(np.ones(Nx - 1), 1) + np.diag(np.ones(Nx - 1), -1)) / dx
+# A_HX[0, 0] = 1 / dx
+# A_HX[-1, -1] = 1 / dx
+A_HX = np.diag(-2 * np.ones(Nx)) + np.diag(np.ones(Nx-1), 1) + np.diag(np.ones(Nx-1), -1)
+A_HX[0, 0] = A_HX[-1, -1] = -1
+A_HX[0, 1] = A_HX[-1, -2] = 0
+# A_HX = A_HX / dx**2
+A_HX_sparse = csc_matrix(A_HX) / dx**2
 
 def HX1(y_hx1, Ts_HX1_L, Tss_HX1_0, step):
     
@@ -30,14 +33,14 @@ def HX1(y_hx1, Ts_HX1_L, Tss_HX1_0, step):
         u=y[:Nx]
         v=y[Nx:]
         
-        du_dt = C1 * (A_HX @ u) + C2 * (u - v)
-        dv_dt = C3 * (A_HX @ v) + C4 * (u - v)
+        du_dt = C1 * (A_HX_sparse @ u) + C2 * (u - v)
+        dv_dt = C3 * (A_HX_sparse @ v) + C4 * (u - v)
         
         # Apply time-varying boundary conditions
-        du_dt[0] = u_L - u[0]
-        du_dt[-1] = u_H - u[-1]
-        dv_dt[0] = v_L - v[0]
-        dv_dt[-1] = v_H - v[-1]
+        du_dt[0] = u_L - u[0] / dx
+        du_dt[-1] = u_H - u[-1] / dx
+        dv_dt[0] = v_L - v[0] / dx
+        dv_dt[-1] = v_H - v[-1] / dx
         
         dydt = np.concatenate([du_dt, dv_dt])
         return dydt

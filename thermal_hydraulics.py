@@ -13,15 +13,19 @@ d_th = L * gamma / (Ms * c_p_s)
 e_th = L * (1 - gamma) / (Mg * c_p_g)
 
 # discretize the spatial domain
-AT=np.diag(-np.ones(N))+ np.diag(np.ones(N-1), 1)
-# AT=np.diag(-np.ones(N))+ np.diag(np.ones(N-1), 1)+ np.diag(np.ones(N-1), -1)
-AT[0, :] = 0
-AT[-1,:] = 0
-AT[0, 0] = 1
-AT[-1, -1] = -1
-AT=AT/dz
+# AT=np.diag(-np.ones(N))+ np.diag(np.ones(N-1), 1)
+# # AT=np.diag(-np.ones(N))+ np.diag(np.ones(N-1), 1)+ np.diag(np.ones(N-1), -1)
+# AT[0, :] = 0
+# AT[-1,:] = 0
+# AT[0, 0] = 1
+# AT[-1, -1] = 1
+# AT=AT/dz
 # print(AT)
-AT_sparse = csc_matrix(AT)
+# AT_sparse = csc_matrix(AT)
+AT = np.diag(-2 * np.ones(N)) + np.diag(np.ones(N-1), 1) + np.diag(np.ones(N-1), -1)
+AT[0, 0] = AT[-1, -1] = -1
+AT[0, 1] = AT[-1, -2] = 0
+AT_sparse = csc_matrix(AT) / dz**2
 # print("Test th")
 def thermal_hydraulics(y_th, q_prime, Ts_core_0, step):
     # print(y_th.shape)

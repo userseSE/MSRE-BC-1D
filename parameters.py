@@ -9,14 +9,15 @@ dz = L / (N - 1)    # Spatial step size
 V = 4e5             
 D = 0.390016          
 sigma_a =0.0835           
-nu_sigma_f = 3.33029e-2        
+nu_sigma_f = 3.33029e-2
+# sigma_f= nu_sigma_f/2.41   
 beta = [0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088] # Delayed neutron fractions
 Beta = sum(beta)
 delta=Beta*nu_sigma_f
 # beta2 = [0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088]
 lambda_i = [0.0126, 0.0337, 0.139, 0.325, 1.13, 2.5]    # Decay constants
 # initial condition
-phi_0=522654 * np.ones(N); #5226.54
+phi_0=5226.54 * np.ones(N); #5226.54
 c0 = (delta / sum(lambda_i)) * phi_0
 
 # Thermal-Hydraulics
@@ -25,7 +26,8 @@ Vc = 0.2    # Salt velocity in the core, m/s
 Ms = 1448   # Fuel salt mass in the core, kg
 Mg = 3687   # Mass of graphite in the core, kg
 gamma = 0.93    # Fraction of power released in the salt
-U = 36000   # Overall heat transfer coefficient between salt and graphite, W/K
+# U = 36000   # Overall heat transfer coefficient between salt and graphite, W/K
+U = 18000
 c_p_g = 1757    # Specific heat of graphite, J/kg K
 # Temp input for test:
 # Amplitude = 4.5e6;
@@ -41,8 +43,8 @@ bc_gL = 968.71
 # bc_g0 = 931.15;
 # bc_gL = 931.15;
 # Initial conditions
-initialS = (bc_s0 + (bc_sL - bc_s0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) - 0.3 * L) / L))).T
-initialG = (bc_g0 + (bc_gL - bc_g0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) - 0.3 * L) / L))).T
+initialS = (bc_s0 + (bc_sL - bc_s0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / L))).T
+initialG = (bc_g0 + (bc_gL - bc_g0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / L)) * 1.05).T
 
 # Heat Exchanger 1
 Nx = N  # Number of spatial points
@@ -61,8 +63,8 @@ u_H = 958
 v_L = 824.85
 v_H = 866.45
 # initial conditions using a sine function
-u_init = u_L + (u_H - u_L) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L_HX, Nx) / L_HX - 0.5)))
-v_init = v_L + (v_H - v_L) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L_HX, Nx) / L_HX - 0.5)))
+u_init = u_L + (u_H - u_L) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L_HX, Nx) / L_HX))).T
+v_init = v_L + (v_H - v_L) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L_HX, Nx) / L_HX))* 1.05).T
 
 # Heat Exchanger 2, TODO: change the parameters
 L_HX2 = 2    # length of the spatial domain
@@ -78,10 +80,11 @@ u2_H = 866
 v2_L = 744
 v2_H = 786
 # initial conditions using a sine function
-u2_init = u2_L + (u2_H - u2_L) * (0.5 + 0.7 * np.sin(np.pi * (np.linspace(0, L_HX2, Nx) / L_HX2 - 0.5)))
-v2_init = v2_L + (v2_H - v2_L) * (0.5 + 0.7 * np.sin(np.pi * (np.linspace(0, L_HX2, Nx) / L_HX2 - 0.5)))
+u2_init = u2_L + (u2_H - u2_L) * (0.5 + 0.7 * np.sin(np.pi * (np.linspace(0, L_HX2, Nx) / L_HX2))).T
+v2_init = v2_L + (v2_H - v2_L) * (0.5 + 0.7 * np.sin(np.pi * (np.linspace(0, L_HX2, Nx) / L_HX2))* 1.05).T
 
 # Reactivity
+rho_init=0
 alpha_f    = -5.904E-5  # U233 (drho/K) fuel salt temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -5.904E-05; % ORNL-TM-0728 p. 101 %
 alpha_g    = -6.624E-5  # U233  (drho/K) graphite temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -6.624E-05; % ORNL-TM-0728 p.101
 tau_l  = 16.73  # ORNL-TM-0728 %16.44; % (s)

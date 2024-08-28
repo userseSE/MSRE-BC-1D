@@ -1,6 +1,6 @@
 import numpy as np
 import os
-from scipy.integrate import solve_ivp
+# from scipy.integrate import solve_ivp
 from scipy.sparse import diags, csc_matrix
 from scipy.sparse.linalg import spsolve
 import queue
@@ -15,13 +15,13 @@ from HX2 import HX2
 from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
-time_span = 10000
+time_span = 50000
 
 # reactivity insertion rod
 rho_insertion = 0  # pcm
 
 # initialization
-rho=0
+rho=rho_init*1e-5
 # initial variables
 y_n=np.zeros((7*N, 1))
 q_prime=np.zeros((N, 1))
@@ -50,6 +50,7 @@ for step in range (time_span):
     # int(time_span/dt)
      
     y_n, q_prime = neutronics(y_n[:,-1], rho, step)
+    # q_prime=q_prime*sigma_f/(3.12*1e10)
     # print("test1") 
     phi = y_n[:N ,-1].T
     ci = y_n[N:,-1].T
