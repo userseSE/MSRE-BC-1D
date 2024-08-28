@@ -10,6 +10,7 @@ V = 4e5
 D = 0.390016          
 sigma_a =0.0835           
 nu_sigma_f = 3.33029e-2
+# nu_sigma_f = 3.33029
 # sigma_f= nu_sigma_f/2.41   
 beta = [0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088] # Delayed neutron fractions
 Beta = sum(beta)
@@ -17,7 +18,7 @@ delta=Beta*nu_sigma_f
 # beta2 = [0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088]
 lambda_i = [0.0126, 0.0337, 0.139, 0.325, 1.13, 2.5]    # Decay constants
 # initial condition
-phi_0=5226.54 * np.ones(N); #5226.54
+phi_0=5226.54 * 1e6 * np.ones(N); #5226.54
 c0 = (delta / sum(lambda_i)) * phi_0
 
 # Thermal-Hydraulics
@@ -43,9 +44,10 @@ bc_gL = 968.71
 # bc_g0 = 931.15;
 # bc_gL = 931.15;
 # Initial conditions
-initialS = (bc_s0 + (bc_sL - bc_s0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / L))).T
+initialS = (bc_s0 + (bc_sL - bc_s0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / L)) * 0.8).T
 initialG = (bc_g0 + (bc_gL - bc_g0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / L)) * 1.05).T
-
+referenceS=1121
+referenceG=1118
 # Heat Exchanger 1
 Nx = N  # Number of spatial points
 L_HX = 2    # length of the spatial domain
@@ -84,7 +86,7 @@ u2_init = u2_L + (u2_H - u2_L) * (0.5 + 0.7 * np.sin(np.pi * (np.linspace(0, L_H
 v2_init = v2_L + (v2_H - v2_L) * (0.5 + 0.7 * np.sin(np.pi * (np.linspace(0, L_HX2, Nx) / L_HX2))* 1.05).T
 
 # Reactivity
-rho_init=0
+rho_init=50
 alpha_f    = -5.904E-5  # U233 (drho/K) fuel salt temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -5.904E-05; % ORNL-TM-0728 p. 101 %
 alpha_g    = -6.624E-5  # U233  (drho/K) graphite temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -6.624E-05; % ORNL-TM-0728 p.101
 tau_l  = 16.73  # ORNL-TM-0728 %16.44; % (s)
@@ -96,8 +98,8 @@ tau_hx_c = 9 # (sec) delay from hx to core TDAMSRE p.6
 tau_c_hx = 4 # (sec) subtracted 1 sec for external loop power generation node resident time; delay from core to fuel hx TDAMSRE p.6
 tau_hx_r = 5 # (sec) fertile hx to core TDAMSRE p.6
 tau_r_hx = 8 # (sec) core to fertile hx TDAMSRE p.6
-tau_r_pp = 10 # TODO:delay from HX2 to the power plant, to be fixed
-tau_pp_r = 10 # TODO:delay from the power plant to HX2, to be fixed
+tau_r_pp = 6 # TODO:delay from HX2 to the power plant, to be fixed
+tau_pp_r = 6 # TODO:delay from the power plant to HX2, to be fixed
 # Initial conditions - DONE
 Ts_in=bc_s0
 Ts_out=bc_sL

@@ -15,10 +15,10 @@ from HX2 import HX2
 from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
-time_span = 50000
+time_span = 5000
 
 # reactivity insertion rod
-rho_insertion = 0  # pcm
+rho_insertion = 50  # pcm
 
 # initialization
 rho=rho_init*1e-5
@@ -66,7 +66,9 @@ for step in range (time_span):
     # print("size of buffer_hx_c: " + str(len(buffer_hx_c)))
     y_th = thermal_hydraulics(y_th, q_prime, Ts_core_0, step)
     temperature_fuel = y_th[:N, -1].T
+    print("avg of fuel: "+str(np.sum(temperature_fuel/N)))
     temperature_graphite = y_th[N:, -1].T
+    print("avg of graphite: "+str(np.sum(temperature_graphite/N)))
     Ts_core_L = y_th[-1, -1]
     temperature_fuel_middle_matrix[step] = temperature_fuel[int(N/2)]
     
@@ -147,7 +149,7 @@ plt.close(fig)  # Close the figure to free memory
 # Third plot: Delayed Neutron Precursors with time in the middle
 fig, ax = plt.subplots(figsize=(14, 6))
 for i in range(6):
-    ax.plot(ci_middle_matrix[i*N:(i+1)*N], label=f'Ci{i+1}')
+    ax.plot(ci_middle_matrix[:,i], label=f'Ci{i+1}')
 ax.set_title('Delayed Neutron Precursors with time in the middle')
 
 plt.tight_layout()

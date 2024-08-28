@@ -38,7 +38,7 @@ def reactivity(temperature_fuel, temperature_graphite, step, time_span, rho_inse
     else:
         react = reactdata[1]
         
-    rho_feedback=np.sum((initialS-temperature_fuel)*alpha_f)/N+np.sum((initialG-temperature_graphite)*alpha_g)/N
+    rho_feedback=(referenceS-np.sum(temperature_fuel)/N)*alpha_f+(referenceG-np.sum(temperature_graphite)/N)*alpha_g
     
     rho=rho_0+rho_feedback+react
     
