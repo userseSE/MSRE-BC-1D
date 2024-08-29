@@ -18,7 +18,7 @@ from power_plant import power_plant_temp
 time_span = 2000
 
 # reactivity insertion rod
-rho_insertion = 50 * np.ones(N)  # pcm
+rho_insertion = (100 + rho_init) * np.ones(N)  # pcm
 
 # initialization
 rho=rho_init*1e-5
@@ -118,7 +118,7 @@ for i in range(6):
     ax[0, 1].plot(z, ci[i*N:(i+1)*N], label=f'Ci{i+1}')
 ax[0, 1].set_title('Delayed Neutron Precursors')
 
-ax[1, 0].plot(rho_matrix)
+ax[1, 0].plot(rho_matrix * 1e5, label='Reactivity at middle with time(pcm)')
 ax[1, 0].set_title('Reactivity')
 
 ax[1, 1].plot(z, temperature_fuel, label='Fuel')
@@ -160,10 +160,10 @@ plt.savefig('precursors_with_time_middle.png')  # Save the figure
 plt.close(fig)  # Close the figure
 
 fig, ax = plt.subplots(2, 2, figsize=(14, 6))
-ax[0, 0].plot(rho_dt_matrix, label='Reactivity change')
+ax[0, 0].plot(rho_dt_matrix * 1e5, label='Reactivity change (pcm)')
 ax[0, 0].set_title('Reactivity_dt')
 
-ax[0, 1].plot(z, rho, label='Reactivity')
+ax[0, 1].plot(z, rho * 1e5, label='Reactivity')
 ax[0, 1].set_title('Reactivity')
 
 plt.tight_layout()
