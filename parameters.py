@@ -41,13 +41,15 @@ c_p_g = 1757    # Specific heat of graphite, J/kg K
 # bc_gL = 968.71
 bc_s0 = 750
 bc_sL = 760
-bc_g0 = 1050
-bc_gL = 1060
+bc_g0 = 780
+bc_gL = 790
+# bc_g0 = 1050
+# bc_gL = 1060
 # bc_g0 = 931.15
 # bc_gL = 931.15
 # Initial conditions
-initialS = (bc_s0 + (bc_sL - bc_s0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / (L/2))) * 0.8).T
-initialG = (bc_g0 + (bc_gL - bc_g0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / (L/2))) * 1.05).T
+initialS = (bc_s0 + (bc_sL - bc_s0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / (L*2))) * 0.8).T
+initialG = (bc_g0 + (bc_gL - bc_g0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / (L*2))) * 1.05).T
 # referenceS=930
 # referenceG=931.15
 # Heat Exchanger 1
