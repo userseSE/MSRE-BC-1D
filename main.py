@@ -15,7 +15,7 @@ from HX2 import HX2
 from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
-time_span = 5000
+time_span = 10000
 
 # reactivity insertion rod
 rho_insertion = 50  # pcm
@@ -150,14 +150,19 @@ plt.savefig('temperature_in_heat_exchangers.png')  # Save the figure
 plt.close(fig)  # Close the figure to free memory
 
 # Third plot: Delayed Neutron Precursors with time in the middle
-fig, ax = plt.subplots(1, 2, figsize=(14, 6))
+fig, ax = plt.subplots(figsize=(14, 6))
 for i in range(6):
-    ax[0, 0].plot(ci_middle_matrix[:,i], label=f'Ci{i+1}')
-ax[0, 0].set_title('Delayed Neutron Precursors with time in the middle')
-
-ax[0, 1].plot(rho_dt_matrix, label='Reactivity change')
-ax[0, 1].set_title('Reactivity_dt')
+    ax.plot(ci_middle_matrix[:,i], label=f'Ci{i+1}')
+ax.set_title('Delayed Neutron Precursors with time in the middle')
 
 plt.tight_layout()
 plt.savefig('precursors_with_time_middle.png')  # Save the figure
+plt.close(fig)  # Close the figure
+
+fig, ax = plt.subplots(figsize=(14, 6))
+ax.plot(rho_dt_matrix, label='Reactivity change')
+ax.set_title('Reactivity_dt')
+
+plt.tight_layout()
+plt.savefig('rho_dt.png')  # Save the figure
 plt.close(fig)  # Close the figure
