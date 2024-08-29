@@ -35,19 +35,19 @@ c_p_g = 1757    # Specific heat of graphite, J/kg K
 # q_prime=Amplitude * sin(pi * linspace(0, L, N) / L)';
 # q_prime=Amplitude;
 # Boundary conditions
-bc_s0 = 910
-bc_sL = 958.15
-bc_g0 = 920
-bc_gL = 968.71
-# bc_s0 = 908.15;
-# bc_sL = 938.15;
-# bc_g0 = 931.15;
-# bc_gL = 931.15;
+# bc_s0 = 910
+# bc_sL = 958.15
+# bc_g0 = 920
+# bc_gL = 968.71
+bc_s0 = 908.15
+bc_sL = 938.15
+bc_g0 = 931.15
+bc_gL = 931.15
 # Initial conditions
 initialS = (bc_s0 + (bc_sL - bc_s0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / L)) * 0.8).T
 initialG = (bc_g0 + (bc_gL - bc_g0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / L)) * 1.05).T
-referenceS=1121
-referenceG=1118
+referenceS=930
+referenceG=931.15
 # Heat Exchanger 1
 Nx = N  # Number of spatial points
 L_HX = 2    # length of the spatial domain
@@ -60,8 +60,8 @@ M_he_s = 342    # Mass of salt in the heat exchanger (fuel side), kg
 M_he_ss = 117   # Mass of salt in the heat exchanger (coolant side), kg
 c_p_ss = 2416   # Specific heat of secondary salt, J/kg/K
 # Initial conditions
-u_L = 908.15
-u_H = 958
+u_L = 900.15
+u_H = 938
 v_L = 824.85
 v_H = 866.45
 # initial conditions using a sine function
