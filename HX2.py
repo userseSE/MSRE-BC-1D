@@ -28,8 +28,8 @@ def HX2(y_hx2, Ts_HX2_L, Tss_HX2_0, step):
         u=y[:Nx]
         v=y[Nx:]
         
-        du_dt = C1 * (A_HX2_sparse @ u) + C2 * (u - v)
-        dv_dt = C3 * (A_HX2_sparse @ v) + C4 * (u - v)
+        du_dt = C1 * (A_HX2_sparse @ u) + C2 * (u - v) + err
+        dv_dt = C3 * (A_HX2_sparse @ v) + C4 * (u - v) + err
         
         # Apply time-varying boundary conditions
         du_dt[0] = u2_L - u[0] / dx

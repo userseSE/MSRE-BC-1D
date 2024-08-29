@@ -41,15 +41,17 @@ c_p_g = 1757    # Specific heat of graphite, J/kg K
 # bc_gL = 968.71
 bc_s0 = 500
 bc_sL = 500
-bc_g0 = 931.15
-bc_gL = 931.15
+bc_g0 = 800
+bc_gL = 800
+# bc_g0 = 931.15
+# bc_gL = 931.15
 # Initial conditions
 initialS = (bc_s0 + (bc_sL - bc_s0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / L)) * 0.8).T
 initialG = (bc_g0 + (bc_gL - bc_g0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / L)) * 1.05).T
-referenceS=930
-referenceG=931.15
+# referenceS=930
+# referenceG=931.15
 # Heat Exchanger 1
-err = 1e-5
+err = 1e-3
 Nx = N  # Number of spatial points
 L_HX = 2    # length of the spatial domain
 dx = L / (N - 1)    # Spatial step size
