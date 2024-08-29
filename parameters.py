@@ -39,8 +39,8 @@ c_p_g = 1757    # Specific heat of graphite, J/kg K
 # bc_sL = 958.15
 # bc_g0 = 920
 # bc_gL = 968.71
-bc_s0 = 908.15
-bc_sL = 938.15
+bc_s0 = 500
+bc_sL = 500
 bc_g0 = 931.15
 bc_gL = 931.15
 # Initial conditions
@@ -49,6 +49,7 @@ initialG = (bc_g0 + (bc_gL - bc_g0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0
 referenceS=930
 referenceG=931.15
 # Heat Exchanger 1
+err = 1e-5
 Nx = N  # Number of spatial points
 L_HX = 2    # length of the spatial domain
 dx = L / (N - 1)    # Spatial step size
@@ -86,7 +87,7 @@ u2_init = u2_L + (u2_H - u2_L) * (0.5 + 0.7 * np.sin(np.pi * (np.linspace(0, L_H
 v2_init = v2_L + (v2_H - v2_L) * (0.5 + 0.7 * np.sin(np.pi * (np.linspace(0, L_HX2, Nx) / L_HX2))* 1.05).T
 
 # Reactivity
-rho_init=50
+rho_init=50 * np.ones(N)
 alpha_f    = -5.904E-5  # U233 (drho/K) fuel salt temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -5.904E-05; % ORNL-TM-0728 p. 101 %
 alpha_g    = -6.624E-5  # U233  (drho/K) graphite temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -6.624E-05; % ORNL-TM-0728 p.101
 tau_l  = 16.73  # ORNL-TM-0728 %16.44; % (s)

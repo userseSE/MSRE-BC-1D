@@ -1,6 +1,7 @@
 from scipy.sparse.linalg import spsolve
 # from scipy.integrate import solve_ivp
 import numpy as np
+from numpy.linalg import inv
 
 from parameters import *
 from ode_solver import ode_solver
@@ -22,7 +23,7 @@ A = csc_matrix(I - 0.5 * dt * V * D * D2_sparse)
 B = csc_matrix(I + 0.5 * dt * V * D * D2_sparse)
 
 def neutronics(y_n, rho, step):
-    Keff=1/(1-rho)
+    Keff=1/(np.ones(N)-rho)
     def pde_to_ode_neutronics(t, y):
         
         phi = y[:N]
@@ -32,7 +33,7 @@ def neutronics(y_n, rho, step):
         for i in range(6):
             lambda_ci += lambda_i[i]*y[(i+1)*N:(i+2)*N]
             
-        rhs_phi = B @ phi + dt * V * ((-sigma_a + ((1 - Beta) * nu_sigma_f/Keff)) * phi + lambda_ci)
+        rhs_phi = B @ phi + dt * V * ((-sigma_a + ((1 - Beta) * nu_sigma_f / Keff)) * phi + lambda_ci)
         # Check for invalid values
         # if np.any(np.isnan(rhs_φ)) or np.any(np.isinf(rhs_φ)):
         #     print(f"Invalid values encountered at t={t}")

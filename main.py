@@ -15,10 +15,10 @@ from HX2 import HX2
 from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
-time_span = 10000
+time_span = 500
 
 # reactivity insertion rod
-rho_insertion = 50  # pcm
+rho_insertion = 50 * np.ones(N)  # pcm
 
 # initialization
 rho=rho_init*1e-5
@@ -102,9 +102,9 @@ for step in range (time_span):
     Tsss_pp_0=y_pp
     
     rho=reactivity(temperature_fuel, temperature_graphite, step, time_span, rho_insertion)
-    rho_matrix[step]=rho
+    rho_matrix[step]=rho[int(N/2)]
     if step>0:
-        rho_dt_matrix[step]=rho-rho_matrix[step-1]
+        rho_dt_matrix[step]=rho[int(N/2)]-rho_matrix[step-1]
 
 # plot phi to axis N
 z = np.linspace(0, L, N)
@@ -159,9 +159,12 @@ plt.tight_layout()
 plt.savefig('precursors_with_time_middle.png')  # Save the figure
 plt.close(fig)  # Close the figure
 
-fig, ax = plt.subplots(figsize=(14, 6))
-ax.plot(rho_dt_matrix, label='Reactivity change')
-ax.set_title('Reactivity_dt')
+fig, ax = plt.subplots(2, 2, figsize=(14, 6))
+ax[0, 0].plot(rho_dt_matrix, label='Reactivity change')
+ax[0, 0].set_title('Reactivity_dt')
+
+ax[0, 1].plot(z, rho, label='Reactivity')
+ax[0, 1].set_title('Reactivity')
 
 plt.tight_layout()
 plt.savefig('rho_dt.png')  # Save the figure

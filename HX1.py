@@ -33,8 +33,8 @@ def HX1(y_hx1, Ts_HX1_L, Tss_HX1_0, step):
         u=y[:Nx]
         v=y[Nx:]
         
-        du_dt = C1 * (A_HX_sparse @ u) + C2 * (u - v)
-        dv_dt = C3 * (A_HX_sparse @ v) + C4 * (u - v)
+        du_dt = C1 * (A_HX_sparse @ u) + C2 * (u - v) + err
+        dv_dt = C3 * (A_HX_sparse @ v) + C4 * (u - v) + err
         
         # Apply time-varying boundary conditions
         du_dt[0] = u_L - u[0] / dx
