@@ -18,7 +18,7 @@ delta=Beta*nu_sigma_f
 # beta2 = [0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088]
 lambda_i = [0.0126, 0.0337, 0.139, 0.325, 1.13, 2.5]    # Decay constants
 # initial condition
-phi_0= 1 * np.ones(N); #5226.54
+phi_0= 5226.54 * np.ones(N); #5226.54
 c0 = (delta / sum(lambda_i)) * phi_0
 
 # Thermal-Hydraulics
@@ -39,19 +39,19 @@ c_p_g = 1757    # Specific heat of graphite, J/kg K
 # bc_sL = 958.15
 # bc_g0 = 920
 # bc_gL = 968.71
-bc_s0 = 700
-bc_sL = 700
-bc_g0 = 1000
-bc_gL = 1000
+bc_s0 = 750
+bc_sL = 760
+bc_g0 = 1050
+bc_gL = 1060
 # bc_g0 = 931.15
 # bc_gL = 931.15
 # Initial conditions
-initialS = (bc_s0 + (bc_sL - bc_s0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / L)) * 0.8).T
-initialG = (bc_g0 + (bc_gL - bc_g0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / L)) * 1.05).T
+initialS = (bc_s0 + (bc_sL - bc_s0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / (L/2))) * 0.8).T
+initialG = (bc_g0 + (bc_gL - bc_g0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / (L/2))) * 1.05).T
 # referenceS=930
 # referenceG=931.15
 # Heat Exchanger 1
-err = 1e-3
+err = 1
 Nx = N  # Number of spatial points
 L_HX = 2    # length of the spatial domain
 dx = L / (N - 1)    # Spatial step size
