@@ -44,6 +44,7 @@ rho_matrix = np.zeros((time_span, 1))
 phi_middle_matrix = np.zeros((time_span, 1))
 ci_middle_matrix = np.zeros((time_span, 6))
 temperature_fuel_middle_matrix = np.zeros((time_span, 1))
+rho_dt_matrix = np.zeros((time_span, 1))
 
 for step in range (time_span):
     print (f"Time step: {step}")
@@ -102,6 +103,8 @@ for step in range (time_span):
     
     rho=reactivity(temperature_fuel, temperature_graphite, step, time_span, rho_insertion)
     rho_matrix[step]=rho
+    if step>0:
+        rho_dt_matrix[step]=rho-rho_matrix[step-1]
 
 # plot phi to axis N
 z = np.linspace(0, L, N)
@@ -147,10 +150,13 @@ plt.savefig('temperature_in_heat_exchangers.png')  # Save the figure
 plt.close(fig)  # Close the figure to free memory
 
 # Third plot: Delayed Neutron Precursors with time in the middle
-fig, ax = plt.subplots(figsize=(14, 6))
+fig, ax = plt.subplots(1, 2, figsize=(14, 6))
 for i in range(6):
-    ax.plot(ci_middle_matrix[:,i], label=f'Ci{i+1}')
-ax.set_title('Delayed Neutron Precursors with time in the middle')
+    ax[0, 0].plot(ci_middle_matrix[:,i], label=f'Ci{i+1}')
+ax[0, 0].set_title('Delayed Neutron Precursors with time in the middle')
+
+ax[0, 1].plot(rho_dt_matrix, label='Reactivity change')
+ax[0, 1].set_title('Reactivity_dt')
 
 plt.tight_layout()
 plt.savefig('precursors_with_time_middle.png')  # Save the figure
