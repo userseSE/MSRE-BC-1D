@@ -49,7 +49,7 @@ def neutronics(y_n, rho, step):
     
         dci_dt = np.zeros((6, N))
         for i in range(6):
-            dci_dt[i]=beta[i]*(nu_sigma_f/Keff)*phi-lambda_i[i]*y[(i+1)*N:(i+2)*N]
+            dci_dt[i]=beta[i]*(nu_sigma_f/Keff)*phi-(lambda_i[i]*y[(i+1)*N:(i+2)*N]/6)
         return np.concatenate([dphi_dt, dci_dt[0], dci_dt[1], dci_dt[2], dci_dt[3], dci_dt[4], dci_dt[5]])
 
     # Initial condition vector
