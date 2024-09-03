@@ -3,12 +3,16 @@ from scipy.sparse import csc_matrix
 
 # Neutronics
 dt=0.2 # fixed time step
-L = 172  # Length of the spatial domain, m
+# L = 172  # Length of the spatial domain, m
+L = 22.9
 N = 200  # Number of spatial points
 dz = L / (N - 1)    # Spatial step size
-V = 4e3             
-D = 0.390016          
-sigma_a =0.0835           
+# V = 4e3
+V = 1.103497*1e7           
+# D = 0.390016    
+D = 0.96343      
+# sigma_a =0.0835   
+sigma_a=1.58430*1e-2        
 nu_sigma_f = 3.33029e-2
 # nu_sigma_f = 3.33029
 # sigma_f= nu_sigma_f/2.41   
@@ -18,7 +22,7 @@ delta=Beta*nu_sigma_f
 # beta2 = [0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088]
 lambda_i = [0.0126, 0.0337, 0.139, 0.325, 1.13, 2.5]    # Decay constants
 # initial condition
-phi_0= 522654 * np.ones(N); #5226.54
+phi_0= 5226.54 * np.ones(N); #5226.54
 c0 = (delta / sum(lambda_i)) * phi_0
 
 # Thermal-Hydraulics
