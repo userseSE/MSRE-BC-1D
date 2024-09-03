@@ -15,7 +15,7 @@ from HX2 import HX2
 from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
-time_span = 4000
+time_span = 1500
 
 # reactivity insertion rod
 rho_insertion = (rho_init) * np.ones(N)  # pcm
@@ -45,6 +45,7 @@ phi_middle_matrix = np.zeros((time_span, 1))
 ci_middle_matrix = np.zeros((time_span, 6))
 temperature_fuel_middle_matrix = np.zeros((time_span, 1))
 rho_dt_matrix = np.zeros((time_span, 1))
+neutron_dt_matrix = np.zeros((time_span, 1))
 
 for step in range (time_span):
     print (f"Time step: {step}")
@@ -56,6 +57,8 @@ for step in range (time_span):
     phi = y_n[:N ,-1].T
     ci = y_n[N:,-1].T
     phi_middle_matrix[step] = phi[int(N/2)]
+    neutron_dt_matrix[step] = (phi[int(N/2)] - phi_middle_matrix[step-1]) * 100
+    print("change of neutron flux: "+str(neutron_dt_matrix[step]))
     for i in range(6):
         ci_middle_matrix[step, i] = ci[int((i*N+(i+1)*N)/2)]
     # print(phi.shape)
@@ -170,6 +173,9 @@ ax[0, 0].set_title('Reactivity_dt')
 
 ax[0, 1].plot(z, rho * 1e5, label='Reactivity')
 ax[0, 1].set_title('Reactivity')
+
+ax[1, 0].plot(neutron_dt_matrix, label='Neutron flux change')
+ax[1, 0].set_title('Neutron flux_dt * 100')
 
 plt.tight_layout()
 plt.savefig('rho_dt.png')  # Save the figure
