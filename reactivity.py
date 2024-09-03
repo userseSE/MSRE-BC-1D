@@ -42,6 +42,6 @@ def reactivity(temperature_fuel, temperature_graphite, step, time_span, rho_inse
     
     rho=rho_0+rho_feedback+react
     
-    rho=rho*0
+    # rho=rho*0
     
     return rho

@@ -15,7 +15,7 @@ from HX2 import HX2
 from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
-time_span = 1000
+time_span = 10000
 
 # reactivity insertion rod
 rho_insertion = (rho_init) * np.ones(N)  # pcm
@@ -58,6 +58,7 @@ for step in range (time_span):
     ci = y_n[N:,-1].T
     phi_middle_matrix[step] = phi[int(N/2)]
     neutron_dt_matrix[step] = (phi[int(N/2)] - phi_middle_matrix[step-1]) * 100
+    print("neutron flux: "+str(phi[int(N/2)]))
     print("change of neutron flux: "+str(neutron_dt_matrix[step]))
     for i in range(6):
         ci_middle_matrix[step, i] = ci[int((i*N+(i+1)*N)/2)]

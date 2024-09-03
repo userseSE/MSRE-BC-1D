@@ -10,22 +10,24 @@ dz = L / (N - 1)    # Spatial step size
 # V = 4e5
 V = 1.103497 * 1e7  # cm/s           
 # D = 0.390016 * 8   
-D = 0.96343 * 7  # cm      
+D = 0.96343 * 7.6  # cm 
+# from 8-7.6, smaller, explode. (7.85)     
 # sigma_a =0.0835   
-sigma_a=1.58430*1e-2/7.5 # cm^-1        
-nu_sigma_f = 3.33029e-2/8 # cm^-1
+sigma_a=1.58430*1e-2/7 # cm^-1        
+nu_sigma_f = 3.33029e-2/7.3 # cm^-1
 # nu_sigma_f = 3.33029
 # sigma_f= nu_sigma_f/2.41   
 beta = [0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088] # Delayed neutron fractions
-Beta = sum(beta)      # 0.00264
-# Beta = 0.0045
+# Beta = sum(beta)      # 0.00264
+Beta = 0.0045
 delta=Beta*nu_sigma_f
 # beta2 = [0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088]
 lambda_i = [0.0126, 0.0337, 0.139, 0.325, 1.13, 2.5]    # Decay constants
+# lambda_i = [0.08, 0.08, 0.08, 0.08, 0.08, 0.08]    # Decay constants
 # sum(lambda_i) = 4.1403        # 0.08
 # initial condition
-phi_0= 5226.54 * 1e-2 * np.ones(N); #5226.54
-c0 = (delta / sum(lambda_i)) * phi_0
+phi_0= 5226.54 * 8 * np.ones(N); #5226.54
+c0 = (delta / (sum(lambda_i)/6)) * phi_0
 
 # Thermal-Hydraulics
 c_p_s = 1983  # Specific heat of primary salt, J/kgK
@@ -45,8 +47,12 @@ c_p_g = 1757    # Specific heat of graphite, J/kg K
 # bc_sL = 958.15
 # bc_g0 = 920
 # bc_gL = 968.71
-bc_s0 = 900
-bc_sL = 910
+# bc_s0 = 900
+# bc_sL = 910
+# bc_g0 = 960
+# bc_gL = 970
+bc_s0 = 920
+bc_sL = 940
 bc_g0 = 960
 bc_gL = 970
 # bc_g0 = 1050
