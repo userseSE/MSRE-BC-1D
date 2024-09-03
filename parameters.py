@@ -14,19 +14,19 @@ D = 0.96343 * 7.6  # cm
 # from 8-7.6, smaller, explode. (7.85)     
 # sigma_a =0.0835   
 sigma_a=1.58430*1e-2/7 # cm^-1        
-nu_sigma_f = 3.33029e-2/7.3 # cm^-1
+nu_sigma_f = 3.33029e-2/7 # cm^-1
 # nu_sigma_f = 3.33029
 # sigma_f= nu_sigma_f/2.41   
 beta = [0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088] # Delayed neutron fractions
-# Beta = sum(beta)      # 0.00264
-Beta = 0.0045
+Beta = sum(beta)      # 0.00264
+# Beta = 0.0045
 delta=Beta*nu_sigma_f
 # beta2 = [0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088]
 lambda_i = [0.0126, 0.0337, 0.139, 0.325, 1.13, 2.5]    # Decay constants
 # lambda_i = [0.08, 0.08, 0.08, 0.08, 0.08, 0.08]    # Decay constants
 # sum(lambda_i) = 4.1403        # 0.08
 # initial condition
-phi_0= 5226.54 * 8 * np.ones(N); #5226.54
+phi_0= 5226.54 * np.ones(N); #5226.54
 c0 = (delta / (sum(lambda_i)/6)) * phi_0
 
 # Thermal-Hydraulics
