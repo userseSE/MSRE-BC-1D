@@ -15,7 +15,7 @@ from HX2 import HX2
 from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
-time_span = 200
+time_span = 500
 
 # reactivity insertion rod
 rho_insertion = (rho_init) * np.ones(N)  # pcm
