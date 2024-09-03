@@ -18,7 +18,7 @@ from power_plant import power_plant_temp
 time_span = 500
 
 # reactivity insertion rod
-rho_insertion = (100 + rho_init) * np.ones(N)  # pcm
+rho_insertion = (rho_init) * np.ones(N)  # pcm
 
 # initialization
 rho=rho_init*1e-5

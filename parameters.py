@@ -95,7 +95,7 @@ u2_init = u2_L + (u2_H - u2_L) * (0.5 + 0.7 * np.sin(np.pi * (np.linspace(0, L_H
 v2_init = v2_L + (v2_H - v2_L) * (0.5 + 0.7 * np.sin(np.pi * (np.linspace(0, L_HX2, Nx) / L_HX2))* 1.05).T
 
 # Reactivity
-rho_init = 100 * np.ones(N)
+rho_init = 0 * np.ones(N)
 alpha_f    = -5.904E-5  # U233 (drho/K) fuel salt temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -5.904E-05; % ORNL-TM-0728 p. 101 %
 alpha_g    = -6.624E-5  # U233  (drho/K) graphite temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -6.624E-05; % ORNL-TM-0728 p.101
 tau_l  = 16.73  # ORNL-TM-0728 %16.44; % (s)
