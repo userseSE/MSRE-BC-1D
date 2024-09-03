@@ -116,6 +116,7 @@ ax[0, 0].set_title('Neutron Flux')
 
 for i in range(6):
     ax[0, 1].plot(z, ci[i*N:(i+1)*N], label=f'Ci{i+1}')
+    ax[0, 1].legend()
 ax[0, 1].set_title('Delayed Neutron Precursors')
 
 ax[1, 0].plot(rho_matrix * 1e5, label='Reactivity at middle with time(pcm)')
@@ -123,6 +124,7 @@ ax[1, 0].set_title('Reactivity')
 
 ax[1, 1].plot(z, temperature_fuel, label='Fuel')
 ax[1, 1].plot(z, temperature_graphite, label='Graphite')
+ax[1, 1].legend()
 ax[1, 1].set_title('Temperature in the core')
 
 plt.tight_layout()
@@ -133,10 +135,12 @@ plt.close(fig)  # Close the figure to free memory
 fig, ax = plt.subplots(2, 2, figsize=(14, 6))
 ax[0, 0].plot(z, Ts_HX1, label='Salt')
 ax[0, 0].plot(z, Tss_HX1, label='Coolant')
+ax[0, 0].legend()
 ax[0, 0].set_title('Temperature in the heat exchanger 1')
 
 ax[0, 1].plot(z, Tss_HX2, label='Tss')
 ax[0, 1].plot(z, Tsss_HX2, label='Tsss')
+ax[0, 1].legend()
 ax[0, 1].set_title('Temperature in the heat exchanger 2')
 
 ax[1, 0].plot(phi_middle_matrix)
@@ -153,6 +157,7 @@ plt.close(fig)  # Close the figure to free memory
 fig, ax = plt.subplots(figsize=(14, 6))
 for i in range(6):
     ax.plot(ci_middle_matrix[:,i], label=f'Ci{i+1}')
+    ax.legend()
 ax.set_title('Delayed Neutron Precursors with time in the middle')
 
 plt.tight_layout()
