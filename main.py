@@ -210,6 +210,7 @@ def plot_results(z, phi, ci, rho, rho_matrix, temperature_fuel, temperature_grap
     plt.close(fig)
 
 def save_specific_data(data, index):
+    print(f'Saving specific data for simulation {index}')
     os.makedirs('simulation_results', exist_ok=True)
     data_file = f'simulation_results/specific_data_{index}.npz'
     np.savez(data_file, data=data)
