@@ -1,12 +1,9 @@
 import numpy as np
 import os
-# from scipy.integrate import solve_ivp
-from scipy.sparse import diags, csc_matrix
-from scipy.sparse.linalg import spsolve
-import queue
+from joblib import Parallel, delayed
 import matplotlib.pyplot as plt
 
-from parameters import *
+from parameters import generate_parameters
 from reactivity import reactivity
 from neutronics import neutronics
 from thermal_hydraulics import thermal_hydraulics
@@ -15,169 +12,228 @@ from HX2 import HX2
 from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
-time_span = 10000
+def run_simulation(params, index):
+    time_span = 2000
+    N = params['N']
+    Nx = params['Nx']
 
-# reactivity insertion rod
-rho_insertion = (rho_init) * np.ones(N)  # pcm
+    # Extract parameters
+    rho_insertion = 0 * np.ones(N)
+    rho = params['rho_init']
+    y_n = np.zeros((7 * N, 1))
+    q_prime = np.zeros((N, 1))
+    y_th = np.zeros((2 * N, 1))
+    y_hx1 = np.zeros((2 * Nx, 1))
+    y_hx2 = np.zeros((2 * Nx, 1))
+    
+    Tss_HX2_0 = 0
+    Ts_HX1_0 = 0
+    Tss_HX1_0 = 0
+    Tsss_pp_0 = 0
+    buffer_hx_c = []
+    buffer_c_hx = []
+    buffer_r_hx = []
+    buffer_hx_r = []
+    buffer_r_pp = []
+    buffer_pp_r = []
+    Ts_in = params['Ts_in']
+    Ts_out = params['Ts_out']
+    Tss_in = params['Tss_in']
+    Tss_out = params['Tss_out']
+    Tsss_in = params['Tsss_in']
+    Tsss_out = params['Tsss_out']
 
-# initialization
-rho=rho_init*1e-5
-# initial variables
-y_n=np.zeros((7*N, 1))
-q_prime=np.zeros((N, 1))
-y_th=np.zeros((2*N, 1))
-y_hx1=np.zeros((2*Nx, 1))
-y_hx2=np.zeros((2*Nx, 1))
-Tss_HX2_0=0
-Ts_HX1_0=0
-Tss_HX1_0=0
-Tsss_pp_0=0
-buffer_hx_c=[]
-buffer_c_hx=[]
-buffer_r_hx=[]
-buffer_hx_r=[]
-buffer_r_pp=[]
-buffer_pp_r=[]
+    # Initial plotting matrices
+    rho_matrix = np.zeros((time_span, 1))
+    phi_middle_matrix = np.zeros((time_span, 1))
+    ci_middle_matrix = np.zeros((time_span, 6))
+    temperature_fuel_middle_matrix = np.zeros((time_span, 1))
+    rho_dt_matrix = np.zeros((time_span, 1))
+    neutron_dt_matrix = np.zeros((time_span, 1))
+    Ts_HX1_matrix = np.zeros((Nx, time_span))
 
-# initial plotting matrices
-rho_matrix = np.zeros((time_span, 1))
-phi_middle_matrix = np.zeros((time_span, 1))
-ci_middle_matrix = np.zeros((time_span, 6))
-temperature_fuel_middle_matrix = np.zeros((time_span, 1))
-rho_dt_matrix = np.zeros((time_span, 1))
-neutron_dt_matrix = np.zeros((time_span, 1))
+    # Steps to save data (0, 1/3, 1/2, 2/3, 1 of total steps)
+    save_steps = [0, time_span//3, time_span//2, 2*time_span//3, time_span-1]
+    saved_data = []
 
-for step in range (time_span):
-    print (f"Time step: {step}")
-    # int(time_span/dt)
-     
-    y_n, q_prime = neutronics(y_n[:,-1], rho, step)
-    # q_prime=q_prime*sigma_f/(3.12*1e10)
-    # print("test1") 
-    phi = y_n[:N ,-1].T
-    ci = y_n[N:,-1].T
-    phi_middle_matrix[step] = phi[int(N/2)]
-    neutron_dt_matrix[step] = (phi[int(N/2)] - phi_middle_matrix[step-1]) * 100
-    print("neutron flux: "+str(phi[int(N/2)]))
-    print("change of neutron flux: "+str(neutron_dt_matrix[step]))
+    for step in range(time_span):
+        print(f'Step {step}/{time_span}')
+        
+        y_n, q_prime = neutronics(y_n[:, -1], rho, step, params)
+        phi = y_n[:N, -1].T
+        ci = y_n[N:, -1].T
+        phi_middle_matrix[step] = phi[int(N / 2)]
+        neutron_dt_matrix[step] = (phi[int(N / 2)] - phi_middle_matrix[step - 1]) * 100
+
+        if step in save_steps:
+            saved_data.append({
+                'step': step,
+                'neutron_flux': phi[int(N / 2)],
+                'neutron_flux_change': neutron_dt_matrix[step]
+            })
+
+        for i in range(6):
+            ci_middle_matrix[step, i] = ci[int((i * N + (i + 1) * N) / 2)]
+
+        Ts_core_0 = transport_delay(Ts_HX1_0, params['tau_hx_c'], Ts_in, buffer_hx_c, step)
+        y_th = thermal_hydraulics(y_th, q_prime, Ts_core_0, params, step)
+        temperature_fuel = y_th[:N, -1].T
+        temperature_graphite = y_th[N:, -1].T
+        Ts_core_L = y_th[-1, -1]
+        temperature_fuel_middle_matrix[step] = temperature_fuel[int(N / 2)]
+
+        Ts_HX1_L = transport_delay(Ts_core_L, params['tau_c_hx'], Ts_out, buffer_c_hx, step)
+        Tss_HX1_0 = transport_delay(Tss_HX2_0, params['tau_r_hx'], Tss_in, buffer_r_hx, step)
+        y_hx1 = HX1(y_hx1, Ts_HX1_L, Tss_HX1_0, params, step)
+        Ts_HX1 = y_hx1[:Nx, -1]
+        Tss_HX1 = y_hx1[Nx:, -1]
+        Ts_HX1_0 = Ts_HX1[0]
+        Tss_HX1_L = Tss_HX1[-1]
+
+        Ts_HX1_matrix[:, step] = Ts_HX1
+
+        Tss_HX2_L = transport_delay(Tss_HX1_L, params['tau_hx_r'], Tss_out, buffer_hx_r, step)
+        Tsss_HX2_0 = transport_delay(Tsss_pp_0, params['tau_pp_r'], Tsss_in, buffer_pp_r, step)
+        y_hx2 = HX2(y_hx2, Tss_HX2_L, Tsss_HX2_0, params, step)
+        Tss_HX2 = y_hx2[:Nx, -1]
+        Tsss_HX2 = y_hx2[Nx:, -1]
+        Tss_HX2_0 = Tss_HX2[0]
+        Tsss_HX2_L = Tsss_HX2[-1]
+
+        Tsss_pp_L = transport_delay(Tsss_HX2_L, params['tau_r_pp'], Tsss_out, buffer_r_pp, step)
+        y_pp = power_plant_temp(Tsss_pp_L, step)
+        Tsss_pp_0 = y_pp
+
+        rho = reactivity(temperature_fuel, temperature_graphite, step, time_span, rho_insertion, params)
+        rho_matrix[step] = rho[int(N / 2)]
+        if step > 0:
+            rho_dt_matrix[step] = rho[int(N / 2)] - rho_matrix[step - 1]
+
+    # Plotting results including Ts_HX1
+    plot_results(z=np.linspace(0, params['L'], N),
+                 phi=phi,
+                 ci=ci,
+                 rho=rho,
+                 rho_matrix=rho_matrix,
+                 temperature_fuel=temperature_fuel,
+                 temperature_graphite=temperature_graphite,
+                 Ts_HX1_matrix=Ts_HX1_matrix,
+                 Tss_HX1=Tss_HX1,
+                 Tss_HX2=Tss_HX2,
+                 Tsss_HX2=Tsss_HX2,
+                 phi_middle_matrix=phi_middle_matrix,
+                 temperature_fuel_middle_matrix=temperature_fuel_middle_matrix,
+                 ci_middle_matrix=ci_middle_matrix,
+                 rho_dt_matrix=rho_dt_matrix,
+                 neutron_dt_matrix=neutron_dt_matrix,
+                 index=index)
+
+    # Save specific data points
+    save_specific_data(saved_data, index)
+
+def plot_results(z, phi, ci, rho, rho_matrix, temperature_fuel, temperature_graphite,
+                 Ts_HX1_matrix, Tss_HX1, Tss_HX2, Tsss_HX2, phi_middle_matrix,
+                 temperature_fuel_middle_matrix, ci_middle_matrix, rho_dt_matrix,
+                 neutron_dt_matrix, index):
+    os.makedirs('simulation_results', exist_ok=True)
+    plot_dir = f'simulation_results/plots_{index}'
+    os.makedirs(plot_dir, exist_ok=True)
+
+    # First plot: Neutron flux and delayed neutron precursors
+    fig, ax = plt.subplots(2, 2, figsize=(14, 6))
+    ax[0, 0].plot(z, phi)
+    ax[0, 0].set_title('Neutron Flux')
+
     for i in range(6):
-        ci_middle_matrix[step, i] = ci[int((i*N+(i+1)*N)/2)]
-    # print(phi.shape)
-    # print(ci.shape)
-    # print(y_n.shape)
-    
-    # tau_hx_c
-    Ts_core_0=transport_delay(Ts_HX1_0, tau_hx_c, Ts_in, buffer_hx_c, step)
-    # print("size of buffer_hx_c: " + str(len(buffer_hx_c)))
-    y_th = thermal_hydraulics(y_th, q_prime, Ts_core_0, step)
-    temperature_fuel = y_th[:N, -1].T
-    print("avg of fuel: "+str(np.sum(temperature_fuel/N)))
-    temperature_graphite = y_th[N:, -1].T
-    print("avg of graphite: "+str(np.sum(temperature_graphite/N)))
-    Ts_core_L = y_th[-1, -1]
-    temperature_fuel_middle_matrix[step] = temperature_fuel[int(N/2)]
-    
-    # tau_c_hx
-    Ts_HX1_L=transport_delay(Ts_core_L,tau_c_hx, Ts_out, buffer_c_hx, step)
-    # print("size of buffer_c_hx: " + str(len(buffer_c_hx)))
-    # tau_r_hx
-    Tss_HX1_0=transport_delay(Tss_HX2_0, tau_r_hx, Tss_in, buffer_r_hx, step)
-    # print("size of buffer_r_hx: " + str(len(buffer_r_hx)))
-    y_hx1 = HX1(y_hx1, Ts_HX1_L, Tss_HX1_0, step)
-    Ts_HX1= y_hx1[:Nx,-1]
-    Tss_HX1= y_hx1[Nx:,-1]
-    Ts_HX1_0 = Ts_HX1[0]
-    Tss_HX1_L = Tss_HX1[-1]
-    
-    # tau_hx_r
-    Tss_HX2_L=transport_delay(Tss_HX1_L, tau_hx_r, Tss_out, buffer_hx_r, step)
-    # tau_pp_r
-    Tsss_HX2_0=transport_delay(Tsss_pp_0, tau_pp_r, Tsss_in, buffer_pp_r, step)
-    # print("size of buffer_hx_r: " + str(len(buffer_hx_r)))
-    y_hx2=HX2(y_hx2, Tss_HX2_L, Tsss_HX2_0, step)
-    Tss_HX2= y_hx2[:Nx,-1]
-    Tsss_HX2= y_hx2[Nx:,-1]
-    Tss_HX2_0=Tss_HX2[0]
-    Tsss_HX2_L=Tsss_HX2[-1]
-    
-    # tau_r_pp
-    Tsss_pp_L=transport_delay(Tsss_HX2_L, tau_r_pp, Tsss_out, buffer_r_pp, step)
-    y_pp=power_plant_temp(Tsss_pp_L, step)
-    Tsss_pp_0=y_pp
-    
-    rho=reactivity(temperature_fuel, temperature_graphite, step, time_span, rho_insertion)
-    rho_matrix[step]=rho[int(N/2)]
-    if step>0:
-        rho_dt_matrix[step]=rho[int(N/2)]-rho_matrix[step-1]
+        ax[0, 1].plot(z, ci[i * len(z):(i + 1) * len(z)], label=f'Ci{i + 1}')
+        ax[0, 1].legend()
+    ax[0, 1].set_title('Delayed Neutron Precursors')
 
-# plot phi to axis N
-z = np.linspace(0, L, N)
-os.chdir('plotting')
+    ax[1, 0].plot(rho_matrix * 1e5, label='Reactivity at middle with time(pcm)')
+    ax[1, 0].set_title('Reactivity')
 
-fig, ax = plt.subplots(2, 2, figsize=(14, 6))
-ax[0, 0].plot(z, phi)
-ax[0, 0].set_title('Neutron Flux')
+    ax[1, 1].plot(z, temperature_fuel, label='Fuel')
+    ax[1, 1].plot(z, temperature_graphite, label='Graphite')
+    ax[1, 1].legend()
+    ax[1, 1].set_title('Temperature in the core')
 
-for i in range(6):
-    ax[0, 1].plot(z, ci[i*N:(i+1)*N], label=f'Ci{i+1}')
+    plt.tight_layout()
+    plt.savefig(f'{plot_dir}/neutron_flux_and_precursors.png')
+    plt.close(fig)
+
+    # Second plot: Temperature in the heat exchangers
+    fig, ax = plt.subplots(2, 2, figsize=(14, 6))
+    ax[0, 0].plot(z, Ts_HX1_matrix[:, -1], label='Salt')
+    ax[0, 0].plot(z, Tss_HX1, label='Coolant')
+    ax[0, 0].legend()
+    ax[0, 0].set_title('Temperature in the heat exchanger 1')
+
+    ax[0, 1].plot(z, Tss_HX2, label='Tss')
+    ax[0, 1].plot(z, Tsss_HX2, label='Tsss')
     ax[0, 1].legend()
-ax[0, 1].set_title('Delayed Neutron Precursors')
+    ax[0, 1].set_title('Temperature in the heat exchanger 2')
 
-ax[1, 0].plot(rho_matrix * 1e5, label='Reactivity at middle with time(pcm)')
-ax[1, 0].set_title('Reactivity')
+    ax[1, 0].plot(phi_middle_matrix)
+    ax[1, 0].set_title('Neutron Flux with time in the middle')
 
-ax[1, 1].plot(z, temperature_fuel, label='Fuel')
-ax[1, 1].plot(z, temperature_graphite, label='Graphite')
-ax[1, 1].legend()
-ax[1, 1].set_title('Temperature in the core')
+    ax[1, 1].plot(temperature_fuel_middle_matrix)
+    ax[1, 1].set_title('Temperature in the core with time in the middle')
 
-plt.tight_layout()
-plt.savefig('neutron_flux_and_precursors.png')  # Save the figure
-plt.close(fig)  # Close the figure to free memory
+    plt.tight_layout()
+    plt.savefig(f'{plot_dir}/temperature_in_heat_exchangers.png')
+    plt.close(fig)
 
-# Second plot: Temperature in the heat exchangers
-fig, ax = plt.subplots(2, 2, figsize=(14, 6))
-ax[0, 0].plot(z, Ts_HX1, label='Salt')
-ax[0, 0].plot(z, Tss_HX1, label='Coolant')
-ax[0, 0].legend()
-ax[0, 0].set_title('Temperature in the heat exchanger 1')
+    # Third plot: Delayed Neutron Precursors with time in the middle
+    fig, ax = plt.subplots(figsize=(14, 6))
+    for i in range(6):
+        ax.plot(ci_middle_matrix[:, i], label=f'Ci{i + 1}')
+        ax.legend()
+    ax.set_title('Delayed Neutron Precursors with time in the middle')
 
-ax[0, 1].plot(z, Tss_HX2, label='Tss')
-ax[0, 1].plot(z, Tsss_HX2, label='Tsss')
-ax[0, 1].legend()
-ax[0, 1].set_title('Temperature in the heat exchanger 2')
+    plt.tight_layout()
+    plt.savefig(f'{plot_dir}/precursors_with_time_middle.png')
+    plt.close(fig)
 
-ax[1, 0].plot(phi_middle_matrix)
-ax[1, 0].set_title('Neutron Flux with time in the middle')
+    # Fourth plot: Reactivity and neutron flux change
+    fig, ax = plt.subplots(2, 2, figsize=(14, 6))
+    ax[0, 0].plot(rho_dt_matrix * 1e5, label='Reactivity change (pcm)')
+    ax[0, 0].set_title('Reactivity_dt')
 
-ax[1, 1].plot(temperature_fuel_middle_matrix)
-ax[1, 1].set_title('Temperature in the core with time in the middle')
+    ax[0, 1].plot(z, rho * 1e5, label='Reactivity')
+    ax[0, 1].set_title('Reactivity')
 
-plt.tight_layout()
-plt.savefig('temperature_in_heat_exchangers.png')  # Save the figure
-plt.close(fig)  # Close the figure to free memory
+    ax[1, 0].plot(neutron_dt_matrix, label='Neutron flux change')
+    ax[1, 0].set_title('Neutron flux_dt * 100')
 
-# Third plot: Delayed Neutron Precursors with time in the middle
-fig, ax = plt.subplots(figsize=(14, 6))
-for i in range(6):
-    ax.plot(ci_middle_matrix[:,i], label=f'Ci{i+1}')
-    ax.legend()
-ax.set_title('Delayed Neutron Precursors with time in the middle')
+    plt.tight_layout()
+    plt.savefig(f'{plot_dir}/rho_dt.png')
+    plt.close(fig)
 
-plt.tight_layout()
-plt.savefig('precursors_with_time_middle.png')  # Save the figure
-plt.close(fig)  # Close the figure
+def save_specific_data(data, index):
+    os.makedirs('simulation_results', exist_ok=True)
+    data_file = f'simulation_results/specific_data_{index}.npz'
+    np.savez(data_file, data=data)
 
-fig, ax = plt.subplots(2, 2, figsize=(14, 6))
-ax[0, 0].plot(rho_dt_matrix * 1e5, label='Reactivity change (pcm)')
-ax[0, 0].set_title('Reactivity_dt')
+def main():
+    # Define ranges of values for parameters
+    V_values = 1.103497 * 10^np.linspace(7, 8, 5)
+    D_values = 0.96343 * np.linspace(7, 8, 5)
+    N_values = np.linspace(180, 220, 5)       
+    sigma_a_values=1.58430e-2/np.linspace(7, 8, 5), # cm^-1        
+    nu_sigma_f_values = 3.33029e-2/np.linspace(7, 8, 5), # cm^-1
 
-ax[0, 1].plot(z, rho * 1e5, label='Reactivity')
-ax[0, 1].set_title('Reactivity')
+    # Generate parameter sets
+    parameter_sets = [
+        generate_parameters(V=V, D=D, N=N, sigma_a=sigma_a, nu_sigma_f=nu_sigma_f)
+        for V in V_values
+        for D in D_values
+        for N in N_values
+        for sigma_a in sigma_a_values
+        for nu_sigma_f in nu_sigma_f_values
+    ]
 
-ax[1, 0].plot(neutron_dt_matrix, label='Neutron flux change')
-ax[1, 0].set_title('Neutron flux_dt * 100')
+    # Run simulations in parallel
+    Parallel(n_jobs=-1)(delayed(run_simulation)(params, idx) for idx, params in enumerate(parameter_sets))
 
-plt.tight_layout()
-plt.savefig('rho_dt.png')  # Save the figure
-plt.close(fig)  # Close the figure
+if __name__ == "__main__":
+    main()

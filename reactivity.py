@@ -1,11 +1,25 @@
 from parameters import *
 import numpy as np
 
-def reactivity(temperature_fuel, temperature_graphite, step, time_span, rho_insertion):
+def reactivity(temperature_fuel, temperature_graphite, step, time_span, rho_insertion, params):
+    
+    beta=params['beta']
+    lambda_i=params['lambda_i']
+    tau_c=params['tau_c']
+    tau_l=params['tau_l']
+    alpha_f=params['alpha_f']
+    alpha_g=params['alpha_g']
+    rho_init=params['rho_init']
+    L=params['L']
+    N=params['N']
+    # initial conditions for TH
+    initialS = params['initialS']
+    initialG = params['initialG']
     
     rho_0=sum(beta)
     for i in range(6):
         rho_0=rho_0-beta[i]/(1+(1/(lambda_i[i]*tau_c))*(1-np.exp(-lambda_i[i]*tau_l)))
+    rho_0=rho_0*np.ones(N)
     # print(rho_0)
     
     # SOURCE INSERTION

@@ -1,24 +1,44 @@
 from parameters import *
 from ode_solver import ode_solver
-# New Form Parameters
-C1 = V_he2_s
-C2 = -U2_hx / (M_he2_s * c_p_ss)
-C3 = V_he2_ss
-C4 = U2_hx / (M_he2_ss * c_p_sss)
+from scipy.sparse import csc_matrix
 
-# Discretize the spatial domain
-# A_HX2=np.diag(-np.ones(Nx))+ np.diag(np.ones(Nx-1), 1) / dx
-# # A_HX2 = (-2*np.diag(np.ones(Nx)) + np.diag(np.ones(Nx - 1), 1) + np.diag(np.ones(Nx - 1), -1)) / dx
-# A_HX2[0, 0] = 1 / dx
-# A_HX2[-1, -1] = 1 / dx
+def HX2(y_hx2, Ts_HX2_L, Tss_HX2_0, params, step):
+    
+    V_he2_s = params['V_he2_s']
+    U2_hx = params['U2_hx']
+    M_he2_s = params['M_he2_s']
+    c_p_ss = params['c_p_ss']
+    V_he2_ss = params['V_he2_ss']
+    U2_hx = params['U2_hx']
+    M_he2_ss = params['M_he2_ss']
+    c_p_sss = params['c_p_sss']
+    Nx = params['Nx']
+    dx = params['dx']
+    u2_L = params['u2_L']
+    u2_H = params['u2_H']
+    v2_L = params['v2_L']
+    v2_H = params['v2_H']
+    err = params['err']
+    u2_init = params['u2_init']
+    v2_init = params['v2_init']
+    
+    # New Form Parameters
+    C1 = V_he2_s
+    C2 = -U2_hx / (M_he2_s * c_p_ss)
+    C3 = V_he2_ss
+    C4 = U2_hx / (M_he2_ss * c_p_sss)
 
-A_HX2 = np.diag(-2 * np.ones(Nx)) + np.diag(np.ones(Nx-1), 1) + np.diag(np.ones(Nx-1), -1)
-A_HX2[0, 0] = A_HX2[-1, -1] = -1
-A_HX2[0, 1] = A_HX2[-1, -2] = 0
-# A_HX2 = A_HX2 / dx**2
-A_HX2_sparse = csc_matrix(A_HX2) / dx**2
+    # Discretize the spatial domain
+    # A_HX2=np.diag(-np.ones(Nx))+ np.diag(np.ones(Nx-1), 1) / dx
+    # # A_HX2 = (-2*np.diag(np.ones(Nx)) + np.diag(np.ones(Nx - 1), 1) + np.diag(np.ones(Nx - 1), -1)) / dx
+    # A_HX2[0, 0] = 1 / dx
+    # A_HX2[-1, -1] = 1 / dx
 
-def HX2(y_hx2, Ts_HX2_L, Tss_HX2_0, step):
+    A_HX2 = np.diag(-2 * np.ones(Nx)) + np.diag(np.ones(Nx-1), 1) + np.diag(np.ones(Nx-1), -1)
+    A_HX2[0, 0] = A_HX2[-1, -1] = -1
+    A_HX2[0, 1] = A_HX2[-1, -2] = 0
+    # A_HX2 = A_HX2 / dx**2
+    A_HX2_sparse = csc_matrix(A_HX2) / dx**2
     
     y_hx2[:Nx,-1]=Ts_HX2_L
     y_hx2[Nx:,0]=Tss_HX2_0
@@ -48,7 +68,7 @@ def HX2(y_hx2, Ts_HX2_L, Tss_HX2_0, step):
         
     # solution_y_hx1 = solve_ivp(pde_to_ode_hx1, (step, step+1), y0, t_eval=t, method='RK45')     
     bc=[]
-    solution_y_hx2 = ode_solver(y0, bc, pde_to_ode_hx2)
+    solution_y_hx2 = ode_solver(y0, bc, pde_to_ode_hx2, params)
         
     # y_hx1 is a vector at time step+1
     y_hx2 = solution_y_hx2.y   

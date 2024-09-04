@@ -1,33 +1,52 @@
 import numpy as np
 from scipy.integrate import solve_ivp
 from scipy.sparse.linalg import spsolve
+from scipy.sparse import csc_matrix
 
 from parameters import *
 from ode_solver import ode_solver
 
-# parameters transformation
-a_th = Vc
-b_th = U / (Ms * c_p_s)
-c_th = U / (Mg * c_p_g)
-d_th = L * gamma / (Ms * c_p_s)
-e_th = L * (1 - gamma) / (Mg * c_p_g)
+def thermal_hydraulics(y_th, q_prime, Ts_core_0, params, step):
+    Vc = params['Vc']
+    U = params['U']
+    Ms = params['Ms']
+    Mg = params['Mg']
+    c_p_s = params['c_p_s']
+    c_p_g = params['c_p_g']
+    L = params['L']
+    gamma = params['gamma']
+    N = params['N']
+    dz = params['dz']
+    bc_s0 = params['bc_s0']
+    bc_sL = params['bc_sL']
+    bc_g0 = params['bc_g0']
+    bc_gL = params['bc_gL']
+    initialS = params['initialS']
+    initialG = params['initialG']
+    
+    # parameters transformation
+    a_th = Vc
+    b_th = U / (Ms * c_p_s)
+    c_th = U / (Mg * c_p_g)
+    d_th = L * gamma / (Ms * c_p_s)
+    e_th = L * (1 - gamma) / (Mg * c_p_g)
 
-# discretize the spatial domain
-# AT=np.diag(-np.ones(N))+ np.diag(np.ones(N-1), 1)
-# # AT=np.diag(-np.ones(N))+ np.diag(np.ones(N-1), 1)+ np.diag(np.ones(N-1), -1)
-# AT[0, :] = 0
-# AT[-1,:] = 0
-# AT[0, 0] = 1
-# AT[-1, -1] = 1
-# AT=AT/dz
-# print(AT)
-# AT_sparse = csc_matrix(AT)
-AT = np.diag(-2 * np.ones(N)) + np.diag(np.ones(N-1), 1) + np.diag(np.ones(N-1), -1)
-AT[0, 0] = AT[-1, -1] = -1
-AT[0, 1] = AT[-1, -2] = 0
-AT_sparse = csc_matrix(AT) / dz**2
-# print("Test th")
-def thermal_hydraulics(y_th, q_prime, Ts_core_0, step):
+    # discretize the spatial domain
+    # AT=np.diag(-np.ones(N))+ np.diag(np.ones(N-1), 1)
+    # # AT=np.diag(-np.ones(N))+ np.diag(np.ones(N-1), 1)+ np.diag(np.ones(N-1), -1)
+    # AT[0, :] = 0
+    # AT[-1,:] = 0
+    # AT[0, 0] = 1
+    # AT[-1, -1] = 1
+    # AT=AT/dz
+    # print(AT)
+    # AT_sparse = csc_matrix(AT)
+    AT = np.diag(-2 * np.ones(N)) + np.diag(np.ones(N-1), 1) + np.diag(np.ones(N-1), -1)
+    AT[0, 0] = AT[-1, -1] = -1
+    AT[0, 1] = AT[-1, -2] = 0
+    AT_sparse = csc_matrix(AT) / dz**2
+    # print("Test th")
+
     # print(y_th.shape)
     y_th[0] = Ts_core_0
     
@@ -60,7 +79,7 @@ def thermal_hydraulics(y_th, q_prime, Ts_core_0, step):
     # print("y0shape: "+str(y0.shape))
     
     bc=[]
-    solution_y_th = ode_solver(y0, bc, pde_to_ode_th)
+    solution_y_th = ode_solver(y0, bc, pde_to_ode_th, params)
     
     y_th = solution_y_th.y
     
