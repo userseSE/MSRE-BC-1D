@@ -59,7 +59,7 @@ def reactivity(temperature_fuel, temperature_graphite, step, time_span, rho_inse
     rho=rho_0+rho_feedback+react
     
     rho=0 * np.ones(N)
-    rho=-0.369e-4 * np.ones(N)
+    rho=0.369e-4 * np.ones(N)
     # if step<=1:
     #     rho=0.0045/2*step*np.ones(N)
     # else:
