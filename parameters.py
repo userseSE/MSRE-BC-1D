@@ -13,8 +13,8 @@ def generate_parameters(
     D = 0.96343 * 7,  # cm 
     # D = 1.02,  
     # sigma_a =0.0835   
-    sigma_a=1.58430*1e-2/7.33, # cm^-1   7.34-explode, 7.325-converge to 0     
-    nu_sigma_f = 3e-2/6.8, # cm^-1, 3.33029e-2, 6.8- seems explode? at 7.33, 6.9-converge to 0 at 7.325
+    sigma_a=1.58430*1e-2/7.33, # cm^-1   7.33-some ci explode, 7.325-converge to 0     
+    nu_sigma_f = 3e-2/6.8, # cm^-1, 3.33029e-2, 6.9- explode at 7.33, 6.9-converge to 0 at 7.325
     # sigma_a = 0.00054869,
     # nu_sigma_f = 0.00098328,
     # nu_sigma_f = 3.33029
