@@ -2,23 +2,23 @@ import numpy as np
 
 def generate_parameters(
     # Neutronics
-    dt=0.02, # fixed time step
+    dt=0.1, # fixed time step
     L = 172,  # Length of the spatial domain, m
     # L = 22.9
     N = 200,  # Number of spatial points
     # V = 4e5
-    # V = 1.103497 * 1e7,  # cm/s   
-    V = 2.2e5,        
+    V = 1.103497 * 1e7,  # cm/s   
+    # V = 2.2e5,        
     # D = 0.390016 * 8   
-    # D = 0.96343 * 7.6,  # cm 
-    D = 1.08,  
+    D = 0.96343 * 5,  # cm 
+    # D = 1.02,  
     # sigma_a =0.0835   
-    # sigma_a=1.58430*1e-2/5, # cm^-1        
-    # nu_sigma_f = 3.33029e-2/5, # cm^-1
-    sigma_a = 0.0054869,
-    nu_sigma_f = 2.41 * 0.00408,
+    sigma_a=1.58430*1e-2/5, # cm^-1        
+    nu_sigma_f = 3.33029e-2/5, # cm^-1
+    # sigma_a = 0.00054869,
+    # nu_sigma_f = 0.00098328,
     # nu_sigma_f = 3.33029
-    # sigma_f= nu_sigma_f/2.41   
+    # sigma_f = 0.00408,  
     beta = [0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088], # Delayed neutron fractions
     # Beta = sum(beta),      # 0.00264
     # Beta = 0.0045
@@ -126,7 +126,7 @@ def generate_parameters(
     dx = L / (Nx - 1)
     Beta = sum(beta)
     delta=Beta*nu_sigma_f
-    phi_0 = 5226.54 * np.ones(N)  # Initial neutron flux, n/cm^2/s
+    phi_0 = 0.421 * np.ones(N)  # 5226.54, Initial neutron flux, n/cm^2/s
     c0 = (sum(beta) * nu_sigma_f) / (sum(lambda_i)/6) * phi_0  # Initial precursor concentration
     
     rho_init = 0 * np.ones(N)

@@ -26,8 +26,8 @@ def neutronics(y_n, rho, step, params):
     # Boundary conditions: Dirichlet boundary conditions for zero flux at boundaries
     D2[0, :] = 0
     D2[-1, :] = 0
-    D2[0, 0] = -1
-    D2[-1, -1] = -1
+    D2[0, 0] = 1
+    D2[-1, -1] = 1
     
     D2_sparse = csc_matrix(D2)
     I = np.eye(N)
@@ -36,6 +36,7 @@ def neutronics(y_n, rho, step, params):
 
     # Compute Keff (effective multiplication factor)
     Keff = 1 / (np.ones(N) - rho)
+    print(f"Keff(N/2): {Keff[int(N/2)]}, Keff(0): {Keff[0]}, Keff(N-1): {Keff[N-1]}, Keff(avg): {Keff.mean()}")  
 
     def pde_to_ode_neutronics(t, y):
         phi = y[:N]
