@@ -223,24 +223,25 @@ def save_specific_data(data, index):
     np.savez(data_file, data=data)
 
 def main():
+    run_simulation(generate_parameters(), 0)
     # Define ranges of values for parameters
-    V_values = np.linspace(1.103497e6, 1.103497e8, 5)
-    D_values = np.linspace(0.96343*7, 0.96343*8, 5)     
-    sigma_a_values=np.linspace(1.58430e-2/7, 1.58430e-2/8, 5) # cm^-1        
-    nu_sigma_f_values = np.linspace(3.33029e-2/7, 3.33029e-2/8, 5) # cm^-1
+    # V_values = np.linspace(1.103497e6, 1.103497e8, 5)
+    # D_values = np.linspace(0.96343*7, 0.96343*8, 5)     
+    # sigma_a_values=np.linspace(1.58430e-2/7, 1.58430e-2/8, 5) # cm^-1        
+    # nu_sigma_f_values = np.linspace(3.33029e-2/7, 3.33029e-2/8, 5) # cm^-1
     # L=22.9
 
     # Generate parameter sets
-    parameter_sets = [
-        generate_parameters(V=V, D=D, sigma_a=sigma_a, nu_sigma_f=nu_sigma_f)
-        for V in V_values
-        for D in D_values
-        for sigma_a in sigma_a_values
-        for nu_sigma_f in nu_sigma_f_values
-    ]
+    # parameter_sets = [
+    #     generate_parameters(sigma_a=sigma_a, nu_sigma_f=nu_sigma_f)
+    #     # for V in V_values
+    #     # for D in D_values
+    #     # for sigma_a in sigma_a_values
+    #     # for nu_sigma_f in nu_sigma_f_values
+    # ]
 
     # Run simulations in parallel
-    Parallel(n_jobs=-1)(delayed(run_simulation)(params, idx) for idx, params in enumerate(parameter_sets))
+    # Parallel(n_jobs=-1)(delayed(run_simulation)(params, idx) for idx, params in enumerate(parameter_sets))
 
 if __name__ == "__main__":
     main()
