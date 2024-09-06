@@ -2,7 +2,7 @@ import numpy as np
 
 def generate_parameters(
     # Neutronics
-    dt=0.1, # fixed time step
+    dt=0.05, # fixed time step
     L = 172,  # Length of the spatial domain, m
     # L = 22.9
     N = 172,  # Number of spatial points
@@ -13,8 +13,8 @@ def generate_parameters(
     D = 0.96343 * 7,  # cm 
     # D = 1.02,  
     # sigma_a =0.0835   
-    sigma_a=1.58430*1e-2/7.5, # cm^-1        
-    nu_sigma_f = 3.33029e-2/7.5, # cm^-1
+    sigma_a=1.58430*1e-2/7.3, # cm^-1        
+    nu_sigma_f = 3.33029e-2/7.3, # cm^-1, 3.33029e-2
     # sigma_a = 0.00054869,
     # nu_sigma_f = 0.00098328,
     # nu_sigma_f = 3.33029
