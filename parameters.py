@@ -14,7 +14,7 @@ def generate_parameters(
     # D = 1.02,  
     # sigma_a =0.0835   
     sigma_a=1.58430*1e-2/7.3, # cm^-1        
-    nu_sigma_f = 2.5e-2/7, # cm^-1, 3.33029e-2
+    nu_sigma_f = 3e-2/7, # cm^-1, 3.33029e-2
     # sigma_a = 0.00054869,
     # nu_sigma_f = 0.00098328,
     # nu_sigma_f = 3.33029
