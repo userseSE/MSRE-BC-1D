@@ -20,7 +20,7 @@ def run_simulation(params, index):
     # Extract parameters
     rho_insertion = 0.0045/2 * np.ones(N)
     # rho = params['rho_init']
-    rho = -0.369e-4 * np.ones(N)
+    rho = 0 * np.ones(N)
     y_n = np.zeros((7 * N, 1))
     q_prime = np.zeros((N, 1))
     y_th = np.zeros((2 * N, 1))
