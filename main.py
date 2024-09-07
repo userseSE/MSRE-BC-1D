@@ -228,7 +228,7 @@ def main():
     # Define ranges of values for parameters
     # V_values = np.linspace(1.103497e6, 1.103497e8, 5)
     # D_values = np.linspace(0.96343*7, 0.96343*8, 5)     
-    sigma_a_values=np.linspace(0.0021613915416098224, 0.0021647986612813256, 8) # cm^-1        
+    sigma_a_values=np.linspace(0.0021618782729914657, 0.002162365004373109, 8) # cm^-1        
     # nu_sigma_f_values = np.linspace(3.33029e-2/7, 3.33029e-2/8, 5) # cm^-1
     # L=22.9
 
