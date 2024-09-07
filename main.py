@@ -13,7 +13,7 @@ from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
 def run_simulation(params, index):
-    time_span = 800
+    time_span = 10000
     N = params['N']
     Nx = params['Nx']
 
@@ -228,7 +228,7 @@ def main():
     # Define ranges of values for parameters
     # V_values = np.linspace(1.103497e6, 1.103497e8, 5)
     # D_values = np.linspace(0.96343*7, 0.96343*8, 5)     
-    sigma_a_values=np.linspace(0.0021618782729914657, 0.002162365004373109, 8) # cm^-1        
+    sigma_a_values=np.linspace(0.00216187, 0.00216195, 25) # cm^-1        
     # nu_sigma_f_values = np.linspace(3.33029e-2/7, 3.33029e-2/8, 5) # cm^-1
     # L=22.9
 
