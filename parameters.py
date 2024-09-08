@@ -1,7 +1,6 @@
 import numpy as np
 
 def generate_parameters(
-    rho_init = 0,
     # Neutronics
     dt=0.1, # fixed time step, 0.5
     L = 172,  # Length of the spatial domain, m
@@ -130,7 +129,7 @@ def generate_parameters(
     phi_0 = 8e6 * np.ones(N)  # 0.421, 5226.54, Initial neutron flux, n/cm^2/s
     c0 = (sum(beta) * nu_sigma_f) / (sum(lambda_i)/6) * phi_0  # Initial precursor concentration
     
-    # rho_init = 0
+    rho_init = 0 * np.ones(N)
     
     initialS = (bc_s0 + (bc_sL - bc_s0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / (L*2))) * 0.8).T
     initialG = (bc_g0 + (bc_gL - bc_g0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / (L*2))) * 1.05).T

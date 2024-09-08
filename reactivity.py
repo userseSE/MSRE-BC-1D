@@ -1,7 +1,7 @@
 from parameters import *
 import numpy as np
 
-def reactivity(temperature_fuel, temperature_graphite, step, time_span, rho_insertion, params):
+def reactivity(temperature_fuel_r, temperature_graphite_r, temperature_fuel, temperature_graphite, step, time_span, rho_insertion, params):
     
     beta=params['beta']
     lambda_i=params['lambda_i']
@@ -54,11 +54,11 @@ def reactivity(temperature_fuel, temperature_graphite, step, time_span, rho_inse
     else:
         react = reactdata[1]
         
-    rho_feedback=(initialS-temperature_fuel)*alpha_f+(initialG-temperature_graphite)*alpha_g
+    rho_feedback=(temperature_fuel_r-temperature_fuel)*alpha_f+(temperature_graphite_r-temperature_graphite)*alpha_g
     
-    rho=rho_0+rho_feedback+react
+    rho=rho_0+rho_feedback*1e-4+react
     
-    rho=rho_init * np.ones(N)
+    # rho=rho_init * np.ones(N)
     
     # rho=0 * np.ones(N)
     # rho=-0.369e-4 * np.ones(N)
