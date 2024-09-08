@@ -13,14 +13,14 @@ from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
 def run_simulation(params, index):
-    time_span = 20000
+    time_span = 800
     N = params['N']
     Nx = params['Nx']
 
     # Extract parameters
     rho_insertion = 0.0045/2 * np.ones(N)
-    # rho = params['rho_init']
-    rho = 0 * np.ones(N)
+    rho = params['rho_init'] * np.ones(N)
+    # rho = 0 * np.ones(N)
     y_n = np.zeros((7 * N, 1))
     q_prime = np.zeros((N, 1))
     y_th = np.zeros((2 * N, 1))
@@ -228,17 +228,21 @@ def main():
     # Define ranges of values for parameters
     # V_values = np.linspace(1.103497e6, 1.103497e8, 5)
     # D_values = np.linspace(0.96343*7, 0.96343*8, 5)     
-    sigma_a_values=np.linspace(0.002161937, 0.002161940, 30) # cm^-1        
+    # sigma_a_values=np.linspace(0.002161937, 0.002161940, 30) # cm^-1        
     # nu_sigma_f_values = np.linspace(3.33029e-2/7, 3.33029e-2/8, 5) # cm^-1
     # L=22.9
+    # phi_0_values = np.linspace(1 * np.ones(200), 1e10*np.ones(200), 10)
+    rho_init_values = np.linspace(-3e-4, 3e-4, 10)
 
     # Generate parameter sets
     parameter_sets = [
-        generate_parameters(sigma_a=sigma_a)
+        generate_parameters(rho_init = rho_init)
+        for rho_init in rho_init_values
         # for V in V_values
         # for D in D_values
-        for sigma_a in sigma_a_values
+        # for sigma_a in sigma_a_values
         # for nu_sigma_f in nu_sigma_f_values
+        # for phi_0 in phi_0_values
     ]
 
     # Run simulations in parallel
