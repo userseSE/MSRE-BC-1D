@@ -57,7 +57,7 @@ def reactivity(temperature_fuel_r, temperature_graphite_r, temperature_fuel, tem
         
     rho_feedback=(temperature_fuel_r-temperature_fuel)*alpha_f+(temperature_graphite_r-temperature_graphite)*alpha_g
     
-    rho=rho_0+rho_feedback*scale+react
+    rho=rho_0+rho_feedback+react
     
     # rho=rho_init * np.ones(N)
     
