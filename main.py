@@ -137,6 +137,7 @@ def run_simulation(params, index):
                 'D': params['D'],
                 'sigma_a': params['sigma_a'],
                 'nu_sigma_f': params['nu_sigma_f'],
+                'scale': params['scale'],
             })
     
     # Save specific data points
@@ -227,7 +228,7 @@ def save_specific_data(data, index):
     np.savez(data_file, data=data)
 
 def main():
-    run_simulation(generate_parameters(), 0)
+    # run_simulation(generate_parameters(), 0)
     # Define ranges of values for parameters
     # V_values = np.linspace(1.103497e6, 1.103497e8, 5)
     # D_values = np.linspace(0.96343*7, 0.96343*8, 5)     
@@ -236,20 +237,22 @@ def main():
     # L=22.9
     # phi_0_values = np.linspace(1 * np.ones(200), 1e10*np.ones(200), 10)
     # rho_init_values = np.linspace(-3e-5, 3e-5, 100)
+    scale_values = [0, 1e-1, 1e-2, 1e-3, 1e-4]
 
     # Generate parameter sets
     parameter_sets = [
-        # generate_parameters(rho_init = rho_init)
+        generate_parameters(scale=scale)
         # for rho_init in rho_init_values
         # for V in V_values
         # for D in D_values
         # for sigma_a in sigma_a_values
         # for nu_sigma_f in nu_sigma_f_values
         # for phi_0 in phi_0_values
+        for scale in scale_values
     ]
 
     # Run simulations in parallel
-    # Parallel(n_jobs=-1)(delayed(run_simulation)(params, idx) for idx, params in enumerate(parameter_sets))
+    Parallel(n_jobs=-1)(delayed(run_simulation)(params, idx) for idx, params in enumerate(parameter_sets))
 
 if __name__ == "__main__":
     main()

@@ -119,6 +119,7 @@ def generate_parameters(
     tau_r_hx = 8, # (sec) core to fertile hx TDAMSRE p.6
     tau_r_pp = 6, # TODO:delay from HX2 to the power plant, to be fixed
     tau_pp_r = 6, # TODO:delay from the power plant to HX2, to be fixed
+    scale = 0,
     ):
     
     dz = L / (N - 1)  # Spatial step size, m
@@ -216,7 +217,8 @@ def generate_parameters(
         'Tsss_in': Tsss_in,
         'Tsss_out': Tsss_out,
         'initialS': initialS,
-        'initialG': initialG
+        'initialG': initialG,
+        'scale': scale  
     }
 
 # Generate default parameters

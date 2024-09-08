@@ -15,6 +15,7 @@ def reactivity(temperature_fuel_r, temperature_graphite_r, temperature_fuel, tem
     # initial conditions for TH
     initialS = params['initialS']
     initialG = params['initialG']
+    scale=params['scale']
     
     rho_0=sum(beta)
     for i in range(6):
@@ -56,7 +57,7 @@ def reactivity(temperature_fuel_r, temperature_graphite_r, temperature_fuel, tem
         
     rho_feedback=(temperature_fuel_r-temperature_fuel)*alpha_f+(temperature_graphite_r-temperature_graphite)*alpha_g
     
-    rho=rho_0+rho_feedback*1e-4+react
+    rho=rho_0+rho_feedback*scale+react
     
     # rho=rho_init * np.ones(N)
     
