@@ -126,7 +126,7 @@ def generate_parameters(
     dx = L / (Nx - 1)
     Beta = sum(beta)
     delta=Beta*nu_sigma_f
-    phi_0 = 8e6 * np.ones(N)  # 0.421, 5226.54, Initial neutron flux, n/cm^2/s
+    phi_0 = 2 * np.ones(N)  # 0.421, 5226.54, Initial neutron flux, n/cm^2/s
     c0 = (sum(beta) * nu_sigma_f) / (sum(lambda_i)/6) * phi_0  # Initial precursor concentration
     
     rho_init = 0 * np.ones(N)
