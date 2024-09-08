@@ -54,7 +54,7 @@ def generate_parameters(
     # bc_g0 = 960
     # bc_gL = 970
     bc_s0 = 920,
-    bc_sL = 940,
+    bc_sL = 950,
     bc_g0 = 960,
     bc_gL = 970,
     # bc_g0 = 1050

@@ -42,7 +42,7 @@ def thermal_hydraulics(y_th, q_prime, Ts_core_0, params, step):
     # print(AT)
     # AT_sparse = csc_matrix(AT)
     AT = np.diag(-2 * np.ones(N)) + np.diag(np.ones(N-1), 1) + np.diag(np.ones(N-1), -1)
-    AT[0, 0] = AT[-1, -1] = -1
+    AT[0, 0] = AT[-1, -1] = 1
     AT[0, 1] = AT[-1, -2] = 0
     AT_sparse = csc_matrix(AT) / dz**2
     # print("Test th")
