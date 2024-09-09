@@ -13,7 +13,7 @@ from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
 def run_simulation(params, index):
-    time_span = 1000
+    time_span = 5000
     N = params['N']
     Nx = params['Nx']
 
@@ -228,7 +228,7 @@ def save_specific_data(data, index):
     np.savez(data_file, data=data)
 
 def main():
-    run_simulation(generate_parameters(), 0)
+    # run_simulation(generate_parameters(), 0)
     # Define ranges of values for parameters
     # V_values = np.linspace(1.103497e6, 1.103497e8, 5)
     # D_values = np.linspace(0.96343*7, 0.96343*8, 5)     
@@ -238,14 +238,16 @@ def main():
     # phi_0_values = np.linspace(1 * np.ones(200), 1e10*np.ones(200), 10)
     # rho_init_values = np.linspace(-3e-5, 3e-5, 100)
     # scale_values = [0, 1e-1, 1e-2, 1e-3, 1e-4]
-    bc_s0_values = np.linspace(900, 940, 10)
-    bc_sL_values = np.linspace(930, 990, 10)
-    bc_g0_values = np.linspace(910, 950, 10)
-    bc_gL_values = np.linspace(940, 1000, 10)
+    # bc_s0_values = np.linspace(900, 940, 10)
+    # bc_sL_values = np.linspace(930, 990, 10)
+    # bc_g0_values = np.linspace(910, 950, 10)
+    # bc_gL_values = np.linspace(940, 1000, 10)
+    U_values = np.linspace(10000, 36000, 10)
 
     # Generate parameter sets
     parameter_sets = [
-        generate_parameters(bc_s0=bc_s0, bc_sL=bc_sL, bc_g0=bc_g0, bc_gL=bc_gL)
+        generate_parameters(U=U) 
+        for U in U_values
         # for rho_init in rho_init_values
         # for V in V_values
         # for D in D_values
@@ -253,14 +255,14 @@ def main():
         # for nu_sigma_f in nu_sigma_f_values
         # for phi_0 in phi_0_values
         # for scale in scale_values
-        for bc_s0 in bc_s0_values
-        for bc_sL in bc_sL_values
-        for bc_g0 in bc_g0_values
-        for bc_gL in bc_gL_values
+        # for bc_s0 in bc_s0_values
+        # for bc_sL in bc_sL_values
+        # for bc_g0 in bc_g0_values
+        # for bc_gL in bc_gL_values
     ]
 
     # Run simulations in parallel
-    # Parallel(n_jobs=-1)(delayed(run_simulation)(params, idx) for idx, params in enumerate(parameter_sets))
+    Parallel(n_jobs=-1)(delayed(run_simulation)(params, idx) for idx, params in enumerate(parameter_sets))
 
 if __name__ == "__main__":
     main()
