@@ -53,10 +53,10 @@ def generate_parameters(
     # bc_sL = 910
     # bc_g0 = 960
     # bc_gL = 970
-    bc_s0 = 920,
-    bc_sL = 950,
-    bc_g0 = 960,
-    bc_gL = 970,
+    bc_s0 = 922,
+    bc_sL = 976,
+    bc_g0 = 921,
+    bc_gL = 973,
     # bc_g0 = 1050
     # bc_gL = 1060
     # bc_g0 = 931.15

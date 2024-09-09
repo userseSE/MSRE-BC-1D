@@ -228,7 +228,7 @@ def save_specific_data(data, index):
     np.savez(data_file, data=data)
 
 def main():
-    # run_simulation(generate_parameters(), 0)
+    run_simulation(generate_parameters(), 0)
     # Define ranges of values for parameters
     # V_values = np.linspace(1.103497e6, 1.103497e8, 5)
     # D_values = np.linspace(0.96343*7, 0.96343*8, 5)     
@@ -260,7 +260,7 @@ def main():
     ]
 
     # Run simulations in parallel
-    Parallel(n_jobs=-1)(delayed(run_simulation)(params, idx) for idx, params in enumerate(parameter_sets))
+    # Parallel(n_jobs=-1)(delayed(run_simulation)(params, idx) for idx, params in enumerate(parameter_sets))
 
 if __name__ == "__main__":
     main()
