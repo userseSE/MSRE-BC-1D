@@ -61,7 +61,7 @@ def neutronics(y_n, rho, step, params):
     if step == 0:
         phi_0 = params['phi_0']
         c0 = params['c0']
-        y0 = np.concatenate([phi_0, c0, c0, c0, c0, c0, c0])
+        y0 = np.concatenate([phi_0, c0[:N], c0[N:2*N], c0[2*N:3*N], c0[3*N:4*N], c0[4*N:5*N], c0[5*N:]])
     else:
         y0 = y_n
 

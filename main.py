@@ -13,12 +13,12 @@ from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
 def run_simulation(params, index):
-    time_span = 5000
+    time_span = 2000
     N = params['N']
     Nx = params['Nx']
 
     # Extract parameters
-    rho_insertion = 0 * np.ones(N)
+    rho_insertion = 0 * np.ones(N)     # pcm
     rho = params['rho_init'] * np.ones(N)
     # rho = 0 * np.ones(N)
     y_n = np.zeros((7 * N, 1))
@@ -61,6 +61,7 @@ def run_simulation(params, index):
         print(f'Step {step}/{time_span}')
         
         y_n, q_prime = neutronics(y_n[:, -1], rho, step, params)
+        q_prime = q_prime * params['sigma_f'] * params['volume'] / (3.12e10)
         phi = y_n[:N, -1].T
         ci = y_n[N:, -1].T
         phi_middle_matrix[step] = phi[int(N / 2)]
@@ -228,7 +229,7 @@ def save_specific_data(data, index):
     np.savez(data_file, data=data)
 
 def main():
-    # run_simulation(generate_parameters(), 0)
+    run_simulation(generate_parameters(), 0)
     # Define ranges of values for parameters
     # V_values = np.linspace(1.103497e6, 1.103497e8, 5)
     # D_values = np.linspace(0.96343*7, 0.96343*8, 5)     
@@ -262,7 +263,7 @@ def main():
     ]
 
     # Run simulations in parallel
-    Parallel(n_jobs=-1)(delayed(run_simulation)(params, idx) for idx, params in enumerate(parameter_sets))
+    # Parallel(n_jobs=-1)(delayed(run_simulation)(params, idx) for idx, params in enumerate(parameter_sets))
 
 if __name__ == "__main__":
     main()

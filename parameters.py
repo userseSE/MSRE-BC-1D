@@ -3,9 +3,10 @@ import numpy as np
 def generate_parameters(
     # Neutronics
     dt=0.1, # fixed time step, 0.5
-    L = 172,  # Length of the spatial domain, m
+    L = 172,  # Length of the spatial domain, cm
     # L = 22.9
     N = 172,  # Number of spatial points
+    volume = 18 * 1e3, # volume of reactor
     # V = 4e5
     V = 1.103497 * 1e7,  # cm/s   
     # V = 2.2e5,        
@@ -13,12 +14,12 @@ def generate_parameters(
     D = 0.96343 * 7,  # cm 
     # D = 1.02,  
     # sigma_a =0.0835   
-    sigma_a=0.002161939172413793, # cm^-1, 7.33-explode, 7.325-converge to 0     
-    nu_sigma_f = 0.004411764705882353, # cm^-1, 3.33029e-2, 6.9- explode at 7.33, 6.9-converge to 0 at 7.325
+    sigma_a=0.002161939172413793, # cm^-1, 0.002161939172413793, 7.33-explode, 7.325-converge to 0     
+    nu_sigma_f = 0.004411764705882353, # cm^-1, 0.004411764705882353, 3.33029e-2, 6.9- explode at 7.33, 6.9-converge to 0 at 7.325
     # sigma_a = 0.00054869,
     # nu_sigma_f = 0.00098328,
     # nu_sigma_f = 3.33029
-    # sigma_f = 0.00408,  
+    sigma_f = 0.004411764705882353/2.41,  
     beta = [0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088], # Delayed neutron fractions
     # Beta = sum(beta),      # 0.00264
     # Beta = 0.0045
@@ -32,35 +33,32 @@ def generate_parameters(
     # c0 = (delta / (sum(lambda_i)/6)) * phi_0
 
     # Thermal-Hydraulics
-    c_p_s = 1983,  # Specific heat of primary salt, J/kgK
-    Vc = 0.2,    # Salt velocity in the core, m/s
-    Ms = 1448,   # Fuel salt mass in the core, kg
-    Mg = 3687,   # Mass of graphite in the core, kg
+    c_p_s = 1983,  # 1983, Specific heat of primary salt, J/kgK
+    c_p_g = 1757,    # 1757, Specific heat of graphite, J/kg K
+    # Vc = 0.2,    # Salt velocity in the core, m/s
+    Vc = 0.2,
+    Ms = 1448,   # 1448, Fuel salt mass in the core, kg
+    Mg = 3687,   # 3687, Mass of graphite in the core, kg
     gamma = 0.93,    # Fraction of power released in the salt
-    # U = 36000   # Overall heat transfer coefficient between salt and graphite, W/K
-    U = 10000,
-    c_p_g = 1757,    # Specific heat of graphite, J/kg K
+    U = 36000,   # Overall heat transfer coefficient between salt and graphite, W/K
+    # U = 1800,
     # Temp input for test:
     # Amplitude = 4.5e6;
     # q_prime=Amplitude * sin(pi * linspace(0, L, N) / L)';
     # q_prime=Amplitude;
     # Boundary conditions
-    # bc_s0 = 910
-    # bc_sL = 958.15
-    # bc_g0 = 920
-    # bc_gL = 968.71
-    # bc_s0 = 900
-    # bc_sL = 910
-    # bc_g0 = 960
-    # bc_gL = 970
+    # bc_s0 = 910,
+    # bc_sL = 958.15,
+    # bc_g0 = 920,
+    # bc_gL = 968.71,
     bc_s0 = 922,
     bc_sL = 976,
     bc_g0 = 925,
     bc_gL = 993,
-    # bc_g0 = 1050
-    # bc_gL = 1060
-    # bc_g0 = 931.15
-    # bc_gL = 931.15
+    # bc_s0 = 0,
+    # bc_sL = 0,
+    # bc_g0 = 0,
+    # bc_gL = 0,
     # Initial conditions
     # initialS = (bc_s0 + (bc_sL - bc_s0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / (L*2))) * 0.8).T
     # initialG = (bc_g0 + (bc_gL - bc_g0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / (L*2))) * 1.05).T
@@ -80,9 +78,13 @@ def generate_parameters(
     c_p_ss = 2416,   # Specific heat of secondary salt, J/kg/K
     # Initial conditions
     u_L = 900.15,
-    u_H = 938,
+    u_H = 958,
     v_L = 824.85,
     v_H = 866.45,
+    # u_L = 0,
+    # u_H = 0,
+    # v_L = 0,
+    # v_H = 0,
     # initial conditions using a sine function
     # u_init = u_L + (u_H - u_L) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L_HX, Nx) / L_HX))).T
     # v_init = v_L + (v_H - v_L) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L_HX, Nx) / L_HX))* 1.05).T
@@ -106,8 +108,8 @@ def generate_parameters(
 
     # Reactivity
     # rho_init = 0 * np.ones(N)
-    alpha_f    = -5.904E-5,  # U233 (drho/K) fuel salt temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -5.904E-05; % ORNL-TM-0728 p. 101 %
-    alpha_g    = -6.624E-5,  # U233  (drho/K) graphite temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -6.624E-05; % ORNL-TM-0728 p.101
+    alpha_f    = -5.904E-5,  # -5.904E-5, U233 (drho/K) fuel salt temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -5.904E-05; % ORNL-TM-0728 p. 101 %
+    alpha_g    = -6.624E-5,  # -6.624E-5, U233  (drho/K) graphite temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -6.624E-05; % ORNL-TM-0728 p.101
     tau_l  = 16.73,  # ORNL-TM-0728 %16.44; % (s)
     tau_c  = 8.46,   # ORNL-TM-0728 %8.460; % (s)
 
@@ -127,9 +129,11 @@ def generate_parameters(
     dx = L / (Nx - 1)
     Beta = sum(beta)
     delta=Beta*nu_sigma_f
-    phi_0 = 2 * np.ones(N)  # 0.421, 5226.54, Initial neutron flux, n/cm^2/s
-    c0 = (sum(beta) * nu_sigma_f) / (sum(lambda_i)/6) * phi_0  # Initial precursor concentration
-    
+    phi_0 = 1e13 * np.ones(N)  # 0.421, 5226.54, Initial neutron flux, n/cm^2/s
+    # c0 = (sum(beta) * nu_sigma_f) / (sum(lambda_i)/6) * phi_0  # Initial precursor concentration
+    c0 = np.zeros(6 * N)
+    for i in range(6):
+        c0[i * N:(i + 1) * N] = (beta[i] * nu_sigma_f) / (lambda_i[i]/6) * phi_0
     rho_init = 0 * np.ones(N)
     
     initialS = (bc_s0 + (bc_sL - bc_s0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / (L*2))) * 0.8).T
@@ -150,12 +154,14 @@ def generate_parameters(
     return {
         'dt': dt,
         'L': L,
+        'volume': volume,
         'N': N,
         'dz': dz,
         'V': V,
         'D': D,
         'sigma_a': sigma_a,
         'nu_sigma_f': nu_sigma_f,
+        'sigma_f': sigma_f,
         'beta': beta,
         'lambda_i': lambda_i,
         'phi_0': phi_0,

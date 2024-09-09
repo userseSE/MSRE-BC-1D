@@ -20,9 +20,12 @@ def reactivity(temperature_fuel_r, temperature_graphite_r, temperature_fuel, tem
     rho_0=sum(beta)
     for i in range(6):
         rho_0=rho_0-beta[i]/(1+(1/(lambda_i[i]*tau_c))*(1-np.exp(-lambda_i[i]*tau_l)))
-    rho_0=rho_0*np.ones(N)
+    # rho_0 = 0.0011211260746046986
+    # rho_0 = 0.000009
+    # print(f'rho_0{rho_0}')
+    rho_0=-rho_0*np.ones(N)
     
-    rho_0=rho_0*0
+    # rho_0= - 4 * np.sin(np.pi * (np.linspace(0, L, N) ) / (L*4)+(L/4))
     # print(rho_0)
     
     # SOURCE INSERTION
@@ -49,14 +52,14 @@ def reactivity(temperature_fuel_r, temperature_graphite_r, temperature_fuel, tem
     # reacttime = [0 10 10.1];
     # react = timeseries(reactdata,reacttime);
     
-    reactdata = [rho_init*1e-5, rho_insertion*1e-5]
+    reactdata = [rho_init * 1e-5, rho_insertion * 1e-5]
     if step < time_span/2:
         react = reactdata[0]
     else:
         react = reactdata[1]
         
     rho_feedback=(temperature_fuel_r-temperature_fuel)*alpha_f+(temperature_graphite_r-temperature_graphite)*alpha_g
-    
+    # rho_feedback = rho_feedback *0
     rho=rho_0+rho_feedback+react
     
     # rho=rho_init * np.ones(N)
