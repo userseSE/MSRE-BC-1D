@@ -38,7 +38,7 @@ def generate_parameters(
     Mg = 3687,   # Mass of graphite in the core, kg
     gamma = 0.93,    # Fraction of power released in the salt
     # U = 36000   # Overall heat transfer coefficient between salt and graphite, W/K
-    U = 36000,
+    U = 10000,
     c_p_g = 1757,    # Specific heat of graphite, J/kg K
     # Temp input for test:
     # Amplitude = 4.5e6;
@@ -56,7 +56,7 @@ def generate_parameters(
     bc_s0 = 922,
     bc_sL = 976,
     bc_g0 = 921,
-    bc_gL = 973,
+    bc_gL = 993,
     # bc_g0 = 1050
     # bc_gL = 1060
     # bc_g0 = 931.15
