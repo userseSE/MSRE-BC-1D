@@ -13,7 +13,7 @@ from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
 def run_simulation(params, index):
-    time_span = 2000
+    time_span = 200000
     N = params['N']
     Nx = params['Nx']
 

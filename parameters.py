@@ -33,13 +33,13 @@ def generate_parameters(
     # c0 = (delta / (sum(lambda_i)/6)) * phi_0
 
     # Thermal-Hydraulics
-    c_p_s = 1983,  # 1983, Specific heat of primary salt, J/kgK
+    c_p_s = 2090,  # 1983, Specific heat of primary salt, J/kgK
     c_p_g = 1757,    # 1757, Specific heat of graphite, J/kg K
     # Vc = 0.2,    # Salt velocity in the core, m/s
     Vc = 0.2,
     Ms = 1448,   # 1448, Fuel salt mass in the core, kg
     Mg = 3687,   # 3687, Mass of graphite in the core, kg
-    gamma = 0.93,    # Fraction of power released in the salt
+    gamma = 0.9,    # 0.93, Fraction of power released in the salt
     U = 36000,   # Overall heat transfer coefficient between salt and graphite, W/K
     # U = 1800,
     # Temp input for test:
@@ -47,14 +47,14 @@ def generate_parameters(
     # q_prime=Amplitude * sin(pi * linspace(0, L, N) / L)';
     # q_prime=Amplitude;
     # Boundary conditions
-    # bc_s0 = 910,
-    # bc_sL = 958.15,
-    # bc_g0 = 920,
-    # bc_gL = 968.71,
-    bc_s0 = 922,
-    bc_sL = 976,
-    bc_g0 = 925,
-    bc_gL = 993,
+    bc_s0 = 910,
+    bc_sL = 958.15,
+    bc_g0 = 920,
+    bc_gL = 968.71,
+    # bc_s0 = 922,
+    # bc_sL = 976,
+    # bc_g0 = 925,
+    # bc_gL = 993,
     # bc_s0 = 0,
     # bc_sL = 0,
     # bc_g0 = 0,
