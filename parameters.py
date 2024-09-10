@@ -5,8 +5,10 @@ def generate_parameters(
     dt=0.1, # fixed time step, 0.5
     L = 172,  # Length of the spatial domain, cm
     # L = 22.9
-    N = 172,  # Number of spatial points
-    volume = 18 * 1e3, # volume of reactor
+    N = 200,  # Number of spatial points
+    A = 4094,  # Area of the reactor, cm^2
+    flux_to_power = 3.12e10,    # 3.12e10, fissions/watt-sec
+    # volume = 18 * 1e3, # volume of reactor
     # V = 4e5
     V = 1.103497 * 1e7,  # cm/s   
     # V = 2.2e5,        
@@ -35,11 +37,11 @@ def generate_parameters(
     # Thermal-Hydraulics
     c_p_s = 2090,  # 1983, Specific heat of primary salt, J/kgK
     c_p_g = 1757,    # 1757, Specific heat of graphite, J/kg K
-    # Vc = 0.2,    # Salt velocity in the core, m/s
-    Vc = 0.2,
+    Vc = 0.2,    # Salt velocity in the core, m/s
+    # Vc = 20,
     Ms = 1448,   # 1448, Fuel salt mass in the core, kg
     Mg = 3687,   # 3687, Mass of graphite in the core, kg
-    gamma = 0.9,    # 0.93, Fraction of power released in the salt
+    gamma = 0.93,    # 0.93, Fraction of power released in the salt
     U = 36000,   # Overall heat transfer coefficient between salt and graphite, W/K
     # U = 1800,
     # Temp input for test:
@@ -47,25 +49,26 @@ def generate_parameters(
     # q_prime=Amplitude * sin(pi * linspace(0, L, N) / L)';
     # q_prime=Amplitude;
     # Boundary conditions
-    bc_s0 = 910,
-    bc_sL = 958.15,
-    bc_g0 = 920,
-    bc_gL = 968.71,
+    # bc_s0 = 910,
+    # bc_sL = 958.15,
+    # bc_g0 = 920,
+    # bc_gL = 968.71,
+    # s_ref = 
     # bc_s0 = 922,
     # bc_sL = 976,
     # bc_g0 = 925,
     # bc_gL = 993,
-    # bc_s0 = 0,
-    # bc_sL = 0,
-    # bc_g0 = 0,
-    # bc_gL = 0,
+    bc_s0 = 700,
+    bc_sL = 800,
+    bc_g0 = 700,
+    bc_gL = 1000,
     # Initial conditions
     # initialS = (bc_s0 + (bc_sL - bc_s0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / (L*2))) * 0.8).T
     # initialG = (bc_g0 + (bc_gL - bc_g0) * (0.5 + 0.5 * np.sin(np.pi * (np.linspace(0, L, N) ) / (L*2))) * 1.05).T
     # referenceS=930
     # referenceG=931.15
     # Heat Exchanger 1
-    err = 1,
+    err = 0,
     # Nx = N  # Number of spatial points
     L_HX = 2,    # length of the spatial domain
     # dx = L / (N - 1)    # Spatial step size
@@ -77,8 +80,12 @@ def generate_parameters(
     M_he_ss = 117,   # Mass of salt in the heat exchanger (coolant side), kg
     c_p_ss = 2416,   # Specific heat of secondary salt, J/kg/K
     # Initial conditions
-    u_L = 900.15,
-    u_H = 958,
+    # u_L = 900.15,
+    # u_H = 958,
+    # v_L = 824.85,
+    # v_H = 866.45,
+    u_L = 800,
+    u_H = 800,
     v_L = 824.85,
     v_H = 866.45,
     # u_L = 0,
@@ -115,13 +122,13 @@ def generate_parameters(
 
     # Transport Delays
     # Pure time delays between components
-    tau_hx_c = 9, # (sec) delay from hx to core TDAMSRE p.6
+    tau_hx_c = 4, # (sec) delay from hx to core TDAMSRE p.6
     tau_c_hx = 4, # (sec) subtracted 1 sec for external loop power generation node resident time; delay from core to fuel hx TDAMSRE p.6
     tau_hx_r = 5, # (sec) fertile hx to core TDAMSRE p.6
     tau_r_hx = 8, # (sec) core to fertile hx TDAMSRE p.6
     tau_r_pp = 6, # TODO:delay from HX2 to the power plant, to be fixed
     tau_pp_r = 6, # TODO:delay from the power plant to HX2, to be fixed
-    scale = 0,
+    scale = 1,
     ):
     
     dz = L / (N - 1)  # Spatial step size, m
@@ -154,9 +161,11 @@ def generate_parameters(
     return {
         'dt': dt,
         'L': L,
-        'volume': volume,
+        # 'volume': volume,
         'N': N,
         'dz': dz,
+        'flux_to_power': flux_to_power,
+        'A': A,
         'V': V,
         'D': D,
         'sigma_a': sigma_a,

@@ -13,12 +13,12 @@ from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
 def run_simulation(params, index):
-    time_span = 200000
+    time_span = 50000
     N = params['N']
     Nx = params['Nx']
 
     # Extract parameters
-    rho_insertion = 0 * np.ones(N)     # pcm
+    rho_insertion = -50 * np.ones(N)     # pcm
     rho = params['rho_init'] * np.ones(N)
     # rho = 0 * np.ones(N)
     y_n = np.zeros((7 * N, 1))
@@ -61,7 +61,7 @@ def run_simulation(params, index):
         print(f'Step {step}/{time_span}')
         
         y_n, q_prime = neutronics(y_n[:, -1], rho, step, params)
-        q_prime = q_prime * params['sigma_f'] * params['volume'] / (3.12e10)
+        q_prime = q_prime * params['sigma_f'] * params['A'] / (params['flux_to_power'])
         phi = y_n[:N, -1].T
         ci = y_n[N:, -1].T
         phi_middle_matrix[step] = phi[int(N / 2)]
@@ -79,7 +79,7 @@ def run_simulation(params, index):
 
         Ts_core_0 = transport_delay(Ts_HX1_0, params['tau_hx_c'], Ts_in, buffer_hx_c, step)
         y_th = thermal_hydraulics(y_th, q_prime, Ts_core_0, params, step)
-        if step % 50 == 0:
+        if step % 100 == 0:
             temperature_fuel_r=y_th[:N,-1].T
             temperature_graphite_r=y_th[N:,-1].T
         temperature_fuel = y_th[:N, -1].T

@@ -23,6 +23,7 @@ def thermal_hydraulics(y_th, q_prime, Ts_core_0, params, step):
     bc_gL = params['bc_gL']
     initialS = params['initialS']
     initialG = params['initialG']
+    err=params['err']
     
     # parameters transformation
     a_th = Vc
@@ -54,8 +55,8 @@ def thermal_hydraulics(y_th, q_prime, Ts_core_0, params, step):
         # print("testThermal")
         temperature_fuel = y[:N]
         temperature_graphite = y[N:]
-        temperature_fuel_dt = a_th * (AT_sparse @ temperature_fuel) + b_th * (temperature_graphite-temperature_fuel)+d_th*q_prime.T
-        temperature_graphite_dt = c_th * (temperature_fuel-temperature_graphite) + e_th * q_prime.T
+        temperature_fuel_dt = a_th * (AT_sparse @ temperature_fuel) + b_th * (temperature_graphite-temperature_fuel)+d_th*q_prime.T + err
+        temperature_graphite_dt = c_th * (temperature_fuel-temperature_graphite) + e_th * q_prime.T + err
         # print(f'd_th: {d_th*q_prime.T}')
         # print(f'e_th: {d_th*q_prime.T}')
         # Apply time-varying boundary conditions
