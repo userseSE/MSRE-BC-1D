@@ -13,7 +13,7 @@ from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
 def run_simulation(params, index):
-    time_span = 50000
+    time_span = 200000
     N = params['N']
     Nx = params['Nx']
 
@@ -79,7 +79,7 @@ def run_simulation(params, index):
 
         Ts_core_0 = transport_delay(Ts_HX1_0, params['tau_hx_c'], Ts_in, buffer_hx_c, step)
         y_th = thermal_hydraulics(y_th, q_prime, Ts_core_0, params, step)
-        if step % 100 == 0:
+        if step % 800 == 0:
             temperature_fuel_r=y_th[:N,-1].T
             temperature_graphite_r=y_th[N:,-1].T
         temperature_fuel = y_th[:N, -1].T
@@ -110,9 +110,9 @@ def run_simulation(params, index):
         Tsss_pp_0 = y_pp
 
         rho = reactivity(temperature_fuel_r, temperature_graphite_r, temperature_fuel, temperature_graphite, step, time_span, rho_insertion, params)
-        rho_matrix[step] = rho[int(N / 2)]
+        rho_matrix[step] = rho.mean()
         if step > 0:
-            rho_dt_matrix[step] = rho[int(N / 2)] - rho_matrix[step - 1]
+            rho_dt_matrix[step] = rho.mean() - rho_matrix[step - 1]
 
     # Plotting results including Ts_HX1
     plot_results(z=np.linspace(0, params['L'], N),
