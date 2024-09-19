@@ -20,7 +20,7 @@ def run_simulation(params, index):
     initialG = params['initialG']
 
     # Extract parameters
-    rho_insertion = 50 * np.ones(N)     # pcm
+    rho_insertion = 0 * np.ones(N)     # pcm
     rho = params['rho_init'] * np.ones(N)
     # rho = 0 * np.ones(N)
     y_n = np.zeros((7 * N, 1))
@@ -81,9 +81,9 @@ def run_simulation(params, index):
 
         Ts_core_0 = transport_delay(Ts_HX1_0, params['tau_hx_c'], Ts_in, buffer_hx_c, step)
         y_th = thermal_hydraulics(y_th, q_prime, Ts_core_0, params, step)
-        if step % 800 == 0:
-            temperature_fuel_r=y_th[:N,-1].T
-            temperature_graphite_r=y_th[N:,-1].T
+        # if step % 800 == 0:
+        #     temperature_fuel_r=y_th[:N,-1].T
+        #     temperature_graphite_r=y_th[N:,-1].T
         temperature_fuel = y_th[:N, -1].T
         temperature_graphite = y_th[N:, -1].T
         Ts_core_L = y_th[-1, -1]
@@ -111,7 +111,7 @@ def run_simulation(params, index):
         y_pp = power_plant_temp(Tsss_pp_L, step)
         Tsss_pp_0 = y_pp
 
-        rho = reactivity(temperature_fuel_r, temperature_graphite_r, temperature_fuel, temperature_graphite, step, time_span, rho_insertion, params)
+        rho = reactivity(initialS, initialG, temperature_fuel, temperature_graphite, step, time_span, rho_insertion, params)
         rho_matrix[step] = rho.mean()
         if step > 0:
             rho_dt_matrix[step] = rho.mean() - rho_matrix[step - 1]

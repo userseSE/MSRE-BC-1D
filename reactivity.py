@@ -13,9 +13,8 @@ def reactivity(temperature_fuel_r, temperature_graphite_r, temperature_fuel, tem
     L=params['L']
     N=params['N']
     # initial conditions for TH
-    initialS = params['initialS']
-    initialG = params['initialG']
     scale=params['scale']
+    max_rho_change=params['max_rho_change']
     
     rho_0=sum(beta)
     for i in range(6):
@@ -58,7 +57,11 @@ def reactivity(temperature_fuel_r, temperature_graphite_r, temperature_fuel, tem
     else:
         react = reactdata[1]
         
-    rho_feedback=(temperature_fuel_r-temperature_fuel)*alpha_f+(temperature_graphite_r-temperature_graphite)*alpha_g
+    # rho_feedback=(temperature_fuel_r-temperature_fuel)*alpha_f+(temperature_graphite_r-temperature_graphite)*alpha_g
+    rho_feedback = np.clip((temperature_fuel_r - temperature_fuel) * alpha_f +
+                       (temperature_graphite_r - temperature_graphite) * alpha_g,
+                       -max_rho_change, max_rho_change)
+
     # rho_feedback = rho_feedback *0
     rho=rho_0+rho_feedback*scale+react
     

@@ -2,7 +2,7 @@ import numpy as np
 
 def generate_parameters(
     # Neutronics
-    dt=0.1, # fixed time step, 0.5
+    dt=0.01, # fixed time step, 0.5
     L = 172,  # Length of the spatial domain, cm
     # L = 22.9
     N = 200,  # Number of spatial points
@@ -79,6 +79,12 @@ def generate_parameters(
     M_he_s = 342,    # Mass of salt in the heat exchanger (fuel side), kg
     M_he_ss = 117,   # Mass of salt in the heat exchanger (coolant side), kg
     c_p_ss = 2416,   # Specific heat of secondary salt, J/kg/K
+    
+    h_s = 0.1,  # Heat transfer coefficient for fluid 1
+    k_s = 0.5,  # Thermal conductivity for fluid 1
+    h_ss = 0.1,  # Heat transfer coefficient for fluid 2
+    k_ss = 0.5,  # Thermal conductivity for fluid 2
+    T_ambient = 800, 
     # Initial conditions
     # u_L = 900.15,
     # u_H = 958,
@@ -115,6 +121,7 @@ def generate_parameters(
 
     # Reactivity
     # rho_init = 0 * np.ones(N)
+    max_rho_change = 0.0001,  # Maximum reactivity change, $/beta
     alpha_f    = -5.904E-5,  # -5.904E-5, U233 (drho/K) fuel salt temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -5.904E-05; % ORNL-TM-0728 p. 101 %
     alpha_g    = -6.624E-5,  # -6.624E-5, U233  (drho/K) graphite temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -6.624E-05; % ORNL-TM-0728 p.101
     tau_l  = 16.73,  # ORNL-TM-0728 %16.44; % (s)
@@ -192,6 +199,7 @@ def generate_parameters(
         'M_he_s': M_he_s,
         'M_he_ss': M_he_ss,
         'c_p_ss': c_p_ss,
+        
         'L_HX2': L_HX2,
         'V_he2_s': V_he2_s,
         'V_he2_ss': V_he2_ss,
@@ -200,6 +208,7 @@ def generate_parameters(
         'M_he2_ss': M_he2_ss,
         'c_p_sss': c_p_sss,
         'rho_init': rho_init,
+        'max_rho_change': max_rho_change,
         'alpha_f': alpha_f,
         'alpha_g': alpha_g,
         'tau_l': tau_l,
@@ -217,6 +226,11 @@ def generate_parameters(
         'err': err,
         'Nx': Nx,
         'dx': dx,
+        'h_s': h_s,
+        'k_s': k_s,
+        'h_ss': h_ss,
+        'k_ss': k_ss,
+        'T_ambient': T_ambient,
         'u_L': u_L,
         'u_H': u_H,
         'v_L': v_L,
