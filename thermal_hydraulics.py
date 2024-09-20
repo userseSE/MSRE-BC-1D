@@ -8,7 +8,8 @@ from ode_solver import ode_solver
 
 def thermal_hydraulics(y_th, q_prime, Ts_core_0, params, step):
     Vc = params['Vc']
-    U = params['U']
+    U_sg = params['U_sg']
+    U_gs = params['U_gs']
     Ms = params['Ms']
     Mg = params['Mg']
     c_p_s = params['c_p_s']
@@ -27,9 +28,9 @@ def thermal_hydraulics(y_th, q_prime, Ts_core_0, params, step):
     
     # parameters transformation
     a_th = Vc
-    b_th = U / (Ms * c_p_s)
+    b_th = U_gs / (Ms * c_p_s)
     d_th = L * gamma / (Ms * c_p_s)
-    c_th = U / (Mg * c_p_g)
+    c_th = U_sg / (Mg * c_p_g)
     e_th = L * (1 - gamma) / (Mg * c_p_g)
 
     # discretize the spatial domain

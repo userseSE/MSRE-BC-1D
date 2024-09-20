@@ -42,7 +42,8 @@ def generate_parameters(
     Ms = 1448,   # 1448, Fuel salt mass in the core, kg
     Mg = 3687,   # 3687, Mass of graphite in the core, kg
     gamma = 0.93,    # 0.93, Fraction of power released in the salt
-    U = 36000,   # Overall heat transfer coefficient between salt and graphite, W/K
+    U_sg = 36000,   # Overall heat transfer coefficient between salt and graphite, W/K
+    U_gs = 36000,   # Overall heat transfer coefficient between graphite and salt, W/K
     # U = 1800,
     # Temp input for test:
     # Amplitude = 4.5e6;
@@ -121,7 +122,7 @@ def generate_parameters(
 
     # Reactivity
     # rho_init = 0 * np.ones(N)
-    max_rho_change = 0.0001,  # Maximum reactivity change, $/beta
+    max_rho_change = 1e-5,  # Maximum reactivity change, $/beta
     alpha_f    = -5.904E-5,  # -5.904E-5, U233 (drho/K) fuel salt temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -5.904E-05; % ORNL-TM-0728 p. 101 %
     alpha_g    = -6.624E-5,  # -6.624E-5, U233  (drho/K) graphite temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -6.624E-05; % ORNL-TM-0728 p.101
     tau_l  = 16.73,  # ORNL-TM-0728 %16.44; % (s)
@@ -187,7 +188,8 @@ def generate_parameters(
         'Ms': Ms,
         'Mg': Mg,
         'gamma': gamma,
-        'U': U,
+        'U_sg': U_sg,
+        'U_gs': U_gs,
         'c_p_g': c_p_g,
         'bc_s0': bc_s0,
         'bc_sL': bc_sL,

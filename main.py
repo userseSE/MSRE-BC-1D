@@ -13,14 +13,14 @@ from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
 def run_simulation(params, index):
-    time_span = 200000
+    time_span = 400000
     N = params['N']
     Nx = params['Nx']
     initialS = params['initialS']
     initialG = params['initialG']
 
     # Extract parameters
-    rho_insertion = 0 * np.ones(N)     # pcm
+    rho_insertion = 50 * np.ones(N)     # pcm
     rho = params['rho_init'] * np.ones(N)
     # rho = 0 * np.ones(N)
     y_n = np.zeros((7 * N, 1))
@@ -249,8 +249,8 @@ def main():
 
     # Generate parameter sets
     parameter_sets = [
-        generate_parameters(U=U) 
-        for U in U_values
+        # generate_parameters(U=U) 
+        # for U in U_values
         # for rho_init in rho_init_values
         # for V in V_values
         # for D in D_values

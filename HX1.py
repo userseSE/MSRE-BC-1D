@@ -60,17 +60,16 @@ def HX1(y_hx1, Ts_HX1_L, Tss_HX1_0, params, step):
         dv_dt = C3 * (A_HX_sparse @ v) + C4 * (u - v) + err
         
         # Apply time-varying boundary conditions
-        # du_dt[0] = u_L - u[0] / dx
-        # du_dt[-1] = u_H - u[-1] / dx
-        # dv_dt[0] = v_L - v[0] / dx
-        # dv_dt[-1] = v_H - v[-1] / dx
-        du_dt[0] = (h_s / k_s) * (T_ambient - u[0]) - u[0] / dx  # Robin condition at the left boundary for `u`
-        du_dt[-1] = (h_s / k_s) * (T_ambient - u[-1]) - u[-1] / dx  # Robin condition at the right boundary for `u`
+        du_dt[0] = u_L - u[0] / dx
+        du_dt[-1] = u_H - u[-1] / dx
+        dv_dt[0] = v_L - v[0] / dx
+        dv_dt[-1] = v_H - v[-1] / dx
+        # du_dt[0] = (h_s / k_s) * (T_ambient - u[0]) - u[0] / dx  # Robin condition at the left boundary for `u`
+        # du_dt[-1] = (h_s / k_s) * (T_ambient - u[-1]) - u[-1] / dx  # Robin condition at the right boundary for `u`
 
-        dv_dt[0] = (h_ss / k_ss) * (T_ambient - v[0]) - v[0] / dx  # Robin condition at the left boundary for `v`
-        dv_dt[-1] = (h_ss / k_ss) * (T_ambient - v[-1]) - v[-1] / dx  # Robin condition at the right boundary for `v`
+        # dv_dt[0] = (h_ss / k_ss) * (T_ambient - v[0]) - v[0] / dx  # Robin condition at the left boundary for `v`
+        # dv_dt[-1] = (h_ss / k_ss) * (T_ambient - v[-1]) - v[-1] / dx  # Robin condition at the right boundary for `v`
 
-        
         dydt = np.concatenate([du_dt, dv_dt])
         return dydt
     
