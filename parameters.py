@@ -2,7 +2,7 @@ import numpy as np
 
 def generate_parameters(
     # Neutronics
-    dt=0.01, # fixed time step, 0.5
+    dt=0.001, # fixed time step, 0.5
     L = 172,  # Length of the spatial domain, cm
     # L = 22.9
     N = 200,  # Number of spatial points
@@ -122,7 +122,7 @@ def generate_parameters(
 
     # Reactivity
     # rho_init = 0 * np.ones(N)
-    max_rho_change = 1e-5,  # Maximum reactivity change, $/beta
+    max_rho_change = 1e-4,  # Maximum reactivity change, $/beta
     alpha_f    = -5.904E-5,  # -5.904E-5, U233 (drho/K) fuel salt temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -5.904E-05; % ORNL-TM-0728 p. 101 %
     alpha_g    = -6.624E-5,  # -6.624E-5, U233  (drho/K) graphite temperature-reactivity feedback coefficient ORNL-TM-1647 p.3 % -6.624E-05; % ORNL-TM-0728 p.101
     tau_l  = 16.73,  # ORNL-TM-0728 %16.44; % (s)

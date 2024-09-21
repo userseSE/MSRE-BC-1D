@@ -56,8 +56,13 @@ def reactivity(temperature_fuel_r, temperature_graphite_r, temperature_fuel, tem
         react = reactdata[0]
     else:
         react = reactdata[1]
+        # smoothing_factor = 100
+        # react_insertion = reactdata[1] * (1 - np.exp(-step / smoothing_factor))
+        # react = react_insertion
+
         
     # rho_feedback=(temperature_fuel_r-temperature_fuel)*alpha_f+(temperature_graphite_r-temperature_graphite)*alpha_g
+
     rho_feedback = np.clip((temperature_fuel_r - temperature_fuel) * alpha_f +
                        (temperature_graphite_r - temperature_graphite) * alpha_g,
                        -max_rho_change, max_rho_change)
