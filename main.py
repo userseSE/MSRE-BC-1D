@@ -13,14 +13,14 @@ from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
 def run_simulation(params, index):
-    time_span = 400000
+    time_span = 2000
     N = params['N']
     Nx = params['Nx']
     initialS = params['initialS']
     initialG = params['initialG']
 
     # Extract parameters
-    rho_insertion = 5 * np.ones(N)     # pcm
+    rho_insertion = - 0 * np.ones(N)     # pcm, add control rod insertion -> negative reactivity
     rho = params['rho_init'] * np.ones(N)
     # rho = 0 * np.ones(N)
     y_n = np.zeros((7 * N, 1))
