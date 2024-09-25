@@ -1,6 +1,7 @@
 #ifndef NEUTRONICS_HPP
 #define NEUTRONICS_HPP
 
+#include "parameters.hpp"
 #include <vector>
 #include <functional>
 #include <Eigen/Core>
@@ -10,6 +11,6 @@
 typedef Eigen::VectorXd state_type;
 
 // Function to solve the neutronics problem
-std::pair<Eigen::VectorXd, Eigen::VectorXd> neutronics(const state_type &y_n, const std::vector<double> &rho, int step, double nu_sigma_f);
+std::pair<Eigen::VectorXd, Eigen::VectorXd> neutronics(const state_type &y_n, const std::vector<double> &rho, int step, Parameters& params);
 
 #endif // NEUTRONICS_HPP

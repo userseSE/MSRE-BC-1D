@@ -17,17 +17,11 @@ using Eigen::SparseMatrix;
 using Eigen::VectorXd;
 using namespace boost::numeric::odeint;
 
-const double a_th = Vc;                                 // 0.2
-const double b_th = U_gs / (Ms * c_p_s);               // 0.0118956
-const double c_th = U_sg / (Mg * c_p_g);            //  0.00555722
-const double d_th = L * gamma / (Ms * c_p_s);           // 5.28563e-05
-const double e_th = L * (1 - gamma) / (Mg * c_p_g);    // 1.85858e-06
-
 // Discretize the spatial domain
 SparseMatrix<double> AT(N, N);
 
-void initialize_AT() {
-
+void initialize_AT(Parameters& params) {
+    double dz = params.dz;
     AT = SparseMatrix<double>(N, N);
     std::vector<Eigen::Triplet<double>> tripletList;
     tripletList.reserve(3 * N - 2);
@@ -55,11 +49,12 @@ void initialize_AT() {
     AT.setFromTriplets(tripletList.begin(), tripletList.end());
 }
 
-VectorXd thermal_hydraulics(VectorXd &y_th, const VectorXd &q_prime, double Ts_core_0, int step) {
+VectorXd thermal_hydraulics(VectorXd &y_th, const VectorXd &q_prime, double Ts_core_0, int step, Parameters& params) {
+    
     // Ensure AT is initialized
     static bool initialized = false;
     if (!initialized) {
-        initialize_AT();
+        initialize_AT(params);
         initialized = true;
     }
 
@@ -75,26 +70,26 @@ VectorXd thermal_hydraulics(VectorXd &y_th, const VectorXd &q_prime, double Ts_c
 
         // Compute the time derivatives for temperature_fuel and temperature_graphite
         VectorXd temperature_fuel_dt =
-            a_th * (AT * temperature_fuel) +
-            b_th * (temperature_graphite - temperature_fuel) +
-            d_th * q_prime;
+            params.a_th * (AT * temperature_fuel) +
+            params.b_th * (temperature_graphite - temperature_fuel) +
+            params.d_th * q_prime;
 
         VectorXd temperature_graphite_dt =
-            c_th * (temperature_fuel - temperature_graphite) +
-            e_th * q_prime;
+            params.c_th * (temperature_fuel - temperature_graphite) +
+            params.e_th * q_prime;
 
         // // Apply time-varying boundary conditions
-        // temperature_fuel_dt[0] = bc_s0 - temperature_fuel[0];
-        // temperature_fuel_dt[N - 1] = bc_sL - temperature_fuel[N - 1];
-        // temperature_graphite_dt[0] = bc_g0 - temperature_graphite[0];
-        // temperature_graphite_dt[N - 1] = bc_gL - temperature_graphite[N - 1];
+        temperature_fuel_dt[0] = params.bc_s0 - temperature_fuel[0];
+        temperature_fuel_dt[N - 1] = params.bc_sL - temperature_fuel[N - 1];
+        temperature_graphite_dt[0] = params.bc_g0 - temperature_graphite[0];
+        temperature_graphite_dt[N - 1] = params.bc_gL - temperature_graphite[N - 1];
 
-        double k = 0.05;  // Heat transfer coefficient to ambient (example value)
-        double ambient_temp = 400.0;  // Ambient temperature in Kelvin
-        temperature_fuel_dt[0] = -k * (temperature_fuel[0] - ambient_temp);
-        temperature_fuel_dt[N - 1] = -k * (temperature_fuel[N - 1] - ambient_temp);
-        temperature_graphite_dt[0] = -k * (temperature_graphite[0] - ambient_temp);
-        temperature_graphite_dt[N - 1] = -k * (temperature_graphite[N - 1] - ambient_temp);
+        // double k = 0.05;  // Heat transfer coefficient to ambient (example value)
+        // double ambient_temp = 300.0;  // Ambient temperature in Kelvin
+        // temperature_fuel_dt[0] = -k * (temperature_fuel[0] - ambient_temp);
+        // temperature_fuel_dt[N - 1] = -k * (temperature_fuel[N - 1] - ambient_temp);
+        // temperature_graphite_dt[0] = -k * (temperature_graphite[0] - ambient_temp);
+        // temperature_graphite_dt[N - 1] = -k * (temperature_graphite[N - 1] - ambient_temp);
 
         // Copy the derivatives to the dydt vector
         dydt.head(N) = temperature_fuel_dt;
@@ -104,14 +99,14 @@ VectorXd thermal_hydraulics(VectorXd &y_th, const VectorXd &q_prime, double Ts_c
     // Initial condition vector
     VectorXd y0(2 * N);
     if (step == 0) {
-        y0.head(N) = initialS;
-        y0.tail(N) = initialG;
+        y0.head(N) = params.initialS;
+        y0.tail(N) = params.initialG;
     } else {
         y0 = y_th;
     }
 
     // Solve the ODE system
-    VectorXd solution_y_th = ode_solver(y0, pde_to_ode_th);
+    VectorXd solution_y_th = ode_solver(y0, pde_to_ode_th, step);
 
     return solution_y_th;
 }

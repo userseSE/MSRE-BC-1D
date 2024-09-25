@@ -297,30 +297,6 @@ src/parameters.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/parameters.cpp.s
 .PHONY : src/parameters.cpp.s
 
-src/power_plant.o: src/power_plant.cpp.o
-.PHONY : src/power_plant.o
-
-# target to build an object file
-src/power_plant.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/power_plant.cpp.o
-.PHONY : src/power_plant.cpp.o
-
-src/power_plant.i: src/power_plant.cpp.i
-.PHONY : src/power_plant.i
-
-# target to preprocess a source file
-src/power_plant.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/power_plant.cpp.i
-.PHONY : src/power_plant.cpp.i
-
-src/power_plant.s: src/power_plant.cpp.s
-.PHONY : src/power_plant.s
-
-# target to generate assembly for a file
-src/power_plant.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/power_plant.cpp.s
-.PHONY : src/power_plant.cpp.s
-
 src/reactivity.o: src/reactivity.cpp.o
 .PHONY : src/reactivity.o
 
@@ -423,9 +399,6 @@ help:
 	@echo "... src/parameters.o"
 	@echo "... src/parameters.i"
 	@echo "... src/parameters.s"
-	@echo "... src/power_plant.o"
-	@echo "... src/power_plant.i"
-	@echo "... src/power_plant.s"
 	@echo "... src/reactivity.o"
 	@echo "... src/reactivity.i"
 	@echo "... src/reactivity.s"

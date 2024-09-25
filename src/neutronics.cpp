@@ -22,12 +22,21 @@ using namespace boost::numeric::odeint;
 typedef Eigen::VectorXd state_type;
 
 std::pair<Eigen::VectorXd, Eigen::VectorXd>
-neutronics(const state_type &y_n, const std::vector<double> &rho, int step, double nu_sigma_f) {
+neutronics(const state_type &y_n, const std::vector<double> &rho, int step, Parameters& params) {
     VectorXd Keff = VectorXd::Zero(N);
     std::transform(rho.data(), rho.data() + N, Keff.data(),
                  [](double r) { return (1.0 / (1.0 - r)); });
     // std::cout << "Keff[N/2]: " << Keff[N / 2] << std::endl;
     // std::cout << "Keff_avg: " << Keff.mean() << std::endl;
+    double dz = params.dz;
+    double dt = params.dt;
+    double V = params.V;
+    double D = params.D;
+    double sigma_a = params.sigma_a;
+    double nu_sigma_f = params.nu_sigma_f;
+    double Beta = params.Beta;
+    VectorXd lambda_i = VectorXd::Map(params.lambda_i.data(), params.lambda_i.size());
+    VectorXd beta = VectorXd::Map(params.beta.data(), params.beta.size());
 
     // Finite difference matrix for the second derivative using Crank-Nicolson method
     VectorXd main_diag = (-2 / (dz * dz)) * VectorXd::Ones(N);
@@ -61,7 +70,8 @@ neutronics(const state_type &y_n, const std::vector<double> &rho, int step, doub
 
     SparseMatrix<double> I(N, N);
     I.setIdentity();
-
+    
+    // TODO: comput the inverse of A and use only * + between matrices
     // Define matrices A and B for Crank-Nicolson method using transposed D2_csc
     SparseMatrix<double> A = I - 0.5 * dt * V * D * D2_sparse;
     // Solve the system
@@ -84,7 +94,7 @@ neutronics(const state_type &y_n, const std::vector<double> &rho, int step, doub
         // Right-hand side for the Crank-Nicolson method
         Eigen::VectorXd rho_eigen = Eigen::VectorXd::Map(rho.data(), rho.size());
 
-        VectorXd rhs_phi = B * phi + dt * V * ((-sigma_a + (1.0 - Beta + rho_eigen.array()) * nu_sigma_f)
+        VectorXd rhs_phi = B * phi + dt * V * ((-sigma_a + (1.0 - Beta)* (1 + rho_eigen.array()) * nu_sigma_f)
                 .matrix()
                 .cwiseProduct(phi) + lambda_ci);
 
@@ -108,13 +118,13 @@ neutronics(const state_type &y_n, const std::vector<double> &rho, int step, doub
     // Initial condition vector
     state_type y0(7 * N);
     if (step == 0) {
-        y0 << phi_0, c1, c2, c3, c4, c5, c6;
+        y0 << params.phi_0, params.c1, params.c2, params.c3, params.c4, params.c5, params.c6;
     } else {
         y0 = y_n;
     }
 
     // Solve the system of ODEs
-    state_type solution_y_n = ode_solver(y0, pde_to_ode_neutronics);  // Pass t0, t_end, dt
+    state_type solution_y_n = ode_solver(y0, pde_to_ode_neutronics, step);  // Pass t0, t_end, dt
 
     // Extract the solution at the last time step
     VectorXd phi = solution_y_n.head(N);

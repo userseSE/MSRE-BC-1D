@@ -4,105 +4,131 @@
 #include <Eigen/Dense>
 #include <array>
 #include <numeric>
+#include <vector>
 
-const int N = 200;  // spatial discretization
-const int Nx = N;   // spatial discretization
+// Spatial discretization constants
+constexpr int N = 200;  // spatial discretization
+constexpr int Nx = N;   // spatial discretization
 
-// Neutronics
-extern double dt;
-extern const double L;
-extern const double A;
-extern const double flux_to_power;
-extern const double dz;
-extern const double V;
-extern const double D;
-extern const double sigma_a;
-extern double nu_sigma_f;  // Remove const to make it modifiable
-extern const double sigma_f;
-extern const std::array<double, 6> beta;
-extern const double Beta;
-extern const std::array<double, 6> lambda_i;
-extern Eigen::VectorXd phi_0;  // Use Eigen::VectorXd
-extern Eigen::VectorXd c1;
-extern Eigen::VectorXd c2;
-extern Eigen::VectorXd c3;
-extern Eigen::VectorXd c4;
-extern Eigen::VectorXd c5;
-extern Eigen::VectorXd c6;
-extern double t0;
-extern double t1;
+struct Parameters {
+    // seperate submodules into different structs
+    // Neutronics
+    static constexpr double dt = 0.01;
+    static constexpr double L = 172;
+    static constexpr double A = 4094;
+    static constexpr double flux_to_power = 3.12e10;
+    static constexpr double dz = L / (N - 1);
+    static constexpr double V = 1.103497 * 1e7;
+    static constexpr double D = 0.96343 * 7;
+    static constexpr double sigma_a = 0.002161939172413793;
+    static constexpr double nu_sigma_f = 0.0044120763;
+    static constexpr double sigma_f = 0.004411764705882353 / 2.41;
+    static constexpr std::array<double, 6> beta = {0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088};
+    static constexpr double Beta = std::accumulate(beta.begin(), beta.end(), 0.0);
+    // static constexpr double Beta = 0.000228 + 0.000788 + 0.000664 + 0.000736 + 0.000136 + 0.000088;
+    static constexpr std::array<double, 6> lambda_i = {0.0126, 0.0337, 0.139, 0.325, 1.13, 2.5};
 
-// Thermal-Hydraulics
-extern const double c_p_s;
-extern const double Vc;
-extern const double Ms;
-extern const double Mg;
-extern const double gamma;
-extern const double U_sg;
-extern const double U_gs;
-extern const double c_p_g;
-extern const double bc_s0;
-extern const double bc_sL;
-extern const double bc_g0;
-extern const double bc_gL;
-extern Eigen::VectorXd initialS;  // Use Eigen::VectorXd
-extern Eigen::VectorXd initialG;  // Use Eigen::VectorXd
+    static constexpr double t0 = 0;
+    static constexpr double t1 = 1;
 
-// Heat Exchanger 1
-extern const double L_HX;
-extern const double dx;
-extern const double V_he_s;
-extern const double V_he_ss;
-extern const double U_hx;
-extern const double M_he_s;
-extern const double M_he_ss;
-extern const double c_p_ss;
-extern const double u_L;
-extern const double u_H;
-extern const double v_L;
-extern const double v_H;
-extern Eigen::VectorXd u_init;  // Use Eigen::VectorXd
-extern Eigen::VectorXd v_init;  // Use Eigen::VectorXd
+    // TODO: init put into another struct, initial conditions set as const
+    Eigen::VectorXd phi_0 = Eigen::VectorXd::Zero(N);
+    Eigen::VectorXd c1 = Eigen::VectorXd::Zero(N);
+    Eigen::VectorXd c2 = Eigen::VectorXd::Zero(N);
+    Eigen::VectorXd c3 = Eigen::VectorXd::Zero(N);
+    Eigen::VectorXd c4 = Eigen::VectorXd::Zero(N);
+    Eigen::VectorXd c5 = Eigen::VectorXd::Zero(N);
+    Eigen::VectorXd c6 = Eigen::VectorXd::Zero(N);
 
-// Heat Exchanger 2
-extern const double L_HX2;
-extern const double V_he2_s;
-extern const double V_he2_ss;
-extern const double U2_hx;
-extern const double M_he2_s;
-extern const double M_he2_ss;
-extern const double c_p_sss;
-extern const double u2_L;
-extern const double u2_H;
-extern const double v2_L;
-extern const double v2_H;
-extern Eigen::VectorXd u2_init;  // Use Eigen::VectorXd
-extern Eigen::VectorXd v2_init;  // Use Eigen::VectorXd
+    // Thermal-Hydraulics
+    static constexpr double c_p_s = 2090;
+    static constexpr double Vc = 20;
+    static constexpr double Ms = 1448;
+    static constexpr double Mg = 3687;
+    static constexpr double gamma = 0.93;
+    static constexpr double U_sg = 36000;
+    static constexpr double U_gs = 36000;
+    static constexpr double c_p_g = 1757;
+    static constexpr double bc_s0 = 800;
+    static constexpr double bc_sL = 900;
+    static constexpr double bc_g0 = 850;
+    static constexpr double bc_gL = 950;
+    static constexpr double a_th = Vc;
+    static constexpr double b_th = U_gs / (Ms * c_p_s);
+    static constexpr double c_th = U_sg / (Mg * c_p_g);
+    static constexpr double d_th = L * gamma / (Ms * c_p_s);
+    static constexpr double e_th = L * (1 - gamma) / (Mg * c_p_g);
 
-// Reactivity
-extern const double alpha_f;
-extern const double alpha_g;
-extern const double tau_l;
-extern const double tau_c;
-extern const double max_rho_change;
-extern double rho_0_value;  // Remove const to make it modifiable
+    Eigen::VectorXd initialS = Eigen::VectorXd::Zero(N);
+    Eigen::VectorXd initialG = Eigen::VectorXd::Zero(N);
 
-// Transport Delays
-extern const double tau_hx_c;
-extern const double tau_c_hx;
-extern const double tau_hx_r;
-extern const double tau_r_hx;
-extern const double tau_r_pp;
-extern const double tau_pp_r;
+    // Heat Exchanger 1
+    static constexpr double L_HX = 2;
+    static constexpr double dx = L / (N - 1);
+    static constexpr double V_he_s = 171.2;
+    static constexpr double V_he_ss = 105.7;
+    static constexpr double U_hx = 82800;
+    static constexpr double M_he_s = 342;
+    static constexpr double M_he_ss = 117;
+    static constexpr double c_p_ss = 2416;
+    static constexpr double u_L = 900;
+    static constexpr double u_H = 950;
+    static constexpr double v_L = 850;
+    static constexpr double v_H = 900;
+    static constexpr double C1_1 = V_he_s;
+    static constexpr double C2_1 = -U_hx / (M_he_s * c_p_s);
+    static constexpr double C3_1 = V_he_ss;
+    static constexpr double C4_1 = U_hx / (M_he_ss * c_p_ss);
 
-// Initial Conditions
-extern const double Ts_in;
-extern const double Ts_out;
-extern const double Tss_in;
-extern const double Tss_out;
-extern const double Tsss_in;
-extern const double Tsss_out;
+    Eigen::VectorXd u_init = Eigen::VectorXd::Zero(N);
+    Eigen::VectorXd v_init = Eigen::VectorXd::Zero(N);
 
-void initialize_parameters();
+    // TODO: cosimulation - generate and use 3 sets of temperatures from brayton cycle, min, max, nominal in simulink
+    // Heat Exchanger 2
+    static constexpr double L_HX2 = 2;
+    static constexpr double V_he2_s = 105.7;
+    static constexpr double V_he2_ss = 45.3;
+    static constexpr double U2_hx = 36000;
+    static constexpr double M_he2_s = 117;
+    static constexpr double M_he2_ss = 672;
+    static constexpr double c_p_sss = 1300;
+    static constexpr double u2_L = 850;
+    static constexpr double u2_H = 900;
+    static constexpr double v2_L = 743;
+    static constexpr double v2_H = 873;
+    static constexpr double C1_2 = V_he2_s;
+    static constexpr double C2_2 = -U2_hx / (M_he2_s * c_p_ss);
+    static constexpr double C3_2 = V_he2_ss;
+    static constexpr double C4_2 = U2_hx / (M_he2_ss * c_p_sss);
+
+    Eigen::VectorXd u2_init = Eigen::VectorXd::Zero(N);
+    Eigen::VectorXd v2_init = Eigen::VectorXd::Zero(N);
+
+    // Reactivity
+    static constexpr double alpha_f = -5.904e-5;
+    static constexpr double alpha_g = -6.624e-5;
+    static constexpr double tau_l = 16.73;
+    static constexpr double tau_c = 8.46;
+    static constexpr double max_rho_change = 1e-4;
+    double rho_0_value = 3.3e-5;
+
+    // Transport Delays
+    static constexpr double tau_hx_c = 0;
+    static constexpr double tau_c_hx = 0;
+    static constexpr double tau_hx_r = 0;
+    static constexpr double tau_r_hx = 0;
+    static constexpr double tau_r_pp = 0;
+    static constexpr double tau_pp_r = 0;
+
+    // Initial Conditions
+    static constexpr double Ts_in = bc_s0;
+    static constexpr double Ts_out = bc_sL;
+    static constexpr double Tss_in = v_L;
+    static constexpr double Tss_out = v_H;
+    static constexpr double Tsss_in = v2_L;
+    static constexpr double Tsss_out = v2_H;
+};
+
+void initialize_parameters(Parameters& params);
 
 #endif // PARAMETERS_HPP

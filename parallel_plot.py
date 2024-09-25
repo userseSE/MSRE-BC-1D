@@ -32,7 +32,7 @@ def main():
     os.chdir(folder_path)
 
     # Plot data from CSV files
-    plot_csv('rho_matrix.csv', 'Reactivity (pcm, avg)')
+    plot_csv('rho_matrix.csv', 'Reactivity (pcm)')
     plot_csv('phi_middle_matrix.csv', 'Neutron Flux in the Middle (at L/2)')
     plot_csv('ci_middle_matrix.csv', 'Delayed Neutron Precursors in the Middle (at L/2)')
     plot_csv('temperature_fuel_middle_matrix.csv', 'Temperature in the Core Middle')

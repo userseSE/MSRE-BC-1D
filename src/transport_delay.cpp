@@ -5,6 +5,11 @@ double transport_delay(double T0, int time_delay, double initial_output,
     
     double T1;
 
+    if (time_delay == 0) {
+        T1 = T0;
+        return T1;
+    }
+
     if (step < time_delay) {
         T1 = initial_output;
         Eigen::VectorXd new_buffer(buffer.size() + 1);
