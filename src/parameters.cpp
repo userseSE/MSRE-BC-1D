@@ -31,20 +31,19 @@ double c4[N];
 double c5[N];
 double c6[N];
 
-// Neutronics
-std::vector<std::vector<double>> neutronics_initial_conditions(7, std::vector<double>(N));
-
 void initialize_neutronics() {
+    // std::fill_n(phi_0, N, 522654);  // Initialize phi_0 with 522654
     double lambda_sum = std::accumulate(lambda_i.begin(), lambda_i.end(), 0.0);
 
     for (int i = 0; i < N; ++i) {
-        neutronics_initial_conditions[0][i] = 1e13;  // phi_0
-        neutronics_initial_conditions[1][i] = ((beta[0] * nu_sigma_f) / (lambda_i[0]/6)) * neutronics_initial_conditions[0][i];  // c1
-        neutronics_initial_conditions[2][i] = ((beta[1] * nu_sigma_f) / (lambda_i[1]/6)) * neutronics_initial_conditions[0][i];  // c2
-        neutronics_initial_conditions[3][i] = ((beta[2] * nu_sigma_f) / (lambda_i[2]/6)) * neutronics_initial_conditions[0][i];  // c3
-        neutronics_initial_conditions[4][i] = ((beta[3] * nu_sigma_f) / (lambda_i[3]/6)) * neutronics_initial_conditions[0][i];  // c4
-        neutronics_initial_conditions[5][i] = ((beta[4] * nu_sigma_f) / (lambda_i[4]/6)) * neutronics_initial_conditions[0][i];  // c5
-        neutronics_initial_conditions[6][i] = ((beta[5] * nu_sigma_f) / (lambda_i[5]/6)) * neutronics_initial_conditions[0][i];  // c6
+        // phi_0[i] = 1e13 * sin(M_PI * i / (N - 1));
+        phi_0[i] = 1e13;
+        c1[i] = ((beta[0] * nu_sigma_f) / (lambda_i[0]/6)) * phi_0[i];
+        c2[i] = ((beta[1] * nu_sigma_f) / (lambda_i[1]/6)) * phi_0[i];
+        c3[i] = ((beta[2] * nu_sigma_f) / (lambda_i[2]/6)) * phi_0[i];
+        c4[i] = ((beta[3] * nu_sigma_f) / (lambda_i[3]/6)) * phi_0[i];
+        c5[i] = ((beta[4] * nu_sigma_f) / (lambda_i[4]/6)) * phi_0[i];
+        c6[i] = ((beta[5] * nu_sigma_f) / (lambda_i[5]/6)) * phi_0[i];
     }
 }
 
@@ -90,16 +89,13 @@ const double v_H = 866.45;
 double u_init[Nx];
 double v_init[Nx];
 
-// Heat Exchanger 1
-std::vector<std::vector<double>> hx1_initial_conditions(2, std::vector<double>(Nx));
 void initialize_heat_exchanger_1() {
     for (int i = 0; i < Nx; ++i) {
         double position = static_cast<double>(i) * L_HX / (Nx - 1);
-        hx1_initial_conditions[0][i] = u_L + (u_L - u_H) * (0.5 + 0.5 * std::sin(M_PI * (position / L_HX)));  // u_init
-        hx1_initial_conditions[1][i] = v_L + (v_L - v_H) * (0.5 + 0.5 * std::sin(M_PI * (position / L_HX)) * 1.05);  // v_init
+        u_init[i] = u_L + (u_L - u_H) * (0.5 + 0.5 * std::sin(M_PI * (position / L_HX)));
+        v_init[i] = v_L + (v_L - v_H) * (0.5 + 0.5 * std::sin(M_PI * (position / L_HX))*1.05);
     }
 }
-
 
 // Heat Exchanger 2
 const double L_HX2 = 2;
@@ -117,13 +113,11 @@ const double v2_H = 786;
 double u2_init[Nx];
 double v2_init[Nx];
 
-// Heat Exchanger 2
-std::vector<std::vector<double>> hx2_initial_conditions(2, std::vector<double>(Nx));
 void initialize_heat_exchanger_2() {
     for (int i = 0; i < Nx; ++i) {
         double position = static_cast<double>(i) * L_HX2 / (Nx - 1);
-        hx2_initial_conditions[0][i] = u2_L + (u2_H - u2_L) * (0.5 + 0.7 * std::sin(M_PI * (position / L_HX2)));  // u2_init
-        hx2_initial_conditions[1][i] = v2_L + (v2_H - v2_L) * (0.5 + 0.7 * std::sin(M_PI * (position / L_HX2)) * 1.05);  // v2_init
+        u2_init[i] = u2_L + (u2_H - u2_L) * (0.5 + 0.7 * std::sin(M_PI * (position / L_HX2)));
+        v2_init[i] = v2_L + (v2_H - v2_L) * (0.5 + 0.7 * std::sin(M_PI * (position / L_HX2))*1.05);
     }
 }
 

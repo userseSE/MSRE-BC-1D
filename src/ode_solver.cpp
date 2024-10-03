@@ -16,21 +16,24 @@
 using namespace boost::numeric::odeint;
 using namespace boost::numeric::ublas;
 
-typedef std::vector<std::vector<double>> state_type;  // 2D vector
+typedef std::vector<double> state_type;
 
-std::vector<std::vector<double>> ode_solver(const std::vector<std::vector<double>> &y0,
-                                            ODEFunction vector_to_be_solved) {
+std::vector<double> ode_solver(const std::vector<double> &y0,
+                               ODEFunction vector_to_be_solved) {
   // Copy initial state y0 to result
-  std::vector<std::vector<double>> result = y0;
+  std::vector<double> result = y0;
 
-  std::cout << "y0: " << y0[0][0] << std::endl;  // Adjusted to access 2D vector
+  std::cout << "y0: " << y0.front() << std::endl;
 
-  // Instantiate the Rosenbrock4 stepper (for stiff problems)
-  rosenbrock4<state_type> stepper;
+  typedef runge_kutta_dopri5<state_type> stepper_type;
 
-  // Integrate the system using adaptive time-stepping
+  // Use Runge-Kutta-Dopri5 stepper for adaptive time-stepping
+  runge_kutta_dopri5<state_type> stepper;
+  
+  // Integrate the system with adaptive time-stepping
   integrate_adaptive(stepper, vector_to_be_solved, result, t0, t1, dt);
+
+  // TODO: TRY Implicit method
 
   return result;
 }
-

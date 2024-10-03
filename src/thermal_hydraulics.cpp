@@ -55,9 +55,9 @@ for (int i = 0; i < N; ++i) {
 AT.setFromTriplets(tripletList.begin(), tripletList.end());
 }
 
-std::vector<std::vector<double>> thermal_hydraulics(std::vector<std::vector<double>> &y_th,
-                                                    const std::vector<double> &q_prime,
-                                                    double Ts_core_0, int step) {
+std::vector<double> thermal_hydraulics(std::vector<double> &y_th,
+                                       const std::vector<double> &q_prime,
+                                       double Ts_core_0, int step) {
   // Ensure AT is initialized
   static bool initialized = false;
   if (!initialized) {
@@ -67,19 +67,22 @@ std::vector<std::vector<double>> thermal_hydraulics(std::vector<std::vector<doub
 
   // Set boundary conditions
   if (step == 0) {
-    y_th[0][0] = Ts_core_0;
+    y_th[0] = Ts_core_0;
   } else {
-    y_th[0][0] = Ts_core_0;
+    y_th[0] = Ts_core_0;
   }
 
-  // Define the ODE system for the thermal-hydraulics model compatible with odeint
-  auto pde_to_ode_th = [&](const std::vector<std::vector<double>> &y,
-                           std::vector<std::vector<double>> &dydt, double t) {
-    // Split the input state vector y into temperature_fuel and temperature_graphite
-    Eigen::Map<const VectorXd> temperature_fuel(y[0].data(), N);
-    Eigen::Map<const VectorXd> temperature_graphite(y[1].data(), N);
+  // Define the ODE system for the thermal-hydraulics model compatible with
+  // odeint
+  auto pde_to_ode_th = [&](const std::vector<double> &y,
+                           std::vector<double> &dydt, double t) {
+    // Split the input state vector y into temperature_fuel and
+    // temperature_graphite
+    VectorXd temperature_fuel = Eigen::Map<const VectorXd>(y.data(), N);
+    VectorXd temperature_graphite = Eigen::Map<const VectorXd>(y.data() + N, N);
 
-    // Compute the time derivatives for temperature_fuel and temperature_graphite
+    // Compute the time derivatives for temperature_fuel and
+    // temperature_graphite
     VectorXd temperature_fuel_dt =
         a_th * (AT * temperature_fuel) +
         b_th * (temperature_graphite - temperature_fuel) +
@@ -97,22 +100,24 @@ std::vector<std::vector<double>> thermal_hydraulics(std::vector<std::vector<doub
 
     // Copy the derivatives to the dydt vector
     std::copy(temperature_fuel_dt.data(), temperature_fuel_dt.data() + N,
-              dydt[0].begin());
+              dydt.begin());
     std::copy(temperature_graphite_dt.data(),
-              temperature_graphite_dt.data() + N, dydt[1].begin());
+              temperature_graphite_dt.data() + N, dydt.begin() + N);
   };
 
-  // Initial condition vector (2D)
-  std::vector<std::vector<double>> y0(2, std::vector<double>(N));
+  // Initial condition vector
+  std::vector<double> y0(2 * N);
   if (step == 0) {
-    std::copy(initialS.data(), initialS.data() + N, y0[0].begin());  // Fuel temperature
-    std::copy(initialG.data(), initialG.data() + N, y0[1].begin());  // Graphite temperature
+    std::copy(initialS.data(), initialS.data() + N, y0.begin());
+    std::copy(initialG.data(), initialG.data() + N, y0.begin() + N);
   } else {
     y0 = y_th;
   }
 
-  // Solve the ODE system using 2D vectors
-  std::vector<std::vector<double>> solution_y_th = ode_solver(y0, pde_to_ode_th);
+  // Solve the ODE system
+  // std::vector<double> solution_y_th = ode_solver(y0, pde_to_ode_th);
+  std::vector<double> solution_y_th = y0;
+  solution_y_th = ode_solver(y0, pde_to_ode_th);
 
   return solution_y_th;
 }

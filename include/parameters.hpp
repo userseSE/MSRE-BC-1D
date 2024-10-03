@@ -5,13 +5,13 @@
 #include <array>
 #include <numeric>
 
-// General
-const int N = 200;  // spatial discretization
-const int Nx = N;  // spatial discretization
+const int N = 200;  // spatial descretization
+const int Nx = N;  // spatial descretization
 
 // Neutronics
 extern double dt;
 extern const double L;
+// extern const double N;
 extern const double A;
 extern const double flux_to_power;
 extern const double dz;
@@ -22,8 +22,15 @@ extern const double nu_sigma_f;
 extern const double sigma_f;
 extern const std::array<double, 6> beta;
 extern const double Beta;
+extern const double delta;
 extern const std::array<double, 6> lambda_i;
-extern std::vector<std::vector<double>> neutronics_initial_conditions;  // 2D vector for phi_0, c1, c2, c3, c4, c5, c6
+extern double phi_0[N];
+extern double c1[N];
+extern double c2[N];
+extern double c3[N];
+extern double c4[N];
+extern double c5[N];
+extern double c6[N];
 extern double t0;
 extern double t1;
 
@@ -44,6 +51,7 @@ extern std::vector<double> initialS;
 extern std::vector<double> initialG;
 
 // Heat Exchanger 1
+// extern const int Nx;
 extern const double L_HX;
 extern const double dx;
 extern const double V_he_s;
@@ -56,7 +64,8 @@ extern const double u_L;
 extern const double u_H;
 extern const double v_L;
 extern const double v_H;
-extern std::vector<std::vector<double>> hx1_initial_conditions;  // 2D vector for u_init and v_init
+extern double u_init[Nx];
+extern double v_init[Nx];
 
 // Heat Exchanger 2
 extern const double L_HX2;
@@ -70,7 +79,8 @@ extern const double u2_L;
 extern const double u2_H;
 extern const double v2_L;
 extern const double v2_H;
-extern std::vector<std::vector<double>> hx2_initial_conditions;  // 2D vector for u2_init and v2_init
+extern double u2_init[Nx];
+extern double v2_init[Nx];
 
 // Reactivity
 extern const double alpha_f;
