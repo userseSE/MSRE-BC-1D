@@ -2,7 +2,7 @@
 #include <vector>
 #define REACTIVITY_HPP
 
-double reactivity(const std::vector<double>& temperature_fuel, 
+std::vector<double> reactivity(const std::vector<double>& temperature_fuel_r, const std::vector<double>& temperature_hraphite_r, const std::vector<double>& temperature_fuel, 
                   const std::vector<double>& temperature_graphite, 
                   int step, int time_span, double rho_insertion);
 

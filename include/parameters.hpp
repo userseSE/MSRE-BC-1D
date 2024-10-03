@@ -1,31 +1,31 @@
 #ifndef PARAMETERS_HPP
 #define PARAMETERS_HPP
 
+#include <vector>
 #include <array>
+#include <numeric>
 
-const int N = 200;  // spatial descretization
-const int Nx = N;  // spatial descretization
+// General
+const int N = 200;  // spatial discretization
+const int Nx = N;  // spatial discretization
 
 // Neutronics
-extern const double dt;
+extern double dt;
 extern const double L;
-extern const int N;
+extern const double A;
+extern const double flux_to_power;
 extern const double dz;
 extern const double V;
 extern const double D;
 extern const double sigma_a;
 extern const double nu_sigma_f;
+extern const double sigma_f;
 extern const std::array<double, 6> beta;
 extern const double Beta;
-extern const double delta;
 extern const std::array<double, 6> lambda_i;
-extern double phi_0[N];
-extern double c1[N];
-extern double c2[N];
-extern double c3[N];
-extern double c4[N];
-extern double c5[N];
-extern double c6[N];
+extern std::vector<std::vector<double>> neutronics_initial_conditions;  // 2D vector for phi_0, c1, c2, c3, c4, c5, c6
+extern double t0;
+extern double t1;
 
 // Thermal-Hydraulics
 extern const double c_p_s;
@@ -33,17 +33,17 @@ extern const double Vc;
 extern const double Ms;
 extern const double Mg;
 extern const double gamma;
-extern const double U;
+extern const double U_sg;
+extern const double U_gs;
 extern const double c_p_g;
 extern const double bc_s0;
 extern const double bc_sL;
 extern const double bc_g0;
 extern const double bc_gL;
-extern double initialS[N];
-extern double initialG[N];
+extern std::vector<double> initialS;
+extern std::vector<double> initialG;
 
 // Heat Exchanger 1
-extern const int Nx;
 extern const double L_HX;
 extern const double dx;
 extern const double V_he_s;
@@ -56,8 +56,7 @@ extern const double u_L;
 extern const double u_H;
 extern const double v_L;
 extern const double v_H;
-extern double u_init[Nx];
-extern double v_init[Nx];
+extern std::vector<std::vector<double>> hx1_initial_conditions;  // 2D vector for u_init and v_init
 
 // Heat Exchanger 2
 extern const double L_HX2;
@@ -71,14 +70,14 @@ extern const double u2_L;
 extern const double u2_H;
 extern const double v2_L;
 extern const double v2_H;
-extern double u2_init[Nx];
-extern double v2_init[Nx];
+extern std::vector<std::vector<double>> hx2_initial_conditions;  // 2D vector for u2_init and v2_init
 
 // Reactivity
 extern const double alpha_f;
 extern const double alpha_g;
 extern const double tau_l;
 extern const double tau_c;
+extern const double max_rho_change;
 
 // Transport Delays
 extern const double tau_hx_c;

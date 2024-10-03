@@ -10,9 +10,11 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #include <Eigen/SparseLU>
+#include <boost/numeric/odeint.hpp>
 
 using Eigen::VectorXd;
 using Eigen::MatrixXd;
+using namespace boost::numeric::odeint;
 // using Eigen::SparseMatrix;
 
 const double C1 = V_he_s;
@@ -26,16 +28,22 @@ MatrixXd A_HX(Nx, Nx);
 void initialize_A_HX() {
     A_HX = MatrixXd::Zero(Nx, Nx);
     for (int i = 0; i < Nx; ++i) {
-        A_HX(i, i) = -1.0;
+        A_HX(i, i) = -2.0 / (dx*dx);
         if (i < Nx - 1) {
-            A_HX(i, i + 1) = 1.0 / dx;
+            A_HX(i, i + 1) = 1.0 / (dx*dx);
+        }
+        if (i > 0) {
+            A_HX(i, i - 1) = 1.0 / (dx*dx);
         }
     }
-    A_HX(0, 0) = 1.0 / dx;
-    A_HX(Nx - 1, Nx - 1) = 1.0 / dx;
+
+    A_HX(0, 0) = -1.0 / (dx*dx);
+    A_HX(Nx - 1, Nx - 1) = -1.0 / (dx*dx);
+
 }
 
-std::vector<double> HX1(std::vector<double>& y_hx1, double Ts_HX1_L, double Tss_HX1_0, int step) {
+std::vector<std::vector<double>> HX1(std::vector<std::vector<double>> &y_hx1, 
+                                     double Ts_HX1_L, double Tss_HX1_0, int step) {
     // Ensure A_HX is initialized
     static bool initialized = false;
     if (!initialized) {
@@ -46,20 +54,23 @@ std::vector<double> HX1(std::vector<double>& y_hx1, double Ts_HX1_L, double Tss_
     // Set boundary conditions
     std::vector<double> u(Nx), v(Nx);
     if (step == 0) {
-        std::copy(u_init, u_init + Nx, u.begin());
-        std::copy(v_init, v_init + Nx, v.begin());
+        std::copy(hx1_initial_conditions[0].begin(), hx1_initial_conditions[0].end(), u.begin());
+        std::copy(hx1_initial_conditions[1].begin(), hx1_initial_conditions[1].end(), v.begin());
     } else {
-        std::copy(y_hx1.begin(), y_hx1.begin() + Nx, u.begin());
-        std::copy(y_hx1.begin() + Nx, y_hx1.end(), v.begin());
+        std::copy(y_hx1[0].begin(), y_hx1[0].end(), u.begin());
+        std::copy(y_hx1[1].begin(), y_hx1[1].end(), v.begin());
     }
     u.back() = Ts_HX1_L;
     v.front() = Tss_HX1_0;
 
-    // Define the ODE system for the heat exchanger
-    auto pde_to_ode_hx1 = [&](double t, const std::vector<double>& y) {
-        VectorXd u = Eigen::Map<const VectorXd>(y.data(), Nx);
-        VectorXd v = Eigen::Map<const VectorXd>(y.data() + Nx, Nx);
+    // Define the ODE system for the heat exchanger compatible with odeint
+    auto pde_to_ode_hx1 = [&](const std::vector<std::vector<double>> &y, 
+                              std::vector<std::vector<double>> &dydt, double t) {
+        // Split the input state vector y into u and v
+        Eigen::Map<const VectorXd> u(y[0].data(), Nx);
+        Eigen::Map<const VectorXd> v(y[1].data(), Nx);
 
+        // Compute du_dt and dv_dt using the provided constants
         VectorXd du_dt = C1 * (A_HX * u) + C2 * (u - v);
         VectorXd dv_dt = C3 * (A_HX * v) + C4 * (u - v);
 
@@ -69,48 +80,22 @@ std::vector<double> HX1(std::vector<double>& y_hx1, double Ts_HX1_L, double Tss_
         dv_dt[0] = v_L - v[0];
         dv_dt[Nx - 1] = v_H - v[Nx - 1];
 
-        std::vector<double> dydt(2 * Nx);
-        std::copy(du_dt.data(), du_dt.data() + Nx, dydt.begin());
-        std::copy(dv_dt.data(), dv_dt.data() + Nx, dydt.begin() + Nx);
-
-        return dydt;
+        // Copy the derivatives to the dydt vector
+        std::copy(du_dt.data(), du_dt.data() + Nx, dydt[0].begin());
+        std::copy(dv_dt.data(), dv_dt.data() + Nx, dydt[1].begin());
     };
 
-    // auto pde_to_ode_hx1 = [&](double t, const std::vector<double>& y, std::vector<double>& dydt) {
-    // // Create Eigen vectors from the input state vector
-    //     Eigen::Map<const Eigen::VectorXd> u(y.data(), Nx);
-    //     Eigen::Map<const Eigen::VectorXd> v(y.data() + Nx, Nx);
-
-    //     // Calculate du/dt and dv/dt
-    //     Eigen::VectorXd du_dt = C1 * (A_HX * u) + C2 * (u - v);
-    //     Eigen::VectorXd dv_dt = C3 * (A_HX * v) + C4 * (u - v);
-
-    //     // Apply time-varying boundary conditions
-    //     du_dt[0] = u_L - u[0];
-    //     du_dt[Nx - 1] = u_H - u[Nx - 1];
-    //     dv_dt[0] = v_L - v[0];
-    //     dv_dt[Nx - 1] = v_H - v[Nx - 1];
-
-    //     // Copy the results into the output derivative vector
-    //     std::copy(du_dt.data(), du_dt.data() + Nx, dydt.begin());
-    //     std::copy(dv_dt.data(), dv_dt.data() + Nx, dydt.begin() + Nx);
-    // };
-
-    // Initial condition vector
-    std::vector<double> y0(2 * Nx);
+    // Initial condition vector (2D)
+    std::vector<std::vector<double>> y0(2, std::vector<double>(Nx));
     if (step == 0) {
-        std::copy(u_init, u_init + Nx, y0.begin());
-        std::copy(v_init, v_init + Nx, y0.begin() + Nx);
+        std::copy(hx1_initial_conditions[0].begin(), hx1_initial_conditions[0].end(), y0[0].begin());
+        std::copy(hx1_initial_conditions[1].begin(), hx1_initial_conditions[1].end(), y0[1].begin());
     } else {
         y0 = y_hx1;
     }
 
-    // Solve the ODE system
-    // std::vector<double> solution_y_hx1 = ode_solver(y0, {}, pde_to_ode_hx1, dt);
-
-    // std::vector<double> y0_hx1 = { /* initial conditions */ };
-    // double dt_hx1 = 0.01;
-    std::vector<double> solution_y_hx1 = ode_solver(y0, {}, pde_to_ode_hx1, dt);
+    // Solve the ODE system using 2D vectors
+    std::vector<std::vector<double>> solution_y_hx1 = ode_solver(y0, pde_to_ode_hx1);
 
     // Return the solution at the last time step
     return solution_y_hx1;

@@ -4,9 +4,8 @@
 #include <vector>
 
 // Function to solve the thermal hydraulics problem
-std::vector<double> thermal_hydraulics(std::vector<double>& y_th, 
-                                       const std::vector<double>& q_prime, 
-                                       double Ts_core_0, 
-                                       int step);
+std::vector<std::vector<double>> thermal_hydraulics(std::vector<std::vector<double>> &y_th,
+                                                    const std::vector<double> &q_prime,
+                                                    double Ts_core_0, int step) ;
 
 #endif // THERMAL_HYDRAULICS_HPP

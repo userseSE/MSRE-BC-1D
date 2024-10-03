@@ -48,10 +48,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /Applications/CMake.app/Contents/bin/cmake
+CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.29.2/bin/cmake
 
 # The command to remove a file.
-RM = /Applications/CMake.app/Contents/bin/cmake -E rm -f
+RM = /opt/homebrew/Cellar/cmake/3.29.2/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -64,6 +64,26 @@ CMAKE_BINARY_DIR = /Users/ouuyou/Project/Projects_development/MSR1DCpp/build
 
 #=============================================================================
 # Targets provided globally by CMake.
+
+# Special rule for the target package
+package: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Run CPack packaging tool..."
+	/opt/homebrew/Cellar/cmake/3.29.2/bin/cpack --config ./CPackConfig.cmake
+.PHONY : package
+
+# Special rule for the target package
+package/fast: package
+.PHONY : package/fast
+
+# Special rule for the target package_source
+package_source:
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Run CPack packaging tool for source..."
+	/opt/homebrew/Cellar/cmake/3.29.2/bin/cpack --config ./CPackSourceConfig.cmake /Users/ouuyou/Project/Projects_development/MSR1DCpp/build/CPackSourceConfig.cmake
+.PHONY : package_source
+
+# Special rule for the target package_source
+package_source/fast: package_source
+.PHONY : package_source/fast
 
 # Special rule for the target edit_cache
 edit_cache:
@@ -78,7 +98,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake to regenerate build system..."
-	/Applications/CMake.app/Contents/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/opt/homebrew/Cellar/cmake/3.29.2/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -472,6 +492,8 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... edit_cache"
+	@echo "... package"
+	@echo "... package_source"
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... src/HX1.o"

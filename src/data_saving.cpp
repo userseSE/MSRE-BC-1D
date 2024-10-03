@@ -10,7 +10,7 @@
 namespace fs = std::filesystem;
 
 void export_to_csv(const std::vector<double>& data, const std::string& filename) {
-    // std::cout << "Exporting to CSV file: " << filename << std::endl;
+    std::cout << "Exporting to CSV file: " << filename << std::endl;
     fs::create_directories("dataset");  // Create "dataset" folder if it doesn't exist
     std::ofstream file("../dataset/" + filename);
     for (const auto& value : data) {
@@ -44,7 +44,7 @@ void save_results(const std::vector<double>& rho_matrix,
     export_to_csv(phi_middle_matrix, "phi_middle_matrix.csv");
     export_matrix_to_csv(ci_middle_matrix, "ci_middle_matrix.csv");
     export_to_csv(temperature_fuel_middle_matrix, "temperature_fuel_middle_matrix.csv");
-    // std::cout << "Results saved to CSV files." << std::endl;
+    std::cout << "Results saved to CSV files." << std::endl;
 }
 
 void save_spacial_results(const std::vector<double>& phi, 
