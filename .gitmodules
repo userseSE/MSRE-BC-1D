@@ -18,3 +18,6 @@
 [submodule "thirdparty/libode"]
 	path = thirdparty/libode
 	url = https://github.com/markmbaum/libode.git
+[submodule "thirdparty/sundials"]
+	path = thirdparty/sundials
+	url = https://github.com/LLNL/sundials.git
