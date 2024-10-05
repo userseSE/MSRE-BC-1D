@@ -2,10 +2,13 @@
 #define THERMAL_HYDRAULICS_HPP
 
 #include <vector>
+#include <Eigen/Core>
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
+
+using Eigen::VectorXd;
 
 // Function to solve the thermal hydraulics problem
-std::vector<double> thermal_hydraulics(std::vector<double> &y_th,
-                                       const std::vector<double> &q_prime,
-                                       double Ts_core_0, int step) ;
+VectorXd thermal_hydraulics(VectorXd &y_th, const VectorXd &q_prime, double Ts_core_0, int step);
 
 #endif // THERMAL_HYDRAULICS_HPP

@@ -1,19 +1,22 @@
-#include "transport_delay.hpp"
-#include <vector>
+#include <Eigen/Dense>
 
 double transport_delay(double T0, int time_delay, double initial_output, 
-                       std::vector<double>& buffer, int step) {
+                       Eigen::VectorXd& buffer, int step) {
     
     double T1;
-    
+
     if (step < time_delay) {
         T1 = initial_output;
-        buffer.push_back(T0);
+        Eigen::VectorXd new_buffer(buffer.size() + 1);
+        new_buffer.head(buffer.size()) = buffer;
+        new_buffer[buffer.size()] = T0;
+        buffer = new_buffer;
     } else {
-        T1 = buffer.front();
-        buffer.erase(buffer.begin());  // Remove the first element
-        buffer.push_back(T0);
+        T1 = buffer[0];  // Front of the buffer
+        buffer.segment(0, buffer.size() - 1) = buffer.tail(buffer.size() - 1);
+        buffer[buffer.size() - 1] = T0;
     }
     
     return T1;
 }
+

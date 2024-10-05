@@ -1,9 +1,13 @@
 #ifndef REACTIVITY_HPP
 #include <vector>
+#include <Eigen/Core>
+#include <Eigen/Dense>
+#include <Eigen/Sparse>
 #define REACTIVITY_HPP
 
-std::vector<double> reactivity(const std::vector<double>& temperature_fuel_r, const std::vector<double>& temperature_hraphite_r, const std::vector<double>& temperature_fuel, 
-                  const std::vector<double>& temperature_graphite, 
-                  int step, int time_span, double rho_insertion);
+using Eigen::VectorXd;
+VectorXd reactivity(const VectorXd& temperature_fuel_r, const VectorXd& temperature_graphite_r, 
+                    const VectorXd& temperature_fuel, const VectorXd& temperature_graphite, 
+                    int step, int time_span, double rho_insertion);
 
 #endif // REACTIVITY_HPP

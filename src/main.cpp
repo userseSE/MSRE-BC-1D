@@ -1,7 +1,6 @@
-// File: src/main.cpp
 #include <iostream>
 #include <numeric>
-#include <vector>
+#include <Eigen/Dense>
 #include <fstream>
 #include <iomanip>
 #include <cmath>
@@ -17,103 +16,102 @@
 #include "power_plant.hpp"
 #include "data_saving.hpp"
 
+using Eigen::VectorXd;
+
 int main() {
-    int time_span = 300;
+    int time_span = 3000;
 
     double rho_insertion = 0.0;  // pcm
 
     // Initialization
-    std::vector<double> rho (N, 0.0);
+    VectorXd rho = VectorXd::Zero(N);
     initialize_parameters();
-    std::vector<double> y_n(7 * N, 0.0);
-    std::vector<double> q_prime(N, 0.0);
-    std::vector<double> y_th(2 * N, 0.0);
-    std::vector<double> y_hx1(2 * Nx, 0.0);
-    std::vector<double> y_hx2(2 * Nx, 0.0);
+    VectorXd y_n = VectorXd::Zero(7 * N);
+    VectorXd q_prime = VectorXd::Zero(N);
+    VectorXd y_th = VectorXd::Zero(2 * N);
+    VectorXd y_hx1 = VectorXd::Zero(2 * Nx);
+    VectorXd y_hx2 = VectorXd::Zero(2 * Nx);
 
     double Tss_HX2_0 = 0.0;
     double Ts_HX1_0 = 0.0;
     double Tss_HX1_0 = 0.0;
     double Tsss_pp_0 = 0.0;
     double Tsss_HX2_0 = 0.0;
-    
-    std::vector<double> buffer_hx_c, buffer_c_hx, buffer_r_hx, buffer_hx_r, buffer_r_pp, buffer_pp_r;
-    
-    std::vector<double> rho_matrix(time_span, 0.0);
-    std::vector<double> phi_middle_matrix(time_span, 0.0);
-    std::vector<std::vector<double>> ci_middle_matrix(time_span, std::vector<double>(6, 0.0));
-    std::vector<double> temperature_fuel_middle_matrix(time_span, 0.0);
 
-    std::vector<double> phi(N, 0.0);
-    std::vector<double> ci(6 * N, 0.0);
-    std::vector<double> temperature_fuel(N, 0.0);
-    std::vector<double> temperature_graphite(N, 0.0);
-    std::vector<double> Ts_HX1(Nx, 0.0);
-    std::vector<double> Tss_HX1(Nx, 0.0);
-    std::vector<double> Tss_HX2(Nx, 0.0);
-    std::vector<double> Tsss_HX2(Nx, 0.0);
+    Eigen::VectorXd buffer_hx_c, buffer_c_hx, buffer_r_hx, buffer_hx_r, buffer_r_pp, buffer_pp_r;
+    
+    VectorXd rho_matrix = VectorXd::Zero(time_span);
+    VectorXd phi_middle_matrix = VectorXd::Zero(time_span);
+    Eigen::MatrixXd ci_middle_matrix = Eigen::MatrixXd::Zero(time_span, 6);
+    VectorXd temperature_fuel_middle_matrix = VectorXd::Zero(time_span);
+
+    VectorXd phi = VectorXd::Zero(N);
+    VectorXd ci = VectorXd::Zero(6 * N);
+    VectorXd temperature_fuel = VectorXd::Zero(N);
+    VectorXd temperature_graphite = VectorXd::Zero(N);
+    VectorXd Ts_HX1 = VectorXd::Zero(Nx);
+    VectorXd Tss_HX1 = VectorXd::Zero(Nx);
+    VectorXd Tss_HX2 = VectorXd::Zero(Nx);
+    VectorXd Tsss_HX2 = VectorXd::Zero(Nx);
 
     for (int step = 0; step < time_span; ++step) {
         std::cout << "Time step: " << step << std::endl;
-        // std::cout << "y_n: " << y_n.front() <<std::endl;
-        std::tie(y_n, q_prime) = neutronics(y_n, rho, step);
+        std::vector<double> rho_vec(rho.data(), rho.data() + rho.size());
+        std::tie(y_n, q_prime) = neutronics(y_n, rho_vec, step);
         for (int i = 0; i < N; ++i) {
             q_prime[i] = q_prime[i] * sigma_f * A / flux_to_power;
         }
-        std::cout << "q_prime: " << q_prime.front() << std::endl;
-        // std::cout<<"test n"<<std::endl;
-        phi=std::vector<double>(y_n.begin(), y_n.begin() + N);
-        ci=std::vector<double>(y_n.begin() + N, y_n.end());
+        std::cout << "q_prime: " << q_prime[0] << std::endl;
+        phi = y_n.head(N);
+        ci = y_n.tail(6 * N);
 
         phi_middle_matrix[step] = phi[N / 2];
         for (int i = 0; i < 6; ++i) {
-            ci_middle_matrix[step][i] = ci[(i * N + (i + 1) * N) / 3];
+            ci_middle_matrix(step, i) = ci[(i * N + (i + 1) * N) / 3];
         }
-        // std::cout<<"test n"<<std::endl;
-        double Ts_core_0 = transport_delay(Ts_HX1_0, tau_hx_c, Ts_in, buffer_hx_c, step);
-        // std::cout<<"test delay"<<std::endl;
-        std::cout << "y_th: " << y_th.front() << std::endl;
-        std::cout << "y_th_N: " << y_th.back() << std::endl;
-        y_th = thermal_hydraulics(y_th, q_prime, Ts_core_0, step);
-        // std::cout<<"test th"<<std::endl;
-        temperature_fuel=std::vector<double>(y_th.begin(), y_th.begin() + N);
-        temperature_graphite=std::vector<double>(y_th.begin() + N, y_th.end());
 
-        double Ts_core_L = y_th.back();
+        double Ts_core_0 = transport_delay(Ts_HX1_0, tau_hx_c, Ts_in, buffer_hx_c, step);
+        std::cout << "y_th: " << y_th[0] << std::endl;
+        std::cout << "y_th_N: " << y_th[2 * N - 1] << std::endl;
+        y_th = thermal_hydraulics(y_th, q_prime, Ts_core_0, step);
+
+        temperature_fuel = y_th.head(N);
+        temperature_graphite = y_th.tail(N);
+
+        double Ts_core_L = y_th[N - 1];
         temperature_fuel_middle_matrix[step] = temperature_fuel[N / 3];
 
         double Ts_HX1_L = transport_delay(Ts_core_L, tau_c_hx, Ts_out, buffer_c_hx, step);
         Tss_HX1_0 = transport_delay(Tss_HX2_0, tau_r_hx, Tss_in, buffer_r_hx, step);
 
         y_hx1 = HX1(y_hx1, Ts_HX1_L, Tss_HX1_0, step);
-        Ts_HX1=std::vector<double> (y_hx1.begin(), y_hx1.begin() + Nx);
-        Tss_HX1=std::vector<double> (y_hx1.begin() + Nx, y_hx1.end());
+        Ts_HX1 = y_hx1.head(Nx);
+        Tss_HX1 = y_hx1.tail(Nx);
 
-        Ts_HX1_0 = Ts_HX1.front();
-        double Tss_HX1_L = Tss_HX1.back();
+        Ts_HX1_0 = Ts_HX1[0];
+        double Tss_HX1_L = Tss_HX1[Nx - 1];
 
         double Tss_HX2_L = transport_delay(Tss_HX1_L, tau_hx_r, Tss_out, buffer_hx_r, step);
         Tsss_HX2_0 = transport_delay(Tsss_pp_0, tau_pp_r, Tsss_in, buffer_pp_r, step);
 
         y_hx2 = HX2(y_hx2, Tss_HX2_L, Tsss_HX2_0, step);
-        Tss_HX2 = std::vector<double> (y_hx2.begin(), y_hx2.begin() + Nx);
-        Tsss_HX2 = std::vector<double> (y_hx2.begin() + Nx, y_hx2.end());
+        Tss_HX2 = y_hx2.head(Nx);
+        Tsss_HX2 = y_hx2.tail(Nx);
 
-        Tss_HX2_0 = Tss_HX2.front();
-        double Tsss_HX2_L = Tsss_HX2.back();
+        Tss_HX2_0 = Tss_HX2[0];
+        double Tsss_HX2_L = Tsss_HX2[Nx - 1];
 
         double Tsss_pp_L = transport_delay(Tsss_HX2_L, tau_r_pp, Tsss_out, buffer_r_pp, step);
         double y_pp = power_plant_temp(Tsss_pp_L, step);
         Tsss_pp_0 = y_pp;
 
         rho = reactivity(initialS, initialG, temperature_fuel, temperature_graphite, step, time_span, rho_insertion);
-        rho_matrix[step] = std::accumulate(rho.begin(), rho.end(), 0.0);
+        rho_matrix[step] = rho.sum();
     }
 
     // Plotting
-    // std::cout << "Plotting results..." << std::endl;
     save_results(rho_matrix, phi_middle_matrix, ci_middle_matrix, temperature_fuel_middle_matrix);
-    // std::cout << "Results have been plotted." << std::endl;
     save_spacial_results(phi, ci, temperature_fuel, temperature_graphite, Ts_HX1, Tss_HX1, Tss_HX2, Tsss_HX2);
+
     return 0;
 }
