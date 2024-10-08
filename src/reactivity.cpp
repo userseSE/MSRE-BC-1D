@@ -1,5 +1,6 @@
 #include "reactivity.hpp"
 #include "parameters.hpp"
+#include "src/Core/Matrix.h"
 #include <Eigen/Dense>
 #include <numeric>
 #include <algorithm>
@@ -46,6 +47,7 @@ VectorXd reactivity(const VectorXd& temperature_fuel_r, const VectorXd& temperat
 
     // Calculate total reactivity
     VectorXd rho = rho_0 + rho_feedback;
+    // VectorXd rho = VectorXd::Constant(N,0.0);
     // std::cout << "rho: " << rho[0] << std::endl;
 
     return rho;

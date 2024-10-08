@@ -16,7 +16,7 @@ const double flux_to_power = 3.12e10;
 const double V = 1.103497 * 1e7;
 const double D = 0.96343 * 7;
 const double sigma_a = 0.002161939172413793;    // 0.002161939172413793, smaller-explode, 0.002340 diverge, 0.002341 converge to 0
-const double nu_sigma_f = 0.004411764705882353;     // 0.004411764705882353, 0.00425-explode, 0.0040000-0, try in 0.00400-0.0040001(nan)
+const double nu_sigma_f = 0.004400;     // 0.004411764705882353, 0.00425-explode, 0.0040000-0, try in 0.00400-0.0040001(nan)
 const double sigma_f = 0.004411764705882353 / 2.41;
 const std::array<double, 6> beta = {0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088};
 const double Beta = std::accumulate(beta.begin(), beta.end(), 0.0);
@@ -37,7 +37,7 @@ void initialize_neutronics() {
     double lambda_sum = std::accumulate(lambda_i.begin(), lambda_i.end(), 0.0);
 
     for (int i = 0; i < N; ++i) {
-        phi_0[i] = 1e13;  // Initial neutron flux
+        phi_0[i] = 1.0e13;  // Initial neutron flux
         double x = i * dz;  // Compute the spatial position
         // phi_0[i] = 1e13 * std::sin(M_PI * x / L);  // Sine wave initialization, scaled by 1e13
         c1[i] = ((beta[0] * nu_sigma_f) / (lambda_i[0]/6)) * phi_0[i];
@@ -45,7 +45,7 @@ void initialize_neutronics() {
         c3[i] = ((beta[2] * nu_sigma_f) / (lambda_i[2]/6)) * phi_0[i];
         c4[i] = ((beta[3] * nu_sigma_f) / (lambda_i[3]/6)) * phi_0[i];
         c5[i] = ((beta[4] * nu_sigma_f) / (lambda_i[4]/6)) * phi_0[i];
-        c6[i] = ((beta[5] * nu_sigma_f) / (lambda_i[5]/6)) * phi_0[i];
+        c6[i] = ((beta[5] * nu_sigma_f) / (lambda_i[5]/6)) * phi_0[i];  
     }
 }
 
@@ -132,8 +132,8 @@ void initialize_heat_exchanger_2() {
 }
 
 // Reactivity
-const double alpha_f =  5.904e-5;
-const double alpha_g =  6.624e-5;
+const double alpha_f =  - 5.904e-5;
+const double alpha_g =  - 6.624e-5;
 const double tau_l = 16.73;
 const double tau_c = 8.46;
 const double max_rho_change = 1e-4;

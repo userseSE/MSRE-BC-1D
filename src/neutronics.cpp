@@ -25,7 +25,7 @@ std::pair<Eigen::VectorXd, Eigen::VectorXd>
 neutronics(const state_type &y_n, const std::vector<double> &rho, int step) {
     VectorXd Keff = VectorXd::Zero(N);
     std::transform(rho.data(), rho.data() + N, Keff.data(),
-                 [](double r) { return (1.0 /(1.0 - r)); });
+                 [](double r) { return (1.0 / (1.0 - r)); });
     std::cout << "Keff[N/2]: " << Keff[N / 2] << std::endl;
     std::cout << "Keff_avg: " << Keff.mean() << std::endl;
 
@@ -46,8 +46,8 @@ neutronics(const state_type &y_n, const std::vector<double> &rho, int step) {
     // Apply Dirichlet boundary conditions for zero flux at boundaries
     D2.row(0).setZero();
     D2.row(N - 1).setZero();
-    D2(0, 0) = 1.0/(dz*dz);
-    D2(N - 1, N - 1) = 1.0/(dz*dz);
+    D2(0, 0) = 1.0;
+    D2(N - 1, N - 1) = 1.0;
     // // Reflective boundary at z = 0 (forward difference)
     // D2(0, 0) = -1 / dz;
     // D2(0, 1) = 1 / dz;
@@ -64,6 +64,10 @@ neutronics(const state_type &y_n, const std::vector<double> &rho, int step) {
 
     // Define matrices A and B for Crank-Nicolson method using transposed D2_csc
     SparseMatrix<double> A = I - 0.5 * dt * V * D * D2_sparse;
+    // Solve the system
+    Eigen::SparseLU<SparseMatrix<double>> solver;
+    solver.compute(A);
+    
     SparseMatrix<double> B = I + 0.5 * dt * V * D * D2_sparse;
 
     // ODE system function compatible with odeint
@@ -78,13 +82,10 @@ neutronics(const state_type &y_n, const std::vector<double> &rho, int step) {
         }
 
         // Right-hand side for the Crank-Nicolson method
-        VectorXd rhs_phi = B * phi + dt * V * ((-sigma_a + (1.0 - Beta) * nu_sigma_f * Keff.array())
+        VectorXd rhs_phi = B * phi + dt * V * ((-sigma_a + (1.0 - Beta) * nu_sigma_f / Keff.array())
                 .matrix()
                 .cwiseProduct(phi) + lambda_ci);
-
-        // Solve the system
-        BiCGSTAB<SparseMatrix<double>> solver;
-        solver.compute(A);
+        
         VectorXd phi_new = solver.solve(rhs_phi);
 
         // Calculate time derivative of phi
@@ -93,7 +94,7 @@ neutronics(const state_type &y_n, const std::vector<double> &rho, int step) {
         // Compute dci/dt
         VectorXd dci_dt(6 * N);
         for (int i = 0; i < 6; ++i) {
-            dci_dt.segment(i * N, N) = beta[i] * (nu_sigma_f * Keff.array()).matrix().cwiseProduct(phi) - lambda_i[i] * y.segment((i + 1) * N, N);
+            dci_dt.segment(i * N, N) = beta[i] * (nu_sigma_f / Keff.array()).matrix().cwiseProduct(phi) - lambda_i[i] * y.segment((i + 1) * N, N);
         }
 
         // Populate dydt with the derivatives

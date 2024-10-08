@@ -1,0 +1,28 @@
+{
+    // This is a comment in jsonc
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "C++ Debug",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/build/test", // Comment about the program path
+        "args": [], // Program arguments
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "lldb", // Use "gdb" for Linux/Windows
+        "setupCommands": [
+          {
+            "description": "Enable pretty-printing for gdb",
+            "text": "-enable-pretty-printing",
+            "ignoreFailures": true
+          }
+        ],
+        "preLaunchTask": "build", // Build task before launch
+        "internalConsoleOptions": "openOnSessionStart"
+      }
+    ]
+  }
+  

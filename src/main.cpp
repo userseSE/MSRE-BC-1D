@@ -58,10 +58,13 @@ int main() {
         std::cout << "Time step: " << step << std::endl;
         std::vector<double> rho_vec(rho.data(), rho.data() + rho.size());
         std::tie(y_n, q_prime) = neutronics(y_n, rho_vec, step);
+        std::cout << "phi[0]: " << q_prime[0] << std::endl;
+        std::cout << "phi[N-1]: " << q_prime[N-1] << std::endl;
         for (int i = 0; i < N; ++i) {
             q_prime[i] = q_prime[i] * sigma_f * A / flux_to_power;
         }
-        std::cout << "q_prime: " << q_prime[0] << std::endl;
+        std::cout << "q_prime[0]: " << q_prime[0] << std::endl;
+        std::cout << "q_prime[N-1]: " << q_prime[N-1] << std::endl;
         phi = y_n.head(N);
         ci = y_n.tail(6 * N);
 
