@@ -17,7 +17,7 @@ extern const double dz;
 extern const double V;
 extern const double D;
 extern const double sigma_a;
-extern const double nu_sigma_f;
+extern double nu_sigma_f;  // Remove const to make it modifiable
 extern const double sigma_f;
 extern const std::array<double, 6> beta;
 extern const double Beta;
@@ -85,6 +85,7 @@ extern const double alpha_g;
 extern const double tau_l;
 extern const double tau_c;
 extern const double max_rho_change;
+extern double rho_0_value;  // Remove const to make it modifiable
 
 // Transport Delays
 extern const double tau_hx_c;

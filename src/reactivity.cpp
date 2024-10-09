@@ -11,16 +11,17 @@ using Eigen::VectorXd;
 
 VectorXd reactivity(const VectorXd& temperature_fuel_r, const VectorXd& temperature_graphite_r, 
                     const VectorXd& temperature_fuel, const VectorXd& temperature_graphite, 
-                    int step, int time_span, double rho_insertion) {
+                    int step, int time_span, double rho_insertion, double rho_0_value) {
     
-    // Calculate the initial reactivity (rho_0_value)
-    double rho_0_value = std::accumulate(beta.begin(), beta.end(), 0.0);
-    for (int i = 0; i < 6; ++i) {
-        rho_0_value -= beta[i] / (1.0 + (1.0 / (lambda_i[i] * tau_c)) * (1.0 - std::exp(-lambda_i[i] * tau_l)));
-    }
+    // // Calculate the initial reactivity (rho_0_value)
+    // double rho_0_value = std::accumulate(beta.begin(), beta.end(), 0.0);
+    // for (int i = 0; i < 6; ++i) {
+    //     rho_0_value -= beta[i] / (1.0 + (1.0 / (lambda_i[i] * tau_c)) * (1.0 - std::exp(-lambda_i[i] * tau_l)));
+    // }
 
     // Initialize reactivity vectors
     VectorXd rho_0 = VectorXd::Constant(N, rho_0_value);
+    // std::cout << rho_0_value << std::endl;
 
     // Determine the reactivity insertion based on the step
     double reactdata = (step < time_span / 2) ? 0.0 : rho_insertion * 1e-5;
@@ -43,7 +44,7 @@ VectorXd reactivity(const VectorXd& temperature_fuel_r, const VectorXd& temperat
         rho_feedback[i] = std::clamp(result, -max_rho_change, max_rho_change);
     }
 
-    std::cout << "rho_feedback: " << rho_feedback[0] << std::endl;
+    // std::cout << "rho_feedback: " << rho_feedback[0] << std::endl;
 
     // Calculate total reactivity
     VectorXd rho = rho_0 + rho_feedback;

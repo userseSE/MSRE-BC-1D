@@ -8,6 +8,6 @@
 using Eigen::VectorXd;
 VectorXd reactivity(const VectorXd& temperature_fuel_r, const VectorXd& temperature_graphite_r, 
                     const VectorXd& temperature_fuel, const VectorXd& temperature_graphite, 
-                    int step, int time_span, double rho_insertion);
+                    int step, int time_span, double rho_insertion, double rho_0_value);
 
 #endif // REACTIVITY_HPP

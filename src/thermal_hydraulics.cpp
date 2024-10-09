@@ -17,11 +17,11 @@ using Eigen::SparseMatrix;
 using Eigen::VectorXd;
 using namespace boost::numeric::odeint;
 
-const double a_th = Vc;
-const double b_th = U_gs / (Ms * c_p_s);
-const double c_th = U_sg / (Mg * c_p_g);
-const double d_th = L * gamma / (Ms * c_p_s);
-const double e_th = L * (1 - gamma) / (Mg * c_p_g);
+const double a_th = Vc;                                 // 0.2
+const double b_th = U_gs / (Ms * c_p_s);               // 0.0118956
+const double c_th = U_sg / (Mg * c_p_g);            //  0.00555722
+const double d_th = L * gamma / (Ms * c_p_s);           // 5.28563e-05
+const double e_th = L * (1 - gamma) / (Mg * c_p_g);    // 1.85858e-06
 
 // Discretize the spatial domain
 SparseMatrix<double> AT(N, N);
@@ -83,11 +83,19 @@ VectorXd thermal_hydraulics(VectorXd &y_th, const VectorXd &q_prime, double Ts_c
             c_th * (temperature_fuel - temperature_graphite) +
             e_th * q_prime;
 
-        // Apply time-varying boundary conditions
-        temperature_fuel_dt[0] = bc_s0 - temperature_fuel[0];
-        temperature_fuel_dt[N - 1] = bc_sL - temperature_fuel[N - 1];
-        temperature_graphite_dt[0] = bc_g0 - temperature_graphite[0];
-        temperature_graphite_dt[N - 1] = bc_gL - temperature_graphite[N - 1];
+        // // Apply time-varying boundary conditions
+        // temperature_fuel_dt[0] = bc_s0 - temperature_fuel[0];
+        // temperature_fuel_dt[N - 1] = bc_sL - temperature_fuel[N - 1];
+        // temperature_graphite_dt[0] = bc_g0 - temperature_graphite[0];
+        // temperature_graphite_dt[N - 1] = bc_gL - temperature_graphite[N - 1];
+        // Apply more physical boundary conditions
+        double k = 0.05;  // Heat transfer coefficient to ambient (example value)
+        double ambient_temp = 300.0;  // Ambient temperature in Kelvin
+
+        temperature_fuel_dt[0] = -k * (temperature_fuel[0] - ambient_temp);
+        temperature_fuel_dt[N - 1] = -k * (temperature_fuel[N - 1] - ambient_temp);
+        temperature_graphite_dt[0] = -k * (temperature_graphite[0] - ambient_temp);
+        temperature_graphite_dt[N - 1] = -k * (temperature_graphite[N - 1] - ambient_temp);
 
         // Copy the derivatives to the dydt vector
         dydt.head(N) = temperature_fuel_dt;

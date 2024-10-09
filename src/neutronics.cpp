@@ -13,7 +13,7 @@
 #include <Eigen/Sparse>
 #include <boost/numeric/odeint.hpp>
 
-using Eigen::BiCGSTAB; // Include the BiCGSTAB solver
+// using Eigen::BiCGSTAB; // Include the BiCGSTAB solver
 using Eigen::MatrixXd;
 using Eigen::SparseMatrix;
 using Eigen::VectorXd;
@@ -22,12 +22,12 @@ using namespace boost::numeric::odeint;
 typedef Eigen::VectorXd state_type;
 
 std::pair<Eigen::VectorXd, Eigen::VectorXd>
-neutronics(const state_type &y_n, const std::vector<double> &rho, int step) {
+neutronics(const state_type &y_n, const std::vector<double> &rho, int step, double nu_sigma_f) {
     VectorXd Keff = VectorXd::Zero(N);
     std::transform(rho.data(), rho.data() + N, Keff.data(),
                  [](double r) { return (1.0 / (1.0 - r)); });
-    std::cout << "Keff[N/2]: " << Keff[N / 2] << std::endl;
-    std::cout << "Keff_avg: " << Keff.mean() << std::endl;
+    // std::cout << "Keff[N/2]: " << Keff[N / 2] << std::endl;
+    // std::cout << "Keff_avg: " << Keff.mean() << std::endl;
 
     // Finite difference matrix for the second derivative using Crank-Nicolson method
     VectorXd main_diag = (-2 / (dz * dz)) * VectorXd::Ones(N);
@@ -46,8 +46,8 @@ neutronics(const state_type &y_n, const std::vector<double> &rho, int step) {
     // Apply Dirichlet boundary conditions for zero flux at boundaries
     D2.row(0).setZero();
     D2.row(N - 1).setZero();
-    D2(0, 0) = 1.0;
-    D2(N - 1, N - 1) = 1.0;
+    D2(0, 0) = 1.0 / (dz*dz);
+    D2(N - 1, N - 1) = 1.0 / (dz*dz);
     // // Reflective boundary at z = 0 (forward difference)
     // D2(0, 0) = -1 / dz;
     // D2(0, 1) = 1 / dz;
@@ -67,7 +67,6 @@ neutronics(const state_type &y_n, const std::vector<double> &rho, int step) {
     // Solve the system
     Eigen::SparseLU<SparseMatrix<double>> solver;
     solver.compute(A);
-    
     SparseMatrix<double> B = I + 0.5 * dt * V * D * D2_sparse;
 
     // ODE system function compatible with odeint
@@ -80,6 +79,7 @@ neutronics(const state_type &y_n, const std::vector<double> &rho, int step) {
         for (int i = 0; i < 6; ++i) {
             lambda_ci += lambda_i[i] * y.segment((i + 1) * N, N);
         }
+
 
         // Right-hand side for the Crank-Nicolson method
         VectorXd rhs_phi = B * phi + dt * V * ((-sigma_a + (1.0 - Beta) * nu_sigma_f / Keff.array())

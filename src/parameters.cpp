@@ -8,7 +8,7 @@
 
 // TODO: try modify sigma_a and nu_sigma_f, and modify initial conditions figures
 // Neutronics
-double dt = 0.01;
+double dt = 0.001;
 const double L = 172;
 const double dz = L / (N - 1);
 const double A = 4094;
@@ -16,7 +16,7 @@ const double flux_to_power = 3.12e10;
 const double V = 1.103497 * 1e7;
 const double D = 0.96343 * 7;
 const double sigma_a = 0.002161939172413793;    // 0.002161939172413793, smaller-explode, 0.002340 diverge, 0.002341 converge to 0
-const double nu_sigma_f = 0.004400;     // 0.004411764705882353, 0.00425-explode, 0.0040000-0, try in 0.00400-0.0040001(nan)
+double nu_sigma_f = 0.004410;     // 0.004417172-0.00441718, 0.004411764705882353
 const double sigma_f = 0.004411764705882353 / 2.41;
 const std::array<double, 6> beta = {0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088};
 const double Beta = std::accumulate(beta.begin(), beta.end(), 0.0);
@@ -51,7 +51,7 @@ void initialize_neutronics() {
 
 // Thermal-Hydraulics
 const double c_p_s = 2090;
-const double Vc = 0.2;
+const double Vc = 0.2;   
 const double Ms = 1448;
 const double Mg = 3687;
 const double gamma = 0.93;
@@ -59,10 +59,14 @@ const double U_sg = 36000;
 const double U_gs = 36000;
 const double c_p_g = 1757;
 
-const double bc_s0 = 700;
-const double bc_sL = 800;
-const double bc_g0 = 700;
-const double bc_gL = 1000;
+// const double bc_s0 = 700;
+// const double bc_sL = 800;
+// const double bc_g0 = 700;
+// const double bc_gL = 850;
+const double bc_s0 = 70;
+const double bc_sL = 80;
+const double bc_g0 = 70;
+const double bc_gL = 85;
 
 Eigen::VectorXd initialS = Eigen::VectorXd::Zero(N);  // Initial temperature in salt
 Eigen::VectorXd initialG = Eigen::VectorXd::Zero(N);  // Initial temperature in graphite
@@ -85,10 +89,15 @@ const double M_he_s = 342;
 const double M_he_ss = 117;
 const double c_p_ss = 2416;
 
-const double u_L = 800;
-const double u_H = 800;
-const double v_L = 824.85;
-const double v_H = 866.45;
+// const double u_L = 800;
+// const double u_H = 800;
+// const double v_L = 824.85;
+// const double v_H = 866.45;
+
+const double u_L = 40;
+const double u_H = 40;
+const double v_L = 42;
+const double v_H = 46;
 
 Eigen::VectorXd u_init = Eigen::VectorXd::Zero(Nx);  // Initial temperature profile for fluid 1
 Eigen::VectorXd v_init = Eigen::VectorXd::Zero(Nx);  // Initial temperature profile for fluid 2
@@ -110,10 +119,10 @@ const double M_he2_s = 117;
 const double M_he2_ss = 100;
 const double c_p_sss = 2416;
 
-const double u2_L = 82;
-const double u2_H = 86;
-const double v2_L = 74;
-const double v2_H = 78;
+const double u2_L = 210;
+const double u2_H = 330;
+const double v2_L = 170;
+const double v2_H = 190;
 
 // const double u2_L = 1;
 // const double u2_H = 1;
@@ -137,6 +146,7 @@ const double alpha_g =  - 6.624e-5;
 const double tau_l = 16.73;
 const double tau_c = 8.46;
 const double max_rho_change = 1e-4;
+double rho_0_value = 0.0;
 
 // Transport Delays
 // const double tau_hx_c = 9;

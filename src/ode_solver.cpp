@@ -1,5 +1,5 @@
 #include <Eigen/Dense>
-#include <boost/numeric/odeint.hpp>
+// #include <boost/numeric/odeint.hpp>
 #include <functional>
 #include <iostream>
 
@@ -12,7 +12,7 @@
 #include "parameters.hpp"
 
 using state_type = VectorXd;
-using namespace boost::numeric::odeint;
+// using namespace boost::numeric::odeint;
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
@@ -538,7 +538,7 @@ public:
     double tol; // Tolerance for adaptive step-size control
     double h_min, h_max; // Min and max step sizes
 
-    RungeKuttaFehlberg45(double tolerance = 1e-7, double min_step = 1e-10, double max_step = 0.1) 
+    RungeKuttaFehlberg45(double tolerance = 1e-8, double min_step = 1e-10, double max_step = 0.1) 
         : tol(tolerance), h_min(min_step), h_max(max_step) {}
 
     void solve(const std::function<void(double, const VectorXd &, VectorXd &)> &ode_func, 
