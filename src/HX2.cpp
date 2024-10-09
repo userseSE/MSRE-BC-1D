@@ -67,11 +67,18 @@ VectorXd HX2(VectorXd& y_hx2, double Ts_HX2_L, double Tss_HX2_0, int step) {
         VectorXd du_dt = C1 * (A_HX2 * u) + C2 * (u - v);
         VectorXd dv_dt = C3 * (A_HX2 * v) + C4 * (u - v);
 
-        // Apply time-varying boundary conditions
-        du_dt[0] = u2_L - u[0];
-        du_dt[Nx - 1] = u2_H - u[Nx - 1];
-        dv_dt[0] = v2_L - v[0];
-        dv_dt[Nx - 1] = v2_H - v[Nx - 1];
+        // // Apply time-varying boundary conditions
+        // du_dt[0] = u2_L - u[0];
+        // du_dt[Nx - 1] = u2_H - u[Nx - 1];
+        // dv_dt[0] = v2_L - v[0];
+        // dv_dt[Nx - 1] = v2_H - v[Nx - 1];
+
+        double k = 0.05;  // Heat transfer coefficient to ambient (example value)
+        double ambient_temp = 300.0;  // Ambient temperature in Kelvin
+        du_dt[0] = -k * (u[0] - ambient_temp);
+        du_dt[N - 1] = -k * (u[Nx - 1] - ambient_temp);
+        dv_dt[0] = -k * (v[0] - ambient_temp);
+        dv_dt[N - 1] = -k * (v[Nx - 1] - ambient_temp);
 
         // Populate dydt with the derivatives
         dydt.head(Nx) = du_dt;

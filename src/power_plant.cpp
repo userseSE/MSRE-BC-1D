@@ -4,7 +4,7 @@
 double power_plant_temp(double Tsss_plant_L, int step){
 
     // TODO - Implement the power plant temperature from in to out
-    double Tsss_plant_0 = Tsss_plant_L-100;
+    double Tsss_plant_0 = Tsss_plant_L-50;
     
     return Tsss_plant_0;
 }

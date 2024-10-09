@@ -33,7 +33,7 @@ void run_simulation(double nu_sigma_f_value, double rho_0_value_input, int simul
     std::cout << "Simulation ID: " << simulation_id << " - Assigned rho_0_value: " << rho_0_value << std::endl;
   }
 
-  int time_span = 3000;
+  int time_span = 20000;
   double rho_insertion = 0.0; // pcm
 
   // Initialization
@@ -170,8 +170,8 @@ void run_simulation(double nu_sigma_f_value, double rho_0_value_input, int simul
 // }
 
 int main(){
-    double nu_sigma_f = 0.004412218;    //0.004412224, 0.004411798 for -9.6e-5, 0.004412218-0
-    double rho_0_value = -0.096e-5;       //-9.6e-5 to -10e-5
+    double nu_sigma_f = 0.0044121797;    //0.004412224, 0.004411798 for -9.6e-5, 0.004412258 for N=500, 0.0044121796-0
+    double rho_0_value = 0.096e-5;       //-9.6e-5 to -10e-5
     int simulation_id = 0;
     run_simulation(nu_sigma_f, rho_0_value, simulation_id);
     return 0;

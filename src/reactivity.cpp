@@ -36,8 +36,8 @@ VectorXd reactivity(const VectorXd& temperature_fuel_r, const VectorXd& temperat
         double graphite = temperature_graphite[i];
 
         // Calculate fuel and graphite differences, then sum
-        double fuel_diff = (fuel_r - fuel) * alpha_f;
-        double graphite_diff = (graphite_r - graphite) * alpha_g;
+        double fuel_diff = (fuel - fuel_r) * alpha_f;
+        double graphite_diff = (graphite - graphite_r) * alpha_g;
         double result = fuel_diff + graphite_diff;
 
         // Clip (clamp) the result between -max_rho_change and max_rho_change
@@ -47,7 +47,7 @@ VectorXd reactivity(const VectorXd& temperature_fuel_r, const VectorXd& temperat
     // std::cout << "rho_feedback: " << rho_feedback[0] << std::endl;
 
     // Calculate total reactivity
-    VectorXd rho = rho_0 + rho_feedback;
+    VectorXd rho = rho_0 + rho_feedback + react;
     // VectorXd rho = VectorXd::Constant(N,0.0);
     // std::cout << "rho: " << rho[0] << std::endl;
 

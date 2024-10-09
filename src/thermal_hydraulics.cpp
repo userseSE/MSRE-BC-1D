@@ -88,10 +88,9 @@ VectorXd thermal_hydraulics(VectorXd &y_th, const VectorXd &q_prime, double Ts_c
         // temperature_fuel_dt[N - 1] = bc_sL - temperature_fuel[N - 1];
         // temperature_graphite_dt[0] = bc_g0 - temperature_graphite[0];
         // temperature_graphite_dt[N - 1] = bc_gL - temperature_graphite[N - 1];
-        // Apply more physical boundary conditions
-        double k = 0.05;  // Heat transfer coefficient to ambient (example value)
-        double ambient_temp = 300.0;  // Ambient temperature in Kelvin
 
+        double k = 0.05;  // Heat transfer coefficient to ambient (example value)
+        double ambient_temp = 400.0;  // Ambient temperature in Kelvin
         temperature_fuel_dt[0] = -k * (temperature_fuel[0] - ambient_temp);
         temperature_fuel_dt[N - 1] = -k * (temperature_fuel[N - 1] - ambient_temp);
         temperature_graphite_dt[0] = -k * (temperature_graphite[0] - ambient_temp);

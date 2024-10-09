@@ -82,9 +82,12 @@ neutronics(const state_type &y_n, const std::vector<double> &rho, int step, doub
 
 
         // Right-hand side for the Crank-Nicolson method
-        VectorXd rhs_phi = B * phi + dt * V * ((-sigma_a + (1.0 - Beta) * nu_sigma_f / Keff.array())
+        Eigen::VectorXd rho_eigen = Eigen::VectorXd::Map(rho.data(), rho.size());
+
+        VectorXd rhs_phi = B * phi + dt * V * ((-sigma_a + (1.0 - Beta + rho_eigen.array()) * nu_sigma_f)
                 .matrix()
                 .cwiseProduct(phi) + lambda_ci);
+
         
         VectorXd phi_new = solver.solve(rhs_phi);
 
@@ -94,7 +97,7 @@ neutronics(const state_type &y_n, const std::vector<double> &rho, int step, doub
         // Compute dci/dt
         VectorXd dci_dt(6 * N);
         for (int i = 0; i < 6; ++i) {
-            dci_dt.segment(i * N, N) = beta[i] * (nu_sigma_f / Keff.array()).matrix().cwiseProduct(phi) - lambda_i[i] * y.segment((i + 1) * N, N);
+            dci_dt.segment(i * N, N) = beta[i] * (nu_sigma_f) * phi - lambda_i[i] * y.segment((i + 1) * N, N);
         }
 
         // Populate dydt with the derivatives
