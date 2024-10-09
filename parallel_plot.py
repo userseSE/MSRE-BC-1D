@@ -32,16 +32,17 @@ def main():
     os.chdir(folder_path)
 
     # Plot data from CSV files
-    plot_csv('rho_matrix.csv', 'Reactivity')
-    plot_csv('phi_middle_matrix.csv', 'Neutron Flux in the Middle')
-    plot_csv('ci_middle_matrix.csv', 'Delayed Neutron Precursors in the Middle')
+    plot_csv('rho_matrix.csv', 'Reactivity (pcm, avg)')
+    plot_csv('phi_middle_matrix.csv', 'Neutron Flux in the Middle (at L/2)')
+    plot_csv('ci_middle_matrix.csv', 'Delayed Neutron Precursors in the Middle (at L/2)')
     plot_csv('temperature_fuel_middle_matrix.csv', 'Temperature in the Core Middle')
 
-    plot_csv('phi.csv', 'Neutron Flux')
+    plot_csv('phi.csv', 'Neutron Flux (n/(cm^2/s))')
     plot_csv('ci.csv', 'Delayed Neutron Precursors')
-    plot_csv('temperature_core.csv', 'Temperature in the Core')
-    plot_csv('temperature_HX1.csv', 'Temperature in Heat Exchanger 1')
-    plot_csv('temperature_HX2.csv', 'Temperature in Heat Exchanger 2')
+    plot_csv('rho.csv', 'Reactivity (pcm, avg)')
+    plot_csv('temperature_core.csv', 'Temperature in the Core (Kelvin, col1-fuel, col2-graphite)')
+    plot_csv('temperature_HX1.csv', 'Temperature in Heat Exchanger 1 (Kelvin, col1-fuel, col2-coolant1)')
+    plot_csv('temperature_HX2.csv', 'Temperature in Heat Exchanger 2 (Kelvin)')
 
 if __name__ == "__main__":
     main()

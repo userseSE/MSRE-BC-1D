@@ -49,6 +49,7 @@ void save_results(const Eigen::VectorXd& rho_matrix,
 
 void save_spacial_results(const Eigen::VectorXd& phi, 
                           const Eigen::VectorXd& ci, 
+                          const Eigen::VectorXd& rho,
                           const Eigen::VectorXd& temperature_fuel, 
                           const Eigen::VectorXd& temperature_graphite, 
                           const Eigen::VectorXd& Ts_HX1, 
@@ -58,6 +59,8 @@ void save_spacial_results(const Eigen::VectorXd& phi,
                           const std::string& folder) {
     // Export each spatial data vector to a CSV file in the specific folder
     export_to_csv(phi, folder, "phi.csv");
+
+    export_to_csv(rho, folder, "rho.csv");
 
     // Reshape and transpose ci for export
     Eigen::MatrixXd segmented_ci = Eigen::Map<const Eigen::MatrixXd>(ci.data(), ci.size() / 6, 6);

@@ -12,6 +12,7 @@ void save_results(const Eigen::VectorXd& rho_matrix,
 
 void save_spacial_results(const Eigen::VectorXd& phi, 
                           const Eigen::VectorXd& ci, 
+                          const Eigen::VectorXd& rho,
                           const Eigen::VectorXd& temperature_fuel, 
                           const Eigen::VectorXd& temperature_graphite, 
                           const Eigen::VectorXd& Ts_HX1, 

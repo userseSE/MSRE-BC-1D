@@ -33,8 +33,8 @@ void run_simulation(double nu_sigma_f_value, double rho_0_value_input, int simul
     std::cout << "Simulation ID: " << simulation_id << " - Assigned rho_0_value: " << rho_0_value << std::endl;
   }
 
-  int time_span = 20000;
-  double rho_insertion = 0.0; // pcm
+  int time_span = 200000;
+  double rho_insertion = -10.0; // pcm
 
   // Initialization
   VectorXd rho = VectorXd::Zero(N);
@@ -127,13 +127,16 @@ void run_simulation(double nu_sigma_f_value, double rho_0_value_input, int simul
 
     rho = reactivity(initialS, initialG, temperature_fuel, temperature_graphite,
                      step, time_span, rho_insertion, rho_0_value);
-    rho_matrix[step] = rho.sum();
+    rho_matrix[step] = (rho.sum()/N)*1e5;
   }
 
   // Save results for this simulation in a specific folder
   std::string folder = "../results/simulation_" + std::to_string(simulation_id);
   save_results(rho_matrix, phi_middle_matrix, ci_middle_matrix, temperature_fuel_middle_matrix, folder);
-  save_spacial_results(phi, ci, temperature_fuel, temperature_graphite, Ts_HX1, Tss_HX1, Tss_HX2, Tsss_HX2, folder);
+  for (int i = 0; i < N; ++i) {
+    rho[i] = rho[i] * 1e5;
+  }
+  save_spacial_results(phi, ci, rho, temperature_fuel, temperature_graphite, Ts_HX1, Tss_HX1, Tss_HX2, Tsss_HX2, folder);
 }
 
 // int main() {
@@ -170,8 +173,8 @@ void run_simulation(double nu_sigma_f_value, double rho_0_value_input, int simul
 // }
 
 int main(){
-    double nu_sigma_f = 0.0044121797;    //0.004412224, 0.004411798 for -9.6e-5, 0.004412258 for N=500, 0.0044121796-0
-    double rho_0_value = 0.096e-5;       //-9.6e-5 to -10e-5
+    double nu_sigma_f = 0.0044121797;    //0.004412224, 0.004411798 for -9.6e-5, 0.004412258 for N=500, 0.0044121799-0
+    double rho_0_value = 0.3e-5;       //-9.6e-5 to -10e-5
     int simulation_id = 0;
     run_simulation(nu_sigma_f, rho_0_value, simulation_id);
     return 0;

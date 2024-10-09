@@ -59,14 +59,14 @@ const double U_sg = 36000;
 const double U_gs = 36000;
 const double c_p_g = 1757;
 
-// const double bc_s0 = 700;
-// const double bc_sL = 800;
-// const double bc_g0 = 700;
-// const double bc_gL = 850;
-const double bc_s0 = 500;
-const double bc_sL = 600;
-const double bc_g0 = 500;
-const double bc_gL = 650;
+const double bc_s0 = 700;
+const double bc_sL = 800;
+const double bc_g0 = 700;
+const double bc_gL = 850;
+// const double bc_s0 = 600;
+// const double bc_sL = 700;
+// const double bc_g0 = 600;
+// const double bc_gL = 750;
 
 Eigen::VectorXd initialS = Eigen::VectorXd::Zero(N);  // Initial temperature in salt
 Eigen::VectorXd initialG = Eigen::VectorXd::Zero(N);  // Initial temperature in graphite

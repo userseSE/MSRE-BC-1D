@@ -40,8 +40,15 @@ VectorXd reactivity(const VectorXd& temperature_fuel_r, const VectorXd& temperat
         double graphite_diff = (graphite - graphite_r) * alpha_g;
         double result = fuel_diff + graphite_diff;
 
+        if (step >= time_span / 2 && step < time_span / 2 + 1000) {
+            // rho_feedback[i] = result;
+            rho_feedback[i] = std::clamp(result, -1e-3, 1e-3);
+        } else {
+            // Clip (clamp) the result between -max_rho_change and max_rho_change
+            rho_feedback[i] = std::clamp(result, -max_rho_change, max_rho_change);
+        }
         // Clip (clamp) the result between -max_rho_change and max_rho_change
-        rho_feedback[i] = std::clamp(result, -max_rho_change, max_rho_change);
+        // rho_feedback[i] = std::clamp(result, -max_rho_change, max_rho_change);
     }
 
     // std::cout << "rho_feedback: " << rho_feedback[0] << std::endl;
