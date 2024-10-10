@@ -33,7 +33,7 @@ void run_simulation(double nu_sigma_f_value, double rho_0_value_input, int simul
     std::cout << "Simulation ID: " << simulation_id << " - Assigned rho_0_value: " << rho_0_value << std::endl;
   }
 
-  int time_span = 200000;
+  int time_span = 20000;
   double rho_insertion = -10.0; // pcm
 
   // Initialization

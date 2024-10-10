@@ -8,7 +8,7 @@
 
 // TODO: try modify sigma_a and nu_sigma_f, and modify initial conditions figures
 // Neutronics
-double dt = 0.001;
+double dt = 0.01;
 const double L = 172;
 const double dz = L / (N - 1);
 const double A = 4094;
