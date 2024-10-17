@@ -1,5 +1,4 @@
 CMakeFiles/test.dir/src/ode_solver.cpp.o: \
-<<<<<<< HEAD
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/ode_solver.cpp \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen/Dense \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen/Core \
@@ -1186,6 +1185,3 @@ CMakeFiles/test.dir/src/ode_solver.cpp.o: \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/__numeric/saturation_arithmetic.h \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/__numeric/transform_exclusive_scan.h \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/__numeric/transform_inclusive_scan.h
-=======
-  /Users/ouuyou/Project/Projects_development/MSR1DCpp/src/ode_solver.cpp
->>>>>>> 8f24367 (this is a compilable version with odeint, but need modificatino to align the python program)

@@ -35,19 +35,24 @@ void export_matrix_to_csv(const Eigen::MatrixXd& matrix, const std::string& fold
 }
 
 void save_results(const Eigen::VectorXd& rho_matrix, 
-                  const Eigen::VectorXd& phi_middle_matrix,
+                  const Eigen::VectorXd& phi1_middle_matrix,
+                  const Eigen::VectorXd& phi2_middle_matrix,
                   const Eigen::MatrixXd& ci_middle_matrix, 
                   const Eigen::VectorXd& temperature_fuel_middle_matrix,
                   const std::string& folder) {
     // Export each data vector to a CSV file in the specific folder
     export_to_csv(rho_matrix, folder, "rho_matrix.csv");
-    export_to_csv(phi_middle_matrix, folder, "phi_middle_matrix.csv");
+    Eigen::MatrixXd phi_middle(phi1_middle_matrix.size(), 2);
+    phi_middle.col(0) = phi1_middle_matrix;
+    phi_middle.col(1) = phi2_middle_matrix;
+    export_matrix_to_csv(phi_middle, folder, "phi_middle_matrix.csv");
     export_matrix_to_csv(ci_middle_matrix, folder, "ci_middle_matrix.csv");
     export_to_csv(temperature_fuel_middle_matrix, folder, "temperature_fuel_middle_matrix.csv");
     std::cout << "Results saved to CSV files in " << folder << "." << std::endl;
 }
 
-void save_spacial_results(const Eigen::VectorXd& phi, 
+void save_spacial_results(const Eigen::VectorXd& phi1, 
+                          const Eigen::VectorXd& phi2, 
                           const Eigen::VectorXd& ci, 
                           const Eigen::VectorXd& rho,
                           const Eigen::VectorXd& temperature_fuel, 
@@ -58,7 +63,10 @@ void save_spacial_results(const Eigen::VectorXd& phi,
                           const Eigen::VectorXd& Tsss_HX2,
                           const std::string& folder) {
     // Export each spatial data vector to a CSV file in the specific folder
-    export_to_csv(phi, folder, "phi.csv");
+    Eigen::MatrixXd phi(phi1.size(), 2);
+    phi.col(0) = phi1;
+    phi.col(1) = phi2;
+    export_matrix_to_csv(phi, folder, "phi.csv");
 
     export_to_csv(rho, folder, "rho.csv");
 

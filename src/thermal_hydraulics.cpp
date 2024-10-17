@@ -60,6 +60,8 @@ VectorXd thermal_hydraulics(VectorXd &y_th, const VectorXd &q_prime, double Ts_c
 
     // Set boundary conditions
     y_th[0] = Ts_core_0;
+    y_th[N - 1] = 950.0;
+    y_th[2*N-1] = 970.0;
 
     // Define the ODE system for the thermal-hydraulics model compatible with odeint
     std::function<void(double, const VectorXd &, VectorXd &)> pde_to_ode_th = 
@@ -80,9 +82,11 @@ VectorXd thermal_hydraulics(VectorXd &y_th, const VectorXd &q_prime, double Ts_c
 
         // // Apply time-varying boundary conditions
         temperature_fuel_dt[0] = params.bc_s0 - temperature_fuel[0];
-        temperature_fuel_dt[N - 1] = params.bc_sL - temperature_fuel[N - 1];
+        // temperature_fuel_dt[N - 1] = params.bc_sL - temperature_fuel[N - 1];
         temperature_graphite_dt[0] = params.bc_g0 - temperature_graphite[0];
-        temperature_graphite_dt[N - 1] = params.bc_gL - temperature_graphite[N - 1];
+        // temperature_graphite_dt[N - 1] = params.bc_gL - temperature_graphite[N - 1];
+        temperature_fuel_dt[N - 1] =0;
+        temperature_graphite_dt[N - 1] = 0;
 
         // double k = 0.05;  // Heat transfer coefficient to ambient (example value)
         // double ambient_temp = 300.0;  // Ambient temperature in Kelvin

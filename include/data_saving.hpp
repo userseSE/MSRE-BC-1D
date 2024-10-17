@@ -5,12 +5,14 @@
 #include <string>
 
 void save_results(const Eigen::VectorXd& rho_matrix, 
-                  const Eigen::VectorXd& phi_middle_matrix,
+                  const Eigen::VectorXd& phi1_middle_matrix,
+                  const Eigen::VectorXd& phi2_middle_matrix,
                   const Eigen::MatrixXd& ci_middle_matrix, 
                   const Eigen::VectorXd& temperature_fuel_middle_matrix,
                   const std::string& folder);
 
-void save_spacial_results(const Eigen::VectorXd& phi, 
+void save_spacial_results(const Eigen::VectorXd& phi1, 
+                          const Eigen::VectorXd& phi2, 
                           const Eigen::VectorXd& ci, 
                           const Eigen::VectorXd& rho,
                           const Eigen::VectorXd& temperature_fuel, 

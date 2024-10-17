@@ -1164,7 +1164,6 @@ CMakeFiles/test.dir/src/reactivity.cpp.o: \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/__numeric/saturation_arithmetic.h \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/__numeric/transform_exclusive_scan.h \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/__numeric/transform_inclusive_scan.h \
-<<<<<<< HEAD
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen/Sparse \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen/SparseCore \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/map \
@@ -1246,59 +1245,3 @@ CMakeFiles/test.dir/src/reactivity.cpp.o: \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen/src/IterativeLinearSolvers/IncompleteCholesky.h \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/list \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/iostream
-=======
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/functional \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/binary_negate.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/bind.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/bind_back.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/perfect_forward.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/bind_front.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/binder1st.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/binder2nd.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/boyer_moore_searcher.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/unordered_map \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/is_transparent.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__hash_table \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__iterator/ranges_iterator_traits.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__node_handle \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/compose.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/default_searcher.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/function.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__memory/builtin_new_allocator.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__type_traits/strip_signature.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/mem_fn.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/mem_fun_ref.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/not_fn.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/pointer_to_binary_function.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/pointer_to_unary_function.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/unary_negate.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/iostream \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/istream \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/ostream \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/bitset \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/format \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/container_adaptor.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/range_default_formatter.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__chrono/statically_widen.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/range_formatter.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/format_context.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/format_arg_store.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/format_args.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__ranges/ref_view.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/queue \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/deque \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/stack \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/format_functions.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/formatter_char.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/write_escaped.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/escaped_output_table.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/formatter_floating_point.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__charconv/chars_format.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__charconv/to_chars_floating_point.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/formatter_integer.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/formatter_pointer.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/formatter_string.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/formatter_tuple.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/print \
-  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/unistd.h
->>>>>>> 8f24367 (this is a compilable version with odeint, but need modificatino to align the python program)

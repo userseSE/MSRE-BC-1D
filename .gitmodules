@@ -12,12 +12,3 @@
 [submodule "thirdparty/odeint"]
 	path = thirdparty/odeint
 	url = https://github.com/headmyshoulder/odeint-v2.git
-[submodule "build/thirdparty/libode"]
-	path = build/thirdparty/libode
-	url = https://github.com/markmbaum/libode.git
-[submodule "thirdparty/libode"]
-	path = thirdparty/libode
-	url = https://github.com/markmbaum/libode.git
-[submodule "thirdparty/sundials"]
-	path = thirdparty/sundials
-	url = https://github.com/LLNL/sundials.git

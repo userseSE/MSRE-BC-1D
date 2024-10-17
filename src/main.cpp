@@ -35,7 +35,7 @@ void run_simulation(int simulation_id) {
 //     // std::cout << "Simulation ID: " << simulation_id << " - Assigned rho_0_value: " << rho_0_value << std::endl;
 //   }
 
-  int time_span = 20000;
+  int time_span = 2500;
   double rho_insertion = 0.0; // pcm
 
   // Initialization
@@ -57,11 +57,13 @@ void run_simulation(int simulation_id) {
       buffer_r_pp, buffer_pp_r;
 
   VectorXd rho_matrix = VectorXd::Zero(time_span);
-  VectorXd phi_middle_matrix = VectorXd::Zero(time_span);
+  VectorXd phi1_middle_matrix = VectorXd::Zero(time_span);
+  VectorXd phi2_middle_matrix = VectorXd::Zero(time_span);
   Eigen::MatrixXd ci_middle_matrix = Eigen::MatrixXd::Zero(time_span, 6);
   VectorXd temperature_fuel_middle_matrix = VectorXd::Zero(time_span);
 
-  VectorXd phi = VectorXd::Zero(N);
+  VectorXd phi1 = VectorXd::Zero(N);
+  VectorXd phi2 = VectorXd::Zero(N);
   VectorXd ci = VectorXd::Zero(6 * N);
   VectorXd temperature_fuel = VectorXd::Zero(N);
   VectorXd temperature_graphite = VectorXd::Zero(N);
@@ -79,18 +81,21 @@ void run_simulation(int simulation_id) {
     // }
     std::cout << "Simulation " << simulation_id << " - Time step: " << step << std::endl;
     std::vector<double> rho_vec(rho.data(), rho.data() + rho.size());
-    std::tie(y_n, phi) = neutronics(y_n, rho_vec, step, params);    // phi: n*cm−2*s−1
+    y_n = neutronics(y_n, rho_vec, step, params);    // phi: n*cm−2*s−1
+    phi1 = y_n.head(N);
+    phi2 = y_n.segment(N,N);
     // std::cout << "phi[0]: " << phi[0] << std::endl;
     // std::cout << "phi[100]: " << phi[100] << std::endl;
     for (int i = 0; i < N; ++i) {
-      q_prime[i] = phi[i] * params.sigma_f * params.A / params.flux_to_power;
+      q_prime[i] = (phi1[i]+phi2[i]) * params.sigma_f * params.A / params.flux_to_power;
     }
     // std::cout << "q_prime[0]: " << q_prime[0] << std::endl;
     // std::cout << "q_prime[N-1]: " << q_prime[N - 1] << std::endl;
     // phi = y_n.head(N);
     ci = y_n.tail(6 * N);
 
-    phi_middle_matrix[step] = phi[N / 2];
+    phi1_middle_matrix[step] = phi1[N / 2];
+    phi2_middle_matrix[step] = phi2[N / 2];
     for (int i = 0; i < 6; ++i) {
       ci_middle_matrix(step, i) = ci[(i * N + (i + 1) * N) / 3];
     }
@@ -137,11 +142,11 @@ void run_simulation(int simulation_id) {
 
   // Save results for this simulation in a specific folder
   std::string folder = "results/simulation_" + std::to_string(simulation_id);
-  save_results(rho_matrix, phi_middle_matrix, ci_middle_matrix, temperature_fuel_middle_matrix, folder);
+  save_results(rho_matrix, phi1_middle_matrix, phi2_middle_matrix, ci_middle_matrix, temperature_fuel_middle_matrix, folder);
   for (int i = 0; i < N; ++i) {
     rho[i] = rho[i] * 1e5;
   }
-  save_spacial_results(phi, ci, rho, temperature_fuel, temperature_graphite, Ts_HX1, Tss_HX1, Tss_HX2, Tsss_HX2, folder);
+  save_spacial_results(phi1, phi2, ci, rho, temperature_fuel, temperature_graphite, Ts_HX1, Tss_HX1, Tss_HX2, Tsss_HX2, folder);
 }
 
 // int main() {

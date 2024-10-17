@@ -893,25 +893,6 @@ CMakeFiles/test.dir/src/HX1.cpp.o: \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/deque \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/__memory/temp_value.h \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/__split_buffer \
-<<<<<<< HEAD
-=======
-  /Users/ouuyou/Project/Projects_development/MSR1DCpp/include/parameters.hpp \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/iostream \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/istream \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/ostream \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/bitset \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/format \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/container_adaptor.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/range_default_formatter.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__chrono/statically_widen.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/range_formatter.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/format_context.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/format_arg_store.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__format/format_args.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__ranges/ref_view.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/queue \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/deque \
->>>>>>> 8f24367 (this is a compilable version with odeint, but need modificatino to align the python program)
   /Users/ouuyou/miniforge/bin/../include/c++/v1/functional \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/binary_negate.h \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/__functional/bind.h \
@@ -1263,11 +1244,8 @@ CMakeFiles/test.dir/src/HX1.cpp.o: \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen/src/IterativeLinearSolvers/IncompleteLUT.h \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen/src/IterativeLinearSolvers/IncompleteCholesky.h \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/list \
-<<<<<<< HEAD
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/include/ode_solver.hpp \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/iostream \
-=======
->>>>>>> 8f24367 (this is a compilable version with odeint, but need modificatino to align the python program)
   /Users/ouuyou/miniforge/include/boost/numeric/odeint.hpp \
   /Users/ouuyou/miniforge/include/boost/numeric/odeint/version.hpp \
   /Users/ouuyou/miniforge/include/boost/numeric/odeint/config.hpp \
@@ -1294,7 +1272,6 @@ CMakeFiles/test.dir/src/HX1.cpp.o: \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/memory_resource \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/charconv \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/filesystem \
-<<<<<<< HEAD
   /Users/ouuyou/miniforge/bin/../include/c++/v1/barrier \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/source_location \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/latch \
@@ -1305,8 +1282,6 @@ CMakeFiles/test.dir/src/HX1.cpp.o: \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/syncstream \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/coroutine \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/semaphore \
-=======
->>>>>>> 8f24367 (this is a compilable version with odeint, but need modificatino to align the python program)
   /Users/ouuyou/miniforge/include/boost/config/detail/cxx_composite.hpp \
   /Users/ouuyou/miniforge/include/boost/numeric/odeint/util/ublas_wrapper.hpp \
   /Users/ouuyou/miniforge/include/boost/type_traits/integral_constant.hpp \
@@ -1428,14 +1403,11 @@ CMakeFiles/test.dir/src/HX1.cpp.o: \
   /Users/ouuyou/miniforge/include/boost/preprocessor/variadic/size.hpp \
   /Users/ouuyou/miniforge/include/boost/preprocessor/facilities/check_empty.hpp \
   /Users/ouuyou/miniforge/include/boost/preprocessor/variadic/has_opt.hpp \
-<<<<<<< HEAD
   /Users/ouuyou/miniforge/include/boost/preprocessor/variadic/detail/has_opt.hpp \
   /Users/ouuyou/miniforge/include/boost/preprocessor/facilities/is_empty_variadic.hpp \
   /Users/ouuyou/miniforge/include/boost/preprocessor/punctuation/is_begin_parens.hpp \
   /Users/ouuyou/miniforge/include/boost/preprocessor/punctuation/detail/is_begin_parens.hpp \
   /Users/ouuyou/miniforge/include/boost/preprocessor/facilities/detail/is_empty.hpp \
-=======
->>>>>>> 8f24367 (this is a compilable version with odeint, but need modificatino to align the python program)
   /Users/ouuyou/miniforge/include/boost/preprocessor/variadic/limits/size_64.hpp \
   /Users/ouuyou/miniforge/include/boost/preprocessor/tuple/rem.hpp \
   /Users/ouuyou/miniforge/include/boost/preprocessor/tuple/detail/is_single_return.hpp \
@@ -1568,11 +1540,8 @@ CMakeFiles/test.dir/src/HX1.cpp.o: \
   /Users/ouuyou/miniforge/include/boost/type_traits/remove_const.hpp \
   /Users/ouuyou/miniforge/include/boost/numeric/ublas/exception.hpp \
   /Users/ouuyou/miniforge/include/boost/numeric/ublas/detail/config.hpp \
-<<<<<<< HEAD
   /Users/ouuyou/miniforge/bin/../include/c++/v1/cassert \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/assert.h \
-=======
->>>>>>> 8f24367 (this is a compilable version with odeint, but need modificatino to align the python program)
   /Users/ouuyou/miniforge/include/boost/noncopyable.hpp \
   /Users/ouuyou/miniforge/include/boost/core/noncopyable.hpp \
   /Users/ouuyou/miniforge/include/boost/mpl/and.hpp \

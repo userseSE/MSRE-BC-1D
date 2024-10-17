@@ -18,11 +18,25 @@ struct Parameters {
     static constexpr double A = 4094;
     static constexpr double flux_to_power = 3.12e10;
     static constexpr double dz = L / (N - 1);
-    static constexpr double V = 1.103497 * 1e7;
-    static constexpr double D = 0.96343 * 7;
-    static constexpr double sigma_a = 0.002161939172413793;
-    static constexpr double nu_sigma_f = 0.0044120763;
-    static constexpr double sigma_f = 0.004411764705882353 / 2.41;
+    // static constexpr double V1 = 3e7;   //1.103497 * 1e7;
+    // static constexpr double V2 = 2.2e5;
+    // static constexpr double D1 = 1.614*9;  //0.96343 * 7;
+    // static constexpr double D2 = 0.282;
+    // static constexpr double sigma_a1 = 0.250;  //0.002161939172413793;  0.001382
+    // static constexpr double sigma_a2 = 0.020;       //0.0054869
+    // static constexpr double nu_sigma_f1 = 0.000005; //0.0044120763;
+    // static constexpr double nu_sigma_f2 = 0.00308;
+    // static constexpr double sigma_s12 = 0.0023;
+    static constexpr double V1 = 1.103497 * 1e7;   //1.103497 * 1e7;
+    static constexpr double V2 = 2.2e5;
+    static constexpr double D1 = 0.96343 * 7;  //0.96343 * 7;
+    static constexpr double D2 = 0.282;
+    static constexpr double sigma_a1 = 0.002161939172413793;  //0.002161939172413793;  0.001382
+    static constexpr double sigma_a2 = 0.030;       //0.0054869
+    static constexpr double nu_sigma_f1 = 0.00440605; //0.0044120763; 0.00440605
+    static constexpr double nu_sigma_f2 = 0.000000000001;
+    static constexpr double sigma_s12 = 0.013;      //0.0023
+    static constexpr double sigma_f = (nu_sigma_f1 + nu_sigma_f2)/2.41;//0.004411764705882353 / 2.41;
     static constexpr std::array<double, 6> beta = {0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088};
     static constexpr double Beta = std::accumulate(beta.begin(), beta.end(), 0.0);
     // static constexpr double Beta = 0.000228 + 0.000788 + 0.000664 + 0.000736 + 0.000136 + 0.000088;
@@ -32,7 +46,8 @@ struct Parameters {
     static constexpr double t1 = 1;
 
     // TODO: init put into another struct, initial conditions set as const
-    Eigen::VectorXd phi_0 = Eigen::VectorXd::Zero(N);
+    Eigen::VectorXd phi1_0 = Eigen::VectorXd::Zero(N);
+    Eigen::VectorXd phi2_0 = Eigen::VectorXd::Zero(N);
     Eigen::VectorXd c1 = Eigen::VectorXd::Zero(N);
     Eigen::VectorXd c2 = Eigen::VectorXd::Zero(N);
     Eigen::VectorXd c3 = Eigen::VectorXd::Zero(N);
@@ -47,12 +62,16 @@ struct Parameters {
     static constexpr double Mg = 3687;
     static constexpr double gamma = 0.93;
     static constexpr double U_sg = 36000;
-    static constexpr double U_gs = 36000;
+    static constexpr double U_gs = 18000;
     static constexpr double c_p_g = 1757;
-    static constexpr double bc_s0 = 800;
-    static constexpr double bc_sL = 900;
-    static constexpr double bc_g0 = 850;
-    static constexpr double bc_gL = 950;
+    static constexpr double bc_s0 = 900;
+    static constexpr double bc_sL = 1000;
+    static constexpr double bc_g0 = 950;
+    static constexpr double bc_gL = 1050;
+    // static constexpr double bc_s0 = 500;
+    // static constexpr double bc_sL = 600;
+    // static constexpr double bc_g0 = 550;
+    // static constexpr double bc_gL = 650;
     static constexpr double a_th = Vc;
     static constexpr double b_th = U_gs / (Ms * c_p_s);
     static constexpr double c_th = U_sg / (Mg * c_p_g);
@@ -109,7 +128,7 @@ struct Parameters {
     static constexpr double alpha_g = -6.624e-5;
     static constexpr double tau_l = 16.73;
     static constexpr double tau_c = 8.46;
-    static constexpr double max_rho_change = 1e-4;
+    static constexpr double max_rho_change = 1e-3;
     double rho_0_value = 3.3e-5;
 
     // Transport Delays

@@ -10,14 +10,15 @@ void initialize_neutronics(Parameters& params) {
     double lambda_sum = std::accumulate(params.lambda_i.begin(), params.lambda_i.end(), 0.0);
 
     for (int i = 0; i < N; ++i) {
-        params.phi_0[i] = 1.0e13;  // Initial neutron flux
+        params.phi1_0[i] = 1.0e13;  // Initial neutron flux
+        params.phi2_0[i] = 0.4e13;  // Initial neutron flux
         double x = i * params.dz;  // Compute the spatial position
-        params.c1[i] = ((params.beta[0] * params.nu_sigma_f) / (params.lambda_i[0]/6)) * params.phi_0[i];
-        params.c2[i] = ((params.beta[1] * params.nu_sigma_f) / (params.lambda_i[1]/6)) * params.phi_0[i];
-        params.c3[i] = ((params.beta[2] * params.nu_sigma_f) / (params.lambda_i[2]/6)) * params.phi_0[i];
-        params.c4[i] = ((params.beta[3] * params.nu_sigma_f) / (params.lambda_i[3]/6)) * params.phi_0[i];
-        params.c5[i] = ((params.beta[4] * params.nu_sigma_f) / (params.lambda_i[4]/6)) * params.phi_0[i];
-        params.c6[i] = ((params.beta[5] * params.nu_sigma_f) / (params.lambda_i[5]/6)) * params.phi_0[i];  
+        params.c1[i] = ((params.beta[0] * (params.nu_sigma_f1)) / (params.lambda_i[0]/6)) * (params.phi1_0[i]+params.phi2_0[i]);
+        params.c2[i] = ((params.beta[1] * (params.nu_sigma_f1)) / (params.lambda_i[1]/6)) * (params.phi1_0[i]+params.phi2_0[i]);
+        params.c3[i] = ((params.beta[2] * (params.nu_sigma_f1)) / (params.lambda_i[2]/6)) * (params.phi1_0[i]+params.phi2_0[i]);
+        params.c4[i] = ((params.beta[3] * (params.nu_sigma_f1)) / (params.lambda_i[3]/6)) * (params.phi1_0[i]+params.phi2_0[i]);
+        params.c5[i] = ((params.beta[4] * (params.nu_sigma_f1)) / (params.lambda_i[4]/6)) * (params.phi1_0[i]+params.phi2_0[i]);
+        params.c6[i] = ((params.beta[5] * (params.nu_sigma_f1)) / (params.lambda_i[5]/6)) * (params.phi1_0[i]+params.phi2_0[i]);  
     }
 }
 
