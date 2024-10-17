@@ -35,8 +35,8 @@ void run_simulation(int simulation_id) {
 //     // std::cout << "Simulation ID: " << simulation_id << " - Assigned rho_0_value: " << rho_0_value << std::endl;
 //   }
 
-  int time_span = 2500;
-  double rho_insertion = 0.0; // pcm
+  int time_span = 5000;
+  double rho_insertion = 500.0; // pcm
 
   // Initialization
   VectorXd rho = VectorXd::Zero(N);
