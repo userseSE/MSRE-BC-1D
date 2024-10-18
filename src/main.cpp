@@ -35,7 +35,7 @@ void run_simulation(int simulation_id) {
 //     // std::cout << "Simulation ID: " << simulation_id << " - Assigned rho_0_value: " << rho_0_value << std::endl;
 //   }
 
-  int time_span = 5000;
+  int time_span = 3000;
   double rho_insertion = 10000.0; // pcm, 50*N
 
   // Initialization

@@ -54,7 +54,8 @@ VectorXd reactivity(const VectorXd& temperature_fuel, const VectorXd& temperatur
         // }
 
         // Clip (clamp) the result between -max_rho_change and max_rho_change
-        rho_feedback[i] = std::clamp(result, -max_rho_change, max_rho_change);
+        // rho_feedback[i] = std::clamp(result, -max_rho_change, max_rho_change);
+        rho_feedback[i] = result;
     }
 
     // std::cout << "rho_feedback: " << rho_feedback[0] << std::endl;

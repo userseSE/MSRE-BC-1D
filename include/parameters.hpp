@@ -18,15 +18,6 @@ struct Parameters {
     static constexpr double A = 4094;
     static constexpr double flux_to_power = 3.12e10;
     static constexpr double dz = L / (N - 1);
-    // static constexpr double V1 = 3e7;   //1.103497 * 1e7;
-    // static constexpr double V2 = 2.2e5;
-    // static constexpr double D1 = 1.614*9;  //0.96343 * 7;
-    // static constexpr double D2 = 0.282;
-    // static constexpr double sigma_a1 = 0.250;  //0.002161939172413793;  0.001382
-    // static constexpr double sigma_a2 = 0.020;       //0.0054869
-    // static constexpr double nu_sigma_f1 = 0.000005; //0.0044120763;
-    // static constexpr double nu_sigma_f2 = 0.00308;
-    // static constexpr double sigma_s12 = 0.0023;
     static constexpr double V1 = 1.103497 * 1e7;   //1.103497 * 1e7;
     static constexpr double V2 = 2.2e5;
     static constexpr double D1 = 0.96343 * 7;  //0.96343 * 7;
@@ -129,7 +120,7 @@ struct Parameters {
     static constexpr double tau_l = 16.73;
     static constexpr double tau_c = 8.46;
     static constexpr double max_rho_change = 1e-3;
-    double rho_0_value = 3.3e-5;
+    double rho_0_value = 0.0e-5; //3.3e-5;
 
     // Transport Delays
     static constexpr double tau_hx_c = 0;

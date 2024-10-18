@@ -80,15 +80,6 @@ VectorXd HX2(VectorXd& y_hx2, double Ts_HX2_L, int step, Parameters& params) {
         dv_dt[0] = 0; // Fixed condition: no change at v[0]
         dv_dt[Nx - 1] = 0; // Fixed condition: no change at v[Nx-1]
 
-        // double k = 0.05;  // Heat transfer coefficient to ambient (example value)
-        // double ambient_temp = 300.0;  // Ambient temperature in Kelvin
-        // du_dt[0] = -k * (u[0] - ambient_temp);
-        // du_dt[N - 1] = -k * (u[Nx - 1] - ambient_temp);
-        // // dv_dt[0] = -k * (v[0] - ambient_temp);
-        // // dv_dt[N - 1] = -k * (v[Nx - 1] - ambient_temp);
-        // dv_dt[0] = 0; // Fixed condition: no change at v[0]
-        // dv_dt[Nx - 1] = 0; // Fixed condition: no change at v[Nx-1]
-
         // Populate dydt with the derivatives
         dydt.head(Nx) = du_dt;
         dydt.tail(Nx) = dv_dt;
