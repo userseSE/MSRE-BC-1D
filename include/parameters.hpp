@@ -24,8 +24,8 @@ struct Parameters {
     static constexpr double D2 = 0.282;
     static constexpr double sigma_a1 = 0.002161939172413793;  //0.002161939172413793;  0.001382
     static constexpr double sigma_a2 = 0.030;       //0.0054869
-    static constexpr double nu_sigma_f1 = 0.00440605; //0.0044120763; 0.00440605
-    static constexpr double nu_sigma_f2 = 0.000000000001;
+    static constexpr double nu_sigma_f1 = 0.00220605; //0.0044120763; 0.00440605
+    static constexpr double nu_sigma_f2 = 0.00220;
     static constexpr double sigma_s12 = 0.013;      //0.0023
     static constexpr double sigma_f = (nu_sigma_f1 + nu_sigma_f2)/2.41;//0.004411764705882353 / 2.41;
     static constexpr std::array<double, 6> beta = {0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088};
@@ -59,6 +59,8 @@ struct Parameters {
     static constexpr double bc_sL = 1000;
     static constexpr double bc_g0 = 950;
     static constexpr double bc_gL = 1050;
+    static constexpr double fixed_boundary_sL = 950.0;
+    static constexpr double fixed_boundary_gL = 970.0;
     // static constexpr double bc_s0 = 500;
     // static constexpr double bc_sL = 600;
     // static constexpr double bc_g0 = 550;
@@ -73,8 +75,8 @@ struct Parameters {
     Eigen::VectorXd initialG = Eigen::VectorXd::Zero(N);
 
     // Heat Exchanger 1
-    static constexpr double L_HX = 2;
-    static constexpr double dx = L / (N - 1);
+    static constexpr double L_HX = 200;
+    static constexpr double dx = L_HX / (N - 1);
     static constexpr double V_he_s = 171.2;
     static constexpr double V_he_ss = 105.7;
     static constexpr double U_hx = 82800;
@@ -95,7 +97,7 @@ struct Parameters {
 
     // TODO: cosimulation - generate and use 3 sets of temperatures from brayton cycle, min, max, nominal in simulink
     // Heat Exchanger 2
-    static constexpr double L_HX2 = 2;
+    static constexpr double L_HX2 = 200;
     static constexpr double V_he2_s = 105.7;
     static constexpr double V_he2_ss = 45.3;
     static constexpr double U2_hx = 36000;

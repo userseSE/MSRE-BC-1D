@@ -1,10 +1,10 @@
 #include "reactivity.hpp"
 #include "parameters.hpp"
-#include "src/Core/Matrix.h"
+// #include "src/Core/Matrix.h"
 #include <Eigen/Dense>
-#include <numeric>
-#include <algorithm>
-#include <cmath>
+// #include <numeric>
+// #include <algorithm>
+// #include <cmath>
 #include <iostream>
 
 using Eigen::VectorXd;

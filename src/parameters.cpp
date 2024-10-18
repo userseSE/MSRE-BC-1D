@@ -1,8 +1,8 @@
 #include <Eigen/Dense>
 #include <array>
-#include <numeric>
-#include <vector>
-#include <cmath>
+// #include <numeric>
+// #include <vector>
+// #include <cmath>
 
 #include "parameters.hpp"
 

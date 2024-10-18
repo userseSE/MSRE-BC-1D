@@ -1147,6 +1147,7 @@ CMakeFiles/test.dir/src/parameters.cpp.o: \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen/src/Eigenvalues/GeneralizedEigenSolver.h \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen/src/Eigenvalues/./RealQZ.h \
   /Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen/src/Eigenvalues/MatrixBaseEigenvalues.h \
+  /Users/ouuyou/Project/Projects_development/MSR1DCpp/include/parameters.hpp \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/numeric \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/__numeric/accumulate.h \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/__numeric/adjacent_difference.h \
@@ -1161,5 +1162,4 @@ CMakeFiles/test.dir/src/parameters.cpp.o: \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/__numeric/reduce.h \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/__numeric/saturation_arithmetic.h \
   /Users/ouuyou/miniforge/bin/../include/c++/v1/__numeric/transform_exclusive_scan.h \
-  /Users/ouuyou/miniforge/bin/../include/c++/v1/__numeric/transform_inclusive_scan.h \
-  /Users/ouuyou/Project/Projects_development/MSR1DCpp/include/parameters.hpp
+  /Users/ouuyou/miniforge/bin/../include/c++/v1/__numeric/transform_inclusive_scan.h

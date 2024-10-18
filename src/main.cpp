@@ -1,13 +1,13 @@
 #include <Eigen/Dense>
-#include <cmath>
+// #include <cmath>
 #include <fstream>
-#include <iomanip>
+// #include <iomanip>
 #include <iostream>
-#include <mutex>
-#include <numeric>
+// #include <mutex>
+// #include <numeric>
 #include <string>
-#include <thread>
-#include <vector>
+// #include <thread>
+// #include <vector>
 
 #include "HX1.hpp"
 #include "HX2.hpp"
@@ -20,22 +20,13 @@
 
 using Eigen::VectorXd;
 
-std::mutex parameter_mutex;
+// std::mutex parameter_mutex;
 
 void run_simulation(int simulation_id) {
-    Parameters params;
-    initialize_parameters(params);
+  Parameters params;
+  initialize_parameters(params);
 
-//   {
-//     // Lock the mutex to safely modify global parameters
-//     // std::lock_guard<std::mutex> guard(parameter_mutex);
-//     // nu_sigma_f = nu_sigma_f_value;
-//     // std::cout << "Simulation ID: " << simulation_id << " - Assigned nu_sigma_f: " << nu_sigma_f << std::endl;
-//     // rho_0_value = rho_0_value_input;
-//     // std::cout << "Simulation ID: " << simulation_id << " - Assigned rho_0_value: " << rho_0_value << std::endl;
-//   }
-
-  int time_span = 3000;
+  int time_span = 2500;
   double rho_insertion = 10000.0; // pcm, 50*N
 
   // Initialization
@@ -73,21 +64,16 @@ void run_simulation(int simulation_id) {
   VectorXd Tsss_HX2 = VectorXd::Zero(Nx);
 
   for (int step = 0; step < time_span; ++step) {
-    // if (step % 1000 == 0) {
-    //   std::cout << "Simulation " << simulation_id << " - Time step: " << step << std::endl;
-    // }
-    // if (step >10000 && step < 1010){
-    //   std::cout << "Simulation " << simulation_id << " - Time step: " << step << std::endl;
-    // }
     std::cout << "Simulation " << simulation_id << " - Time step: " << step << std::endl;
     std::vector<double> rho_vec(rho.data(), rho.data() + rho.size());
-    y_n = neutronics(y_n, rho_vec, step, params);    // phi: n*cm−2*s−1
+    y_n = neutronics(y_n, rho_vec, step, params); // phi: n*cm−2*s−1
     phi1 = y_n.head(N);
-    phi2 = y_n.segment(N,N);
+    phi2 = y_n.segment(N, N);
     // std::cout << "phi[0]: " << phi[0] << std::endl;
     // std::cout << "phi[100]: " << phi[100] << std::endl;
     for (int i = 0; i < N; ++i) {
-      q_prime[i] = (phi1[i]+phi2[i]) * params.sigma_f * params.A / params.flux_to_power;
+      q_prime[i] = (phi1[i] + phi2[i]) * params.sigma_f * params.A /
+                   params.flux_to_power;
     }
     // std::cout << "q_prime[0]: " << q_prime[0] << std::endl;
     // std::cout << "q_prime[N-1]: " << q_prime[N - 1] << std::endl;
@@ -100,8 +86,8 @@ void run_simulation(int simulation_id) {
       ci_middle_matrix(step, i) = ci[(i * N + (i + 1) * N) / 3];
     }
 
-    double Ts_core_0 =
-        transport_delay(Ts_HX1_0, params.tau_hx_c, params.Ts_in, buffer_hx_c, step);
+    double Ts_core_0 = transport_delay(Ts_HX1_0, params.tau_hx_c, params.Ts_in,
+                                       buffer_hx_c, step);
     y_th = thermal_hydraulics(y_th, q_prime, Ts_core_0, step, params);
     // std::cout << "fuel_th[N/2]: " << y_th[N/4] << std::endl;
     temperature_fuel = y_th.head(N);
@@ -110,8 +96,10 @@ void run_simulation(int simulation_id) {
     double Ts_core_L = y_th[N - 1];
     temperature_fuel_middle_matrix[step] = temperature_fuel[N / 3];
 
-    double Ts_HX1_L = transport_delay(Ts_core_L, params.tau_c_hx, params.Ts_out, buffer_c_hx, step);
-    Tss_HX1_0 = transport_delay(Tss_HX2_0, params.tau_r_hx, params.Tss_in, buffer_r_hx, step);
+    double Ts_HX1_L = transport_delay(Ts_core_L, params.tau_c_hx, params.Ts_out,
+                                      buffer_c_hx, step);
+    Tss_HX1_0 = transport_delay(Tss_HX2_0, params.tau_r_hx, params.Tss_in,
+                                buffer_r_hx, step);
 
     y_hx1 = HX1(y_hx1, Ts_HX1_L, Tss_HX1_0, step, params);
     Ts_HX1 = y_hx1.head(Nx);
@@ -120,8 +108,10 @@ void run_simulation(int simulation_id) {
     Ts_HX1_0 = Ts_HX1[0];
     double Tss_HX1_L = Tss_HX1[Nx - 1];
 
-    double Tss_HX2_L = transport_delay(Tss_HX1_L, params.tau_hx_r, params.Ts_out, buffer_hx_r, step);
-    // Tsss_HX2_0 = transport_delay(Tsss_pp_0, tau_pp_r, Tsss_in, buffer_pp_r, step);
+    double Tss_HX2_L = transport_delay(Tss_HX1_L, params.tau_hx_r,
+                                       params.Ts_out, buffer_hx_r, step);
+    // Tsss_HX2_0 = transport_delay(Tsss_pp_0, tau_pp_r, Tsss_in, buffer_pp_r,
+    // step);
 
     y_hx2 = HX2(y_hx2, Tss_HX2_L, step, params);
     Tss_HX2 = y_hx2.head(Nx);
@@ -130,23 +120,27 @@ void run_simulation(int simulation_id) {
     Tss_HX2_0 = Tss_HX2[0];
     double Tsss_HX2_L = Tsss_HX2[Nx - 1];
 
-    double Tsss_pp_L = transport_delay(Tsss_HX2_L, params.tau_r_pp, params.Tsss_out, buffer_r_pp, step);
+    double Tsss_pp_L = transport_delay(Tsss_HX2_L, params.tau_r_pp,
+                                       params.Tsss_out, buffer_r_pp, step);
     // double y_pp = power_plant_temp(Tsss_pp_L, step);
     // Tsss_pp_0 = y_pp;
 
-    rho = reactivity(temperature_fuel, temperature_graphite,
-                     step, time_span, rho_insertion, params);
-    rho_matrix[step] = (rho.sum()/N) * 1e5;
+    rho = reactivity(temperature_fuel, temperature_graphite, step, time_span,
+                     rho_insertion, params);
+    rho_matrix[step] = (rho.sum() / N) * 1e5;
     // rho_matrix[step] = rho[N / 2] * 1e5;
   }
 
   // Save results for this simulation in a specific folder
   std::string folder = "results/simulation_" + std::to_string(simulation_id);
-  save_results(rho_matrix, phi1_middle_matrix, phi2_middle_matrix, ci_middle_matrix, temperature_fuel_middle_matrix, folder);
+  save_results(rho_matrix, phi1_middle_matrix, phi2_middle_matrix,
+               ci_middle_matrix, temperature_fuel_middle_matrix, folder);
   for (int i = 0; i < N; ++i) {
     rho[i] = rho[i] * 1e5;
   }
-  save_spacial_results(phi1, phi2, ci, rho, temperature_fuel, temperature_graphite, Ts_HX1, Tss_HX1, Tss_HX2, Tsss_HX2, folder);
+  save_spacial_results(phi1, phi2, ci, rho, temperature_fuel,
+                       temperature_graphite, Ts_HX1, Tss_HX1, Tss_HX2, Tsss_HX2,
+                       folder);
 }
 
 // int main() {
@@ -156,7 +150,8 @@ void run_simulation(int simulation_id) {
 //   double nu_sigma_f_start = 0.0044120;
 //   double nu_sigma_f_end = 0.0044130;
 //   for (int i = 0; i < num_slices_nu_sigma_f; ++i) {
-//     nu_sigma_f_values.push_back(nu_sigma_f_start + i * (nu_sigma_f_end - nu_sigma_f_start) / (num_slices_nu_sigma_f - 1));
+//     nu_sigma_f_values.push_back(nu_sigma_f_start + i * (nu_sigma_f_end -
+//     nu_sigma_f_start) / (num_slices_nu_sigma_f - 1));
 //   }
 
 //   double rho_0_value = 0.0;
@@ -182,10 +177,11 @@ void run_simulation(int simulation_id) {
 //   return 0;
 // }
 
-int main(){
-    // double nu_sigma_f = 0.0044120764;    //0.004412224, 0.004411798 for -9.6e-5, 0.004412258 for N=500, 0.0044121799-0
-    // double rho_0_value = 3.3e-5;       //-9.6e-5 to -10e-5
-    int simulation_id = 1;
-    run_simulation(simulation_id);
-    return 0;
+int main() {
+  // double nu_sigma_f = 0.0044120764;    //0.004412224, 0.004411798 for
+  // -9.6e-5, 0.004412258 for N=500, 0.0044121799-0 double rho_0_value = 3.3e-5;
+  // //-9.6e-5 to -10e-5
+  int simulation_id = 1;
+  run_simulation(simulation_id);
+  return 0;
 }

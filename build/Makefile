@@ -177,6 +177,30 @@ src/HX2.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/HX2.cpp.s
 .PHONY : src/HX2.cpp.s
 
+src/PartialPivLU.o: src/PartialPivLU.cpp.o
+.PHONY : src/PartialPivLU.o
+
+# target to build an object file
+src/PartialPivLU.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/PartialPivLU.cpp.o
+.PHONY : src/PartialPivLU.cpp.o
+
+src/PartialPivLU.i: src/PartialPivLU.cpp.i
+.PHONY : src/PartialPivLU.i
+
+# target to preprocess a source file
+src/PartialPivLU.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/PartialPivLU.cpp.i
+.PHONY : src/PartialPivLU.cpp.i
+
+src/PartialPivLU.s: src/PartialPivLU.cpp.s
+.PHONY : src/PartialPivLU.s
+
+# target to generate assembly for a file
+src/PartialPivLU.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/PartialPivLU.cpp.s
+.PHONY : src/PartialPivLU.cpp.s
+
 src/data_saving.o: src/data_saving.cpp.o
 .PHONY : src/data_saving.o
 
@@ -384,6 +408,9 @@ help:
 	@echo "... src/HX2.o"
 	@echo "... src/HX2.i"
 	@echo "... src/HX2.s"
+	@echo "... src/PartialPivLU.o"
+	@echo "... src/PartialPivLU.i"
+	@echo "... src/PartialPivLU.s"
 	@echo "... src/data_saving.o"
 	@echo "... src/data_saving.i"
 	@echo "... src/data_saving.s"

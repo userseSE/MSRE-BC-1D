@@ -1,12 +1,12 @@
 #include <Eigen/Dense>
-#include <fstream>
-#include <functional>
+// #include <fstream>
+// #include <functional>
 #include <iostream>
 
 #include "ode_solver.hpp"
 #include "parameters.hpp"
 
-using state_type = VectorXd;
+// using state_type = VectorXd;
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
@@ -50,23 +50,6 @@ public:
       // Update step size for the next iteration
       h *= std::clamp(scale, 0.5,2.0); // Clamp the scaling to avoid drastic step-size changes
       h = std::clamp(h, h_min, h_max); // Ensure step size stays within bounds
-
-      // if (step >= 1000 && step < 1001) {
-      //     std::cout << "error_norm: "<< error_norm <<std::endl;
-      //     std::cout <<"h: "<< h <<std::endl;
-      // }
-      // if (step >= 9999 && step < 10001) {
-      //   // Open a file in append mode
-      //   std::ofstream outputFile("output.txt", std::ios::app);
-
-      //   if (outputFile.is_open()) {
-      //     outputFile << "error_norm: " << error_norm << std::endl;
-      //     outputFile << "h: " << h << std::endl;
-      //     outputFile.close(); // Close the file
-      //   } else {
-      //     std::cerr << "Unable to open file";
-      //   }
-      // }
     }
   }
 

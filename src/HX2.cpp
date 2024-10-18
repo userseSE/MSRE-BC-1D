@@ -1,20 +1,20 @@
 #include "HX2.hpp"
 #include "parameters.hpp"
 #include "ode_solver.hpp"
-#include <vector>
-#include <cmath>
-#include <algorithm>
+// #include <vector>
+// #include <cmath>
+// #include <algorithm>
 #include <iostream>
 
 // Include necessary linear algebra headers
 #include <Eigen/Dense>
-#include <Eigen/Sparse>
-#include <Eigen/SparseLU>
-#include <boost/numeric/odeint.hpp>
+// #include <Eigen/Sparse>
+// #include <Eigen/SparseLU>
+// #include <boost/numeric/odeint.hpp>
 
 using Eigen::VectorXd;
 using Eigen::MatrixXd;
-using namespace boost::numeric::odeint;
+// using namespace boost::numeric::odeint;
 
 
 
