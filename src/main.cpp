@@ -36,7 +36,7 @@ void run_simulation(int simulation_id) {
 //   }
 
   int time_span = 5000;
-  double rho_insertion = 500.0; // pcm
+  double rho_insertion = 10000.0; // pcm, 50*N
 
   // Initialization
   VectorXd rho = VectorXd::Zero(N);
@@ -185,7 +185,7 @@ void run_simulation(int simulation_id) {
 int main(){
     // double nu_sigma_f = 0.0044120764;    //0.004412224, 0.004411798 for -9.6e-5, 0.004412258 for N=500, 0.0044121799-0
     // double rho_0_value = 3.3e-5;       //-9.6e-5 to -10e-5
-    int simulation_id = 0;
+    int simulation_id = 1;
     run_simulation(simulation_id);
     return 0;
 }

@@ -11,7 +11,7 @@ void initialize_neutronics(Parameters& params) {
 
     for (int i = 0; i < N; ++i) {
         params.phi1_0[i] = 1.0e13;  // Initial neutron flux
-        params.phi2_0[i] = 0.4e13;  // Initial neutron flux
+        params.phi2_0[i] = 0.5e13;  // Initial neutron flux
         double x = i * params.dz;  // Compute the spatial position
         params.c1[i] = ((params.beta[0] * (params.nu_sigma_f1)) / (params.lambda_i[0]/6)) * (params.phi1_0[i]+params.phi2_0[i]);
         params.c2[i] = ((params.beta[1] * (params.nu_sigma_f1)) / (params.lambda_i[1]/6)) * (params.phi1_0[i]+params.phi2_0[i]);
