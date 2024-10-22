@@ -44,13 +44,13 @@ void run_simulation(int simulation_id) {
   double Tsss_pp_0 = 0.0;
   double Tsss_HX2_0 = 0.0;
 
-  Eigen::VectorXd buffer_hx_c, buffer_c_hx, buffer_r_hx, buffer_hx_r,
+  VectorXd buffer_hx_c, buffer_c_hx, buffer_r_hx, buffer_hx_r,
       buffer_r_pp, buffer_pp_r;
 
   VectorXd rho_matrix = VectorXd::Zero(time_span);
   VectorXd phi1_middle_matrix = VectorXd::Zero(time_span);
   VectorXd phi2_middle_matrix = VectorXd::Zero(time_span);
-  Eigen::MatrixXd ci_middle_matrix = Eigen::MatrixXd::Zero(time_span, 6);
+  MatrixXd ci_middle_matrix = MatrixXd::Zero(time_span, 6);
   VectorXd temperature_fuel_middle_matrix = VectorXd::Zero(time_span);
 
   VectorXd phi1 = VectorXd::Zero(N);
@@ -143,44 +143,7 @@ void run_simulation(int simulation_id) {
                        folder);
 }
 
-// int main() {
-//   // Define parameter ranges
-//   std::vector<double> nu_sigma_f_values;
-//   int num_slices_nu_sigma_f = 10; // Define the number of slices
-//   double nu_sigma_f_start = 0.0044120;
-//   double nu_sigma_f_end = 0.0044130;
-//   for (int i = 0; i < num_slices_nu_sigma_f; ++i) {
-//     nu_sigma_f_values.push_back(nu_sigma_f_start + i * (nu_sigma_f_end -
-//     nu_sigma_f_start) / (num_slices_nu_sigma_f - 1));
-//   }
-
-//   double rho_0_value = 0.0;
-
-//   std::vector<std::thread> threads;
-//   int simulation_id = 0;
-
-//   // Create threads for each parameter combination
-//   for (double nu_sigma_f : nu_sigma_f_values) {
-//     int current_simulation_id = simulation_id++;
-//     threads.emplace_back([nu_sigma_f, rho_0_value, current_simulation_id]() {
-//       run_simulation(nu_sigma_f, rho_0_value, current_simulation_id);
-//     });
-//   }
-
-//   // Join all threads
-//   for (auto &thread : threads) {
-//     if (thread.joinable()) {
-//       thread.join();
-//     }
-//   }
-
-//   return 0;
-// }
-
 int main() {
-  // double nu_sigma_f = 0.0044120764;    //0.004412224, 0.004411798 for
-  // -9.6e-5, 0.004412258 for N=500, 0.0044121799-0 double rho_0_value = 3.3e-5;
-  // //-9.6e-5 to -10e-5
   int simulation_id = 1;
   run_simulation(simulation_id);
   return 0;

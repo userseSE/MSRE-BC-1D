@@ -46,6 +46,11 @@ struct Parameters {
     Eigen::VectorXd c5 = Eigen::VectorXd::Zero(N);
     Eigen::VectorXd c6 = Eigen::VectorXd::Zero(N);
 
+    Eigen::MatrixXd A1= Eigen::MatrixXd::Zero(N, N);
+    Eigen::MatrixXd A2= Eigen::MatrixXd::Zero(N, N);
+    Eigen::MatrixXd B1= Eigen::MatrixXd::Zero(N, N);
+    Eigen::MatrixXd B2= Eigen::MatrixXd::Zero(N, N);
+
     // Thermal-Hydraulics
     static constexpr double c_p_s = 2090;
     static constexpr double Vc = 20;

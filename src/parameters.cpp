@@ -3,6 +3,8 @@
 // #include <numeric>
 // #include <vector>
 // #include <cmath>
+using Eigen::MatrixXd;
+using Eigen::VectorXd;
 
 #include "parameters.hpp"
 
@@ -20,6 +22,32 @@ void initialize_neutronics(Parameters& params) {
         params.c5[i] = ((params.beta[4] * (params.nu_sigma_f1)) / (params.lambda_i[4]/6)) * (params.phi1_0[i]+params.phi2_0[i]);
         params.c6[i] = ((params.beta[5] * (params.nu_sigma_f1)) / (params.lambda_i[5]/6)) * (params.phi1_0[i]+params.phi2_0[i]);  
     }
+    // Finite difference matrix for the second derivative using Crank-Nicolson
+  // method
+  VectorXd main_diag = (-2 / (params.dz * params.dz)) * VectorXd::Ones(N);
+  VectorXd off_diag = (1 / (params.dz * params.dz)) * VectorXd::Ones(N - 1);
+  MatrixXd D3 = MatrixXd::Zero(N, N);
+  // Set the main diagonal
+  D3.diagonal() = main_diag;
+  // Set the superdiagonal (above the main diagonal)
+  D3.diagonal(1) = off_diag;
+  // Set the subdiagonal (below the main diagonal)
+  D3.diagonal(-1) = off_diag;
+
+  // Apply Dirichlet boundary conditions for zero flux at boundaries
+  D3.row(0).setZero();
+  D3.row(N - 1).setZero();
+  D3(0, 0) = 1.0 / (params.dz * params.dz);
+  D3(N - 1, N - 1) = 1.0 / (params.dz * params.dz);
+
+  MatrixXd I = MatrixXd::Identity(N, N);     // Identity matrix
+  params.A1 = I - 0.5 * params.dt * params.V1 * params.D1 * D3; 
+  params.A2 = I - 0.5 * params.dt * params.V2 * params.D2 * D3;
+  params.B1 = I + 0.5 * params.dt * params.V1 * params.D1 * D3;
+  params.B2 = I + 0.5 * params.dt * params.V2 * params.D2 * D3;
+  
+  params.A1 = params.A1.inverse();
+  params.A2 = params.A2.inverse();
 }
 
 void initialize_thermal_hydraulics(Parameters& params) {
