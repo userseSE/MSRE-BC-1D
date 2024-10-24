@@ -9,23 +9,25 @@
 
 namespace fs = std::filesystem;
 
-void export_to_csv(const Eigen::VectorXd& data, const std::string& folder, const std::string& filename) {
+// Helper function to export a 1D array to CSV
+void export_to_csv(const double* data, int size, const std::string& folder, const std::string& filename) {
     std::cout << "Exporting to CSV file: " << folder << "/" << filename << std::endl;
     fs::create_directories(folder);  // Create folder if it doesn't exist
     std::ofstream file(folder + "/" + filename);
-    for (int i = 0; i < data.size(); ++i) {
+    for (int i = 0; i < size; ++i) {
         file << data[i] << "\n";
     }
     file.close();
 }
 
-void export_matrix_to_csv(const Eigen::MatrixXd& matrix, const std::string& folder, const std::string& filename) {
+// Helper function to export a 2D array to CSV
+void export_matrix_to_csv(const double* data, int rows, int cols, const std::string& folder, const std::string& filename) {
     fs::create_directories(folder);  // Create folder if it doesn't exist
     std::ofstream file(folder + "/" + filename);
-    for (int i = 0; i < matrix.rows(); ++i) {
-        for (int j = 0; j < matrix.cols(); ++j) {
-            file << matrix(i, j);
-            if (j < matrix.cols() - 1) {
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            file << data[i * cols + j];  // Access 2D array stored in 1D
+            if (j < cols - 1) {
                 file << ",";
             }
         }
@@ -34,62 +36,44 @@ void export_matrix_to_csv(const Eigen::MatrixXd& matrix, const std::string& fold
     file.close();
 }
 
-void save_results(const Eigen::VectorXd& rho_matrix, 
-                  const Eigen::VectorXd& phi1_middle_matrix,
-                  const Eigen::VectorXd& phi2_middle_matrix,
-                  const Eigen::MatrixXd& ci_middle_matrix, 
-                  const Eigen::VectorXd& temperature_fuel_middle_matrix,
+void save_results(const double rho_matrix[time_span], 
+                  const double phi1_middle_matrix[time_span],
+                  const double phi2_middle_matrix[time_span],
+                  const double ci_middle_matrix[time_span][6], 
+                  const double temperature_fuel_middle_matrix[time_span],
                   const std::string& folder) {
     // Export each data vector to a CSV file in the specific folder
-    export_to_csv(rho_matrix, folder, "rho_matrix.csv");
-    Eigen::MatrixXd phi_middle(phi1_middle_matrix.size(), 2);
-    phi_middle.col(0) = phi1_middle_matrix;
-    phi_middle.col(1) = phi2_middle_matrix;
-    export_matrix_to_csv(phi_middle, folder, "phi_middle_matrix.csv");
-    export_matrix_to_csv(ci_middle_matrix, folder, "ci_middle_matrix.csv");
-    export_to_csv(temperature_fuel_middle_matrix, folder, "temperature_fuel_middle_matrix.csv");
+    export_to_csv(rho_matrix, time_span, folder, "rho_matrix.csv");
+
+    // Combine phi1_middle_matrix and phi2_middle_matrix into one matrix for export
+    double phi_middle[time_span][2];
+    for (int i = 0; i < time_span; ++i) {
+        phi_middle[i][0] = phi1_middle_matrix[i];
+        phi_middle[i][1] = phi2_middle_matrix[i];
+    }
+    export_matrix_to_csv(&phi_middle[0][0], time_span, 2, folder, "phi_middle_matrix.csv");
+
+    // Export ci_middle_matrix
+    export_matrix_to_csv(&ci_middle_matrix[0][0], time_span, 6, folder, "ci_middle_matrix.csv");
+
+    // Export temperature_fuel_middle_matrix
+    export_to_csv(temperature_fuel_middle_matrix, time_span, folder, "temperature_fuel_middle_matrix.csv");
+
     std::cout << "Results saved to CSV files in " << folder << "." << std::endl;
 }
 
-void save_spacial_results(const Eigen::VectorXd& phi1, 
-                          const Eigen::VectorXd& phi2, 
-                          const Eigen::VectorXd& ci, 
-                          const Eigen::VectorXd& rho,
-                          const Eigen::VectorXd& temperature_fuel, 
-                          const Eigen::VectorXd& temperature_graphite, 
-                          const Eigen::VectorXd& Ts_HX1, 
-                          const Eigen::VectorXd& Tss_HX1, 
-                          const Eigen::VectorXd& Tss_HX2, 
-                          const Eigen::VectorXd& Tsss_HX2,
+void save_spacial_results(const double rho[N], 
+                          const double y_n[length_neutr], 
+                          const double y_th[length_th], 
+                          const double y_hx1[length_hx], 
+                          const double y_hx2[length_hx], 
                           const std::string& folder) {
-    // Export each spatial data vector to a CSV file in the specific folder
-    Eigen::MatrixXd phi(phi1.size(), 2);
-    phi.col(0) = phi1;
-    phi.col(1) = phi2;
-    export_matrix_to_csv(phi, folder, "phi.csv");
+    // Export the 1D arrays to CSV
+    export_to_csv(rho, N, folder, "rho.csv");
+    export_to_csv(y_n, length_neutr, folder, "y_n.csv");
+    export_to_csv(y_th, length_th, folder, "y_th.csv");
+    export_to_csv(y_hx1, length_hx, folder, "y_hx1.csv");
+    export_to_csv(y_hx2, length_hx, folder, "y_hx2.csv");
 
-    export_to_csv(rho, folder, "rho.csv");
-
-    // Reshape and transpose ci for export
-    Eigen::MatrixXd segmented_ci = Eigen::Map<const Eigen::MatrixXd>(ci.data(), ci.size() / 6, 6);
-    export_matrix_to_csv(segmented_ci, folder, "ci.csv");
-
-    // Combine temperature_fuel and temperature_graphite into a matrix for export
-    Eigen::MatrixXd temperature_core(temperature_fuel.size(), 2);
-    temperature_core.col(0) = temperature_fuel;
-    temperature_core.col(1) = temperature_graphite;
-    export_matrix_to_csv(temperature_core, folder, "temperature_core.csv");
-
-    // Combine Ts_HX1 and Tss_HX1 into a matrix for export
-    Eigen::MatrixXd temperature_HX1(Ts_HX1.size(), 2);
-    temperature_HX1.col(0) = Ts_HX1;
-    temperature_HX1.col(1) = Tss_HX1;
-    export_matrix_to_csv(temperature_HX1, folder, "temperature_HX1.csv");
-
-    // Combine Tss_HX2 and Tsss_HX2 into a matrix for export
-    Eigen::MatrixXd temperature_HX2(Tss_HX2.size(), 2);
-    temperature_HX2.col(0) = Tss_HX2;
-    temperature_HX2.col(1) = Tsss_HX2;
-    export_matrix_to_csv(temperature_HX2, folder, "temperature_HX2.csv");
     std::cout << "Spatial results saved to CSV files in " << folder << "." << std::endl;
 }

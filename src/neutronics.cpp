@@ -1,106 +1,119 @@
-#include "neutronics.hpp"
-#include "ode_solver.hpp"
-#include "parameters.hpp"
-// #include "PartialPivLU.hpp"
+#include <cmath>
 #include <iostream>
 
-// Include necessary linear algebra headers
-#include <Eigen/Dense>
+#include "neutronics.hpp"
+#include "ode_solver_neutronics.hpp"
+#include "parameters.hpp"
 
-using Eigen::MatrixXd;
-using Eigen::VectorXd;
+// Define the function pointer type
+// typedef void (*OdeFuncPointer)(double, const double[length_neutr], double[length_neutr], Parameters &params, const double Keff[N]);
 
-// typedef Eigen::VectorXd state_type;
-
-Eigen::VectorXd neutronics(const state_type &y_n,
-                           const std::vector<double> &rho, int step,
-                           Parameters &params) {
-  VectorXd Keff = VectorXd::Zero(N);
-  std::transform(rho.data(), rho.data() + N, Keff.data(),
-                 [](double r) { return (1.0 / (1.0 + r)); });
-
-  double dz = params.dz;
-  double dt = params.dt;
-  double V1 = params.V1;
-  double V2 = params.V2;
-  double D1 = params.D1;
-  double D2 = params.D2;
-  double sigma_a1 = params.sigma_a1;
-  double sigma_a2 = params.sigma_a2;
-  double nu_sigma_f1 = params.nu_sigma_f1;
-  double nu_sigma_f2 = params.nu_sigma_f2;
-  double sigma_s12 = params.sigma_s12;
-  double Beta = params.Beta;
-  VectorXd lambda_i = VectorXd::Map(params.lambda_i.data(), params.lambda_i.size());
-  VectorXd beta = VectorXd::Map(params.beta.data(), params.beta.size());
-
-  // ODE system function compatible with odeint
-  std::function<void(double, const VectorXd &, VectorXd &)>
-      pde_to_ode_neutronics = [&](double t, const VectorXd &y, VectorXd &dydt) {
-        // Split y into fast flux (phi1), thermal flux (phi2), and delayed
-        // neutron precursors
-        VectorXd phi1 = y.head(N);       // Fast group
-        VectorXd phi2 = y.segment(N, N); // Thermal group
-        VectorXd lambda_ci = VectorXd::Zero(N);
-
-        // Compute delayed neutron precursor contributions
-        for (int i = 0; i < 6; ++i) {
-          lambda_ci += lambda_i[i] * y.segment((i + 2) * N, N);
+// Standalone function definition
+void pde_to_ode_neutronics(double t, const double y[length_neutr], double dydt[length_neutr], Parameters &params, const double Keff[N]) {
+    // std::cout << "Neutronics PDE to ODE solver called" << std::endl;
+    double lambda_ci[N]; // For summing contributions
+    // Initialize lambda_ci to zero
+    for (int i = 0; i < N; ++i) {
+        lambda_ci[i] = 0.0;
+    }
+    // Delayed neutron precursor contributions
+    for (int i = 0; i < 6; ++i) {
+        const double *ci = &y[(i + 2) * N]; // Access ci for each group
+        for (int j = 0; j < N; ++j) {
+            lambda_ci[j] += params.lambda_i[i] * ci[j]; // Sum contributions to lambda_ci
         }
+    }
 
-        // Right-hand side for fast group
-        VectorXd rhs_phi1 = params.B1 * phi1 + dt * V1 * ((-sigma_a1 + (1.0 - Beta) * ((nu_sigma_f1 + nu_sigma_f2) / Keff.array())).matrix()
-                     .cwiseProduct(phi1) + lambda_ci);
-        // VectorXd rhs_phi1 = B1 * phi1 + dt * V1 * ((-sigma_a1 + (1.0 - Beta)
-        // * (nu_sigma_f1 / Keff.array())).matrix().cwiseProduct(phi1) +
-        // lambda_ci); Right-hand side for thermal group
-        VectorXd rhs_phi2 =
-            params.B2 * phi2 + dt * V2 * ((-sigma_a2 * phi2) + (sigma_s12 * phi1));
-
-        // Solve for the new fluxes
-        // VectorXd phi1_new = solver1.solve(rhs_phi1);
-        // VectorXd phi2_new = solver2.solve(rhs_phi2);
-        VectorXd phi1_new = params.A1 * rhs_phi1;
-        VectorXd phi2_new = params.A2 * rhs_phi2;
-
-        // Calculate time derivative of phi1 and phi2
-        VectorXd dphi1_dt = (phi1_new - phi1) / dt;
-        VectorXd dphi2_dt = (phi2_new - phi2) / dt;
-
-        // phi2 = VectorXd::Zero(N);
-
-        // Compute dci/dt for delayed neutron precursors
-        VectorXd dci_dt(6 * N);
-        for (int i = 0; i < 6; ++i) {
-          dci_dt.segment(i * N, N) =
-              beta[i] * (nu_sigma_f1 + nu_sigma_f2) * (phi1 + phi2) -
-              lambda_i[i] * y.segment((i + 2) * N, N);
+    // Compute the right-hand side for phi1 (fast group)
+    double rhs_phi1[N];
+    for (int i = 0; i < N; ++i) {
+        rhs_phi1[i] = 0.0;
+        for (int j = 0; j < N; ++j) {
+            rhs_phi1[i] += params.B1[i][j] * y[j]; // Matrix multiplication for B1 * phi1
         }
+        rhs_phi1[i] += params.dt * params.V1 * (-params.sigma_a1 + (1.0 - params.Beta) * ((params.nu_sigma_f1 + params.nu_sigma_f2) / Keff[i])) * y[i] + lambda_ci[i];
+    }
 
-        // Populate dydt with the derivatives
-        dydt.head(N) = dphi1_dt;
-        dydt.segment(N, N) = dphi2_dt;
-        dydt.tail(6 * N) = dci_dt;
-      };
+    // Compute the right-hand side for phi2 (thermal group)
+    double rhs_phi2[N];
+    for (int i = 0; i < N; ++i) {
+        rhs_phi2[i] = 0.0;
+        for (int j = 0; j < N; ++j) {
+            rhs_phi2[i] += params.B2[i][j] * y[N + j]; // Matrix multiplication for B2 * phi2
+        }
+        rhs_phi2[i] += params.dt * params.V2 * (-params.sigma_a2 * y[N + i] + params.sigma_s12 * y[i]);
+    }
 
-  // Initial condition vector
-  state_type y0(8 *
-                N); // Updated to hold both phi1, phi2, and 6 precursor groups
-  if (step == 0) {
-    y0 << params.phi1_0, params.phi2_0, params.c1, params.c2, params.c3,
-        params.c4, params.c5, params.c6;
-  } else {
-    y0 = y_n;
-  }
+    // Solve for the new fluxes (phi1_new and phi2_new)
+    double phi1_new[N];
+    double phi2_new[N];
 
-  // Solve the system of ODEs
-  state_type solution_y_n =
-      ode_solver(y0, pde_to_ode_neutronics, step); // Pass t0, t_end, dt
+    for (int i = 0; i < N; ++i) {
+        phi1_new[i] = 0.0;
+        phi2_new[i] = 0.0;
+        for (int j = 0; j < N; ++j) {
+            phi1_new[i] += params.A1[i][j] * rhs_phi1[j]; // Solve A1 * rhs_phi1
+            phi2_new[i] += params.A2[i][j] * rhs_phi2[j]; // Solve A2 * rhs_phi2
+        }
+    }
 
-  // Extract the solution at the last time step
-  VectorXd phi1 = solution_y_n.head(N);
-  VectorXd phi2 = solution_y_n.segment(N, N);
-  VectorXd q_prime = phi1 + phi2; // Combine fluxes for q_prime
+    // Calculate time derivative of phi1 and phi2
+    for (int i = 0; i < N; ++i) {
+        dydt[i] = (phi1_new[i] - y[i]) / params.dt;         // dphi1/dt
+        dydt[N + i] = (phi2_new[i] - y[N + i]) / params.dt; // dphi2/dt
+    }
 
-  return {solution_y_n};
+    // Compute dci/dt for delayed neutron precursors
+    for (int i = 0; i < 6; ++i) {
+        // double *dci_dt = &dydt[(i + 2) * N];
+        for (int j = 0; j < N; ++j) {
+            dydt[(i+2)*N+j] = params.beta[i] * (params.nu_sigma_f1 + params.nu_sigma_f2) * (y[j] + y[N + j]) - params.lambda_i[i] * y[(i + 2) * N + j];
+        }
+    }
+    // std::cout << "Neutronics PDE to ODE solver finished" << std::endl;
+}
+
+// Modified neutronics function using the function pointer
+void neutronics(double y_n[length_neutr], const double rho[N], int step, Parameters &params) {
+    std::cout << "Neutronics is called for step " << step << std::endl;
+    double Keff[N] = {0};
+    for (int i = 0; i < N; ++i) {
+        Keff[i] = (1.0 / (1.0 + rho[i]));
+    }
+
+    // Initialize the initial condition vector
+    int index = 0;
+    if (step == 0) {
+        // Concatenate phi1_0, phi2_0, and c1 through c6
+        for (int i = 0; i < N; ++i) {
+            y_n[index++] = params.phi1_0[i];
+        }
+        for (int i = 0; i < N; ++i) {
+            y_n[index++] = params.phi2_0[i];
+        }
+        for (int i = 0; i < N; ++i) {
+            y_n[index++] = params.c1[i];
+        }
+        for (int i = 0; i < N; ++i) {
+            y_n[index++] = params.c2[i];
+        }
+        for (int i = 0; i < N; ++i) {
+            y_n[index++] = params.c3[i];
+        }
+        for (int i = 0; i < N; ++i) {
+            y_n[index++] = params.c4[i];
+        }
+        for (int i = 0; i < N; ++i) {
+            y_n[index++] = params.c5[i];
+        }
+        for (int i = 0; i < N; ++i) {
+            y_n[index++] = params.c6[i];
+        }
+    }
+
+    // Function pointer to the ODE system
+    OdeFuncPointer ode_func = pde_to_ode_neutronics;
+
+    // Solve the system of ODEs using ode_solver
+    ode_solver_neutr(y_n, ode_func, step, params, Keff); // Pass t0, t_end, dt and necessary parameters
 }

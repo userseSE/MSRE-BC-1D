@@ -3,24 +3,20 @@
 
 #include <Eigen/Core>
 #include <string>
+#include "parameters.hpp"
 
-void save_results(const Eigen::VectorXd& rho_matrix, 
-                  const Eigen::VectorXd& phi1_middle_matrix,
-                  const Eigen::VectorXd& phi2_middle_matrix,
-                  const Eigen::MatrixXd& ci_middle_matrix, 
-                  const Eigen::VectorXd& temperature_fuel_middle_matrix,
+void save_results(const double rho_matrix[time_span], 
+                  const double phi1_middle_matrix[time_span],
+                  const double phi2_middle_matrix[time_span],
+                  const double ci_middle_matrix[time_span][6], 
+                  const double temperature_fuel_middle_matrix[time_span],
                   const std::string& folder);
 
-void save_spacial_results(const Eigen::VectorXd& phi1, 
-                          const Eigen::VectorXd& phi2, 
-                          const Eigen::VectorXd& ci, 
-                          const Eigen::VectorXd& rho,
-                          const Eigen::VectorXd& temperature_fuel, 
-                          const Eigen::VectorXd& temperature_graphite, 
-                          const Eigen::VectorXd& Ts_HX1, 
-                          const Eigen::VectorXd& Tss_HX1, 
-                          const Eigen::VectorXd& Tss_HX2, 
-                          const Eigen::VectorXd& Tsss_HX2,
+void save_spacial_results(const double rho[N], 
+                          const double y_n[length_neutr], 
+                          const double y_th[length_th], 
+                          const double y_hx1[length_hx], 
+                          const double y_hx2[length_hx], 
                           const std::string& folder);
 
 #endif // DATA_SAVING_HPP

@@ -1,102 +1,77 @@
+#include <iostream>
 #include "HX2.hpp"
 #include "parameters.hpp"
-#include "ode_solver.hpp"
-// #include <vector>
-// #include <cmath>
-// #include <algorithm>
-#include <iostream>
+#include "ode_solver_HX.hpp"
 
-// Include necessary linear algebra headers
-#include <Eigen/Dense>
-// #include <Eigen/Sparse>
-// #include <Eigen/SparseLU>
-// #include <boost/numeric/odeint.hpp>
+void pde_to_ode_hx2(double t, const double y[length_hx], double dydt[length_hx], Parameters &params) {
+    // Split the input state vector y into u and v
+    const double* u = &y[0];    // u is the first half of y
+    const double* v = &y[Nx];   // v is the second half of y
 
-using Eigen::VectorXd;
-using Eigen::MatrixXd;
-// using namespace boost::numeric::odeint;
+    double du_dt[Nx] = {0};    // Array to store the derivative of u
+    double dv_dt[Nx] = {0};    // Array to store the derivative of v
 
-
-
-// Discretize the spatial domain
-MatrixXd A_HX2(Nx, Nx);
-
-void initialize_A_HX2(Parameters& params) {
-    double dx = params.dx;
-    A_HX2 = MatrixXd::Zero(Nx, Nx);
+    // Compute du_dt and dv_dt using the provided constants
     for (int i = 0; i < Nx; ++i) {
-        A_HX2(i, i) = -2.0 / (dx * dx);
-        if (i < Nx - 1) {
-            A_HX2(i, i + 1) = 1.0 / (dx * dx);
+        for (int j = 0; j < Nx; ++j) {
+            du_dt[i] += params.C1_2 * params.A_HX2[i][j] * u[j];
+            dv_dt[i] += params.C3_2 * params.A_HX2[i][j] * v[j];
         }
-        if (i > 0) {
-            A_HX2(i, i - 1) = 1.0 / (dx * dx);
-        }
+        du_dt[i] += params.C2_2 * (u[i] - v[i]);
+        dv_dt[i] += params.C4_2 * (u[i] - v[i]);
     }
 
-    A_HX2(0, 0) = -1.0 / (dx * dx);
-    A_HX2(Nx - 1, Nx - 1) = -1.0 / (dx * dx);
+    // Apply time-varying boundary conditions
+    du_dt[0] = params.u2_L - u[0];
+    du_dt[Nx - 1] = params.u2_H - u[Nx - 1];
+    dv_dt[0] = 0; // Fixed condition: no change at v[0]
+    dv_dt[Nx - 1] = 0; // Fixed condition: no change at v[Nx-1]
+
+    // Populate dydt with the derivatives
+    for (int i = 0; i < Nx; ++i) {
+        dydt[i] = du_dt[i];        // First half for du_dt
+        dydt[Nx + i] = dv_dt[i];   // Second half for dv_dt
+    }
 }
 
-VectorXd HX2(VectorXd& y_hx2, double Ts_HX2_L, int step, Parameters& params) {
-    // Ensure A_HX2 is initialized
-    static bool initialized = false;
-    if (!initialized) {
-        initialize_A_HX2(params);
-        initialized = true;
-    }
-
+void HX2(double y_hx2[length_hx], double Ts_HX2_L, int step, Parameters &params) {
+    std::cout<<"HX2 is called"<<std::endl;
     // Set boundary conditions
     y_hx2[Nx + 1] = params.v2_L;    // Fixed boundary condition at v[0]
-    y_hx2[2*Nx - 1] = params.v2_H; // Fixed boundary condition at v[L]
+    y_hx2[length_hx - 1] = params.v2_H; // Fixed boundary condition at v[L]
 
-    VectorXd u(Nx), v(Nx);
+    double u[Nx], v[Nx];
     if (step == 0) {
-        u = params.u2_init;  // Use Eigen::VectorXd directly
-        v = params.v2_init;
+        for (int i = 0; i < Nx; ++i) {
+            u[i] = params.u2_init[i];
+            v[i] = params.v2_init[i];
+        }
     } else {
-        u = y_hx2.head(Nx);
-        v = y_hx2.tail(Nx);
+        for (int i = 0; i < Nx; ++i) {
+            u[i] = y_hx2[i];
+            v[i] = y_hx2[Nx + i];
+        }
     }
     u[Nx - 1] = Ts_HX2_L;
-    // v[0] = Tss_HX2_0;
 
-    // Define the ODE system for the second heat exchanger model compatible with odeint
-    std::function<void(double, const VectorXd &, VectorXd &)> pde_to_ode_hx2 = 
-    [&](double t, const VectorXd &y, VectorXd &dydt) {
-        // Split the input state vector y into u and v
-        VectorXd u = y.head(Nx);
-        VectorXd v = y.tail(Nx);
-
-        // Compute du_dt and dv_dt using the provided constants
-        VectorXd du_dt = params.C1_2 * (A_HX2 * u) + params.C2_2 * (u - v);
-        VectorXd dv_dt = params.C3_2 * (A_HX2 * v) + params.C4_2 * (u - v);
-
-        // // Apply time-varying boundary conditions
-        du_dt[0] = params.u2_L - u[0];
-        du_dt[Nx - 1] = params.u2_H - u[Nx - 1];
-        // dv_dt[0] = v2_L - v[0];
-        // dv_dt[Nx - 1] = v2_H - v[Nx - 1];
-        dv_dt[0] = 0; // Fixed condition: no change at v[0]
-        dv_dt[Nx - 1] = 0; // Fixed condition: no change at v[Nx-1]
-
-        // Populate dydt with the derivatives
-        dydt.head(Nx) = du_dt;
-        dydt.tail(Nx) = dv_dt;
-    };
-
-    // Initial condition vector
-    VectorXd y0(2 * Nx);
+    // Initial condition vector y0
+    double y0[length_hx];
     if (step == 0) {
-        y0.head(Nx) = params.u2_init;
-        y0.tail(Nx) = params.v2_init;
+        for (int i = 0; i < Nx; ++i) {
+            y0[i] = params.u2_init[i];
+            y0[Nx + i] = params.v2_init[i];
+        }
     } else {
-        y0 = y_hx2;
+        for (int i = 0; i < length_hx; ++i) {
+            y0[i] = y_hx2[i];
+        }
     }
 
-    // Solve the ODE system
-    VectorXd solution_y_hx2 = ode_solver(y0, pde_to_ode_hx2, step);
+    // Solve the system of ODEs
+    ode_solver_HX(y0, pde_to_ode_hx2, step, params);
 
-    // Return the solution at the last time step
-    return solution_y_hx2;
+    // Update y_hx2 with the solution from the ODE solver
+    for (int i = 0; i < length_hx; ++i) {
+        y_hx2[i] = y0[i];  // Update the original array with the new values
+    }
 }

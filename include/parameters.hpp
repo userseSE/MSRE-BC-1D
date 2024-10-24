@@ -1,14 +1,14 @@
 #ifndef PARAMETERS_HPP
 #define PARAMETERS_HPP
 
-#include <Eigen/Dense>
-#include <array>
-#include <numeric>
-#include <vector>
-
 // Spatial discretization constants
 constexpr int N = 200;  // spatial discretization
 constexpr int Nx = N;   // spatial discretization
+constexpr int time_span = 1000;
+constexpr double rho_insertion = 0.0;  // pcm, 50 * N
+constexpr int length_th = 2 * N;
+constexpr int length_neutr = 8 * N;
+constexpr int length_hx = 2 * Nx;
 
 struct Parameters {
     // seperate submodules into different structs
@@ -28,28 +28,28 @@ struct Parameters {
     static constexpr double nu_sigma_f2 = 0.00220;
     static constexpr double sigma_s12 = 0.013;      //0.0023
     static constexpr double sigma_f = (nu_sigma_f1 + nu_sigma_f2)/2.41;//0.004411764705882353 / 2.41;
-    static constexpr std::array<double, 6> beta = {0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088};
-    static constexpr double Beta = std::accumulate(beta.begin(), beta.end(), 0.0);
+    static constexpr double beta[] = {0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088};
+    static constexpr double Beta = 0.000228+ 0.000788+ 0.000664+ 0.000736+ 0.000136+ 0.000088;
     // static constexpr double Beta = 0.000228 + 0.000788 + 0.000664 + 0.000736 + 0.000136 + 0.000088;
-    static constexpr std::array<double, 6> lambda_i = {0.0126, 0.0337, 0.139, 0.325, 1.13, 2.5};
+    static constexpr double lambda_i[] = {0.0126, 0.0337, 0.139, 0.325, 1.13, 2.5};
 
     static constexpr double t0 = 0;
     static constexpr double t1 = 1;
 
     // TODO: init put into another struct, initial conditions set as const
-    Eigen::VectorXd phi1_0 = Eigen::VectorXd::Zero(N);
-    Eigen::VectorXd phi2_0 = Eigen::VectorXd::Zero(N);
-    Eigen::VectorXd c1 = Eigen::VectorXd::Zero(N);
-    Eigen::VectorXd c2 = Eigen::VectorXd::Zero(N);
-    Eigen::VectorXd c3 = Eigen::VectorXd::Zero(N);
-    Eigen::VectorXd c4 = Eigen::VectorXd::Zero(N);
-    Eigen::VectorXd c5 = Eigen::VectorXd::Zero(N);
-    Eigen::VectorXd c6 = Eigen::VectorXd::Zero(N);
+    double phi1_0[N] = {0};
+    double phi2_0[N] = {0};
+    double c1[N] = {0};
+    double c2[N] = {0};
+    double c3[N] = {0};
+    double c4[N] = {0};
+    double c5[N] = {0};
+    double c6[N] = {0};
 
-    Eigen::MatrixXd A1= Eigen::MatrixXd::Zero(N, N);
-    Eigen::MatrixXd A2= Eigen::MatrixXd::Zero(N, N);
-    Eigen::MatrixXd B1= Eigen::MatrixXd::Zero(N, N);
-    Eigen::MatrixXd B2= Eigen::MatrixXd::Zero(N, N);
+    double A1[N][N] = {0};
+    double A2[N][N] = {0};
+    double B1[N][N] = {0};
+    double B2[N][N] = {0};
 
     // Thermal-Hydraulics
     static constexpr double c_p_s = 2090;
@@ -76,8 +76,9 @@ struct Parameters {
     static constexpr double d_th = L * gamma / (Ms * c_p_s);
     static constexpr double e_th = L * (1 - gamma) / (Mg * c_p_g);
 
-    Eigen::VectorXd initialS = Eigen::VectorXd::Zero(N);
-    Eigen::VectorXd initialG = Eigen::VectorXd::Zero(N);
+    double initialS[N] = {0};
+    double initialG[N] = {0};
+    double AT[N][N] = {0};
 
     // Heat Exchanger 1
     static constexpr double L_HX = 200;
@@ -97,8 +98,9 @@ struct Parameters {
     static constexpr double C3_1 = V_he_ss;
     static constexpr double C4_1 = U_hx / (M_he_ss * c_p_ss);
 
-    Eigen::VectorXd u_init = Eigen::VectorXd::Zero(N);
-    Eigen::VectorXd v_init = Eigen::VectorXd::Zero(N);
+    double u_init[N] = {0};
+    double v_init[N] = {0};
+    double A_HX[Nx][Nx] = {0};
 
     // TODO: cosimulation - generate and use 3 sets of temperatures from brayton cycle, min, max, nominal in simulink
     // Heat Exchanger 2
@@ -118,8 +120,9 @@ struct Parameters {
     static constexpr double C3_2 = V_he2_ss;
     static constexpr double C4_2 = U2_hx / (M_he2_ss * c_p_sss);
 
-    Eigen::VectorXd u2_init = Eigen::VectorXd::Zero(N);
-    Eigen::VectorXd v2_init = Eigen::VectorXd::Zero(N);
+    double u2_init[N] = {0};
+    double v2_init[N] = {0};
+    double A_HX2[Nx][Nx] = {0};
 
     // Reactivity
     static constexpr double alpha_f = -5.904e-5;
@@ -127,7 +130,7 @@ struct Parameters {
     static constexpr double tau_l = 16.73;
     static constexpr double tau_c = 8.46;
     static constexpr double max_rho_change = 1e-3;
-    double rho_0_value = 0.0e-5; //3.3e-5;
+    static constexpr double rho_0_value = 0.0; //3.3e-5;
 
     // Transport Delays
     static constexpr double tau_hx_c = 0;
@@ -144,6 +147,9 @@ struct Parameters {
     static constexpr double Tss_out = v_H;
     static constexpr double Tsss_in = v2_L;
     static constexpr double Tsss_out = v2_H;
+
+    //ode_solver
+
 };
 
 void initialize_parameters(Parameters& params);
