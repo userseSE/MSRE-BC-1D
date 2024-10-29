@@ -31,8 +31,18 @@ void pde_to_ode_neutronics(double t, const double y[length_neutr], double dydt[l
         for (int j = 0; j < N; ++j) {
             rhs_phi1[i] += params.B1[i][j] * y[j]; // Matrix multiplication for B1 * phi1
         }
-        rhs_phi1[i] += params.dt * params.V1 * (-params.sigma_a1 + (1.0 - params.Beta) * ((params.nu_sigma_f1 + params.nu_sigma_f2) / Keff[i])) * y[i] + lambda_ci[i];
+        rhs_phi1[i] += params.dt * params.V1 * (((-params.sigma_a1 + (1.0 - params.Beta) * ((params.nu_sigma_f1 + params.nu_sigma_f2) / Keff[i])) * y[i]) + lambda_ci[i]);
+        // std::cout<<params.dt * params.V1 * (-params.sigma_a1 + (1.0 - params.Beta) * ((params.nu_sigma_f1 + params.nu_sigma_f2) / Keff[i]))<<std::endl;
     }
+    // for (int i = 0; i < N; ++i) {
+    //     for (int j = 0; j < N; ++j) {
+    //         std::cout  << params.B1[i][j]<< " ";
+    //     }
+    //     std::cout << std::endl;
+    // }
+    // for (int i = 0; i < N; ++i) {
+    //     std::cout << "rhs_phi1[" << i << "]: " << rhs_phi1[i] << std::endl;
+    // }
 
     // Compute the right-hand side for phi2 (thermal group)
     double rhs_phi2[N];
@@ -43,6 +53,10 @@ void pde_to_ode_neutronics(double t, const double y[length_neutr], double dydt[l
         }
         rhs_phi2[i] += params.dt * params.V2 * (-params.sigma_a2 * y[N + i] + params.sigma_s12 * y[i]);
     }
+    
+    // for (int i = 0; i < N; ++i) {
+    //     std::cout << "rhs_phi2[" << i << "]: " << rhs_phi2[i] << std::endl;
+    // }
 
     // Solve for the new fluxes (phi1_new and phi2_new)
     double phi1_new[N];
@@ -56,6 +70,12 @@ void pde_to_ode_neutronics(double t, const double y[length_neutr], double dydt[l
             phi2_new[i] += params.A2[i][j] * rhs_phi2[j]; // Solve A2 * rhs_phi2
         }
     }
+    // for (int i = 0; i < N; ++i) {
+    //     for (int j = 0; j < N; ++j) {
+    //         std::cout  << params.A1[i][j]<< " ";
+    //     }
+    //     std::cout << std::endl;
+    // }
 
     // Calculate time derivative of phi1 and phi2
     for (int i = 0; i < N; ++i) {
@@ -70,6 +90,9 @@ void pde_to_ode_neutronics(double t, const double y[length_neutr], double dydt[l
             dydt[(i+2)*N+j] = params.beta[i] * (params.nu_sigma_f1 + params.nu_sigma_f2) * (y[j] + y[N + j]) - params.lambda_i[i] * y[(i + 2) * N + j];
         }
     }
+    // for (int i = 0 ; i< N; ++i){
+    //     std::cout << "dydt[" << i << "]: " << dydt[i] << std::endl;
+    // }
     // std::cout << "Neutronics PDE to ODE solver finished" << std::endl;
 }
 

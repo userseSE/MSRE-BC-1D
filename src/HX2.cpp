@@ -68,7 +68,7 @@ void HX2(double y_hx2[length_hx], double Ts_HX2_L, int step, Parameters &params)
     }
 
     // Solve the system of ODEs
-    ode_solver_HX(y0, pde_to_ode_hx2, step, params);
+    ode_solver_hx(y0, pde_to_ode_hx2, step, params);
 
     // Update y_hx2 with the solution from the ODE solver
     for (int i = 0; i < length_hx; ++i) {

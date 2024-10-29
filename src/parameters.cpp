@@ -1,7 +1,9 @@
 #include <cmath>
+// #include <iostream>
 
-#include "parameters.hpp"
 #include "matrix_LU.hpp"
+#include "parameters.hpp"
+#include <iostream>
 
 void initialize_neutronics(Parameters &params) {
 
@@ -27,7 +29,7 @@ void initialize_neutronics(Parameters &params) {
         ((params.beta[5] * (params.nu_sigma_f1)) / (params.lambda_i[5] / 6)) *
         (params.phi1_0[i] + params.phi2_0[i]);
   }
-  
+
   // Finite difference matrix for the second derivative using Crank-Nicolson
   double D3[N][N];
 
@@ -37,10 +39,12 @@ void initialize_neutronics(Parameters &params) {
       D3[i][j] = 0.0; // Initialize all elements to zero
     }
     D3[i][i] = -2.0 / (params.dz * params.dz); // Set main diagonal
-    if (i < N - 1) {
-      D3[i][i + 1] = 1.0 / (params.dz * params.dz); // Set superdiagonal
-      D3[i + 1][i] = 1.0 / (params.dz * params.dz); // Set subdiagonal
-    }
+  }
+
+  // Now set the superdiagonal and subdiagonal separately
+  for (int i = 0; i < N - 1; ++i) {
+    D3[i][i + 1] = 1.0 / (params.dz * params.dz); // Set superdiagonal
+    D3[i + 1][i] = 1.0 / (params.dz * params.dz); // Set subdiagonal
   }
 
   // Apply Dirichlet boundary conditions for zero flux at boundaries
@@ -50,6 +54,13 @@ void initialize_neutronics(Parameters &params) {
   }
   D3[0][0] = 1.0 / (params.dz * params.dz);
   D3[N - 1][N - 1] = 1.0 / (params.dz * params.dz);
+
+  // for (int i = 0; i < N; ++i) {
+  //   for (int j = 0; j < N; ++j) {
+  //     std::cout << D3[i][j] << " ";
+  //   }
+  //   std::cout << std::endl;
+  // }
 
   // Define identity matrix
   double I[N][N];
@@ -68,10 +79,21 @@ void initialize_neutronics(Parameters &params) {
       params.B2[i][j] = I[i][j] + 0.5 * params.dt * params.V2 * params.D2 * D3[i][j];
     }
   }
-
+  // for (int i = 0; i < N; ++i) {
+  //       for (int j = 0; j < N; ++j) {
+  //           std::cout  << params.A1[i][j]<< " ";
+  //       }
+  //       std::cout << std::endl;
+  //   }
   // Inversion of A1 and A2 (You will need to implement a matrix inversion
   // function)
   invert_LU(params.A1);
+  // for (int i = 0; i < N; ++i) {
+  //       for (int j = 0; j < N; ++j) {
+  //           std::cout  << params.A1[i][j]<< " ";
+  //       }
+  //       std::cout << std::endl;
+  //   }
   invert_LU(params.A2);
 }
 
@@ -127,16 +149,16 @@ void initialize_heat_exchanger_1(Parameters &params) {
             (0.5 + 0.5 * approx_sin(M_PI * (position / params.L_HX)) * 1.05);
   }
   for (int i = 0; i < Nx; ++i) {
-        params.A_HX[i][i] = -2.0 / (params.dx * params.dx);
-        if (i < Nx - 1) {
-            params.A_HX[i][i + 1] = 1.0 / (params.dx * params.dx);
-        }
-        if (i > 0) {
-            params.A_HX[i][i - 1] = 1.0 / (params.dx * params.dx);
-        }
+    params.A_HX[i][i] = -2.0 / (params.dx * params.dx);
+    if (i < Nx - 1) {
+      params.A_HX[i][i + 1] = 1.0 / (params.dx * params.dx);
     }
-    params.A_HX[0][0] = -1.0 / (params.dx * params.dx);
-    params.A_HX[Nx - 1][Nx - 1] = -1.0 / (params.dx * params.dx);
+    if (i > 0) {
+      params.A_HX[i][i - 1] = 1.0 / (params.dx * params.dx);
+    }
+  }
+  params.A_HX[0][0] = -1.0 / (params.dx * params.dx);
+  params.A_HX[Nx - 1][Nx - 1] = -1.0 / (params.dx * params.dx);
 }
 
 void initialize_heat_exchanger_2(Parameters &params) {
@@ -152,16 +174,16 @@ void initialize_heat_exchanger_2(Parameters &params) {
             (0.5 + 0.7 * approx_sin(M_PI * (position / params.L_HX2)) * 1.05);
   }
   for (int i = 0; i < Nx; ++i) {
-        params.A_HX2[i][i] = -2.0 / (params.dx * params.dx);
-        if (i < Nx - 1) {
-            params.A_HX2[i][i + 1] = 1.0 / (params.dx * params.dx);
-        }
-        if (i > 0) {
-            params.A_HX2[i][i - 1] = 1.0 / (params.dx * params.dx);
-        }
+    params.A_HX2[i][i] = -2.0 / (params.dx * params.dx);
+    if (i < Nx - 1) {
+      params.A_HX2[i][i + 1] = 1.0 / (params.dx * params.dx);
     }
-    params.A_HX2[0][0] = -1.0 / (params.dx * params.dx);
-    params.A_HX2[Nx - 1][Nx - 1] = -1.0 / (params.dx * params.dx);
+    if (i > 0) {
+      params.A_HX2[i][i - 1] = 1.0 / (params.dx * params.dx);
+    }
+  }
+  params.A_HX2[0][0] = -1.0 / (params.dx * params.dx);
+  params.A_HX2[Nx - 1][Nx - 1] = -1.0 / (params.dx * params.dx);
 }
 
 void initialize_parameters(Parameters &params) {
