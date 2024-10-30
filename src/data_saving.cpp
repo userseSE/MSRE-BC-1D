@@ -20,41 +20,36 @@ void export_to_csv(const double* data, int size, const std::string& folder, cons
     file.close();
 }
 
-// Helper function to export a 2D array to CSV
-void export_matrix_to_csv(const double* data, int rows, int cols, const std::string& folder, const std::string& filename) {
-    fs::create_directories(folder);  // Create folder if it doesn't exist
-    std::ofstream file(folder + "/" + filename);
-    for (int i = 0; i < rows; ++i) {
-        for (int j = 0; j < cols; ++j) {
-            file << data[i * cols + j];  // Access 2D array stored in 1D
-            if (j < cols - 1) {
-                file << ",";
-            }
-        }
-        file << "\n";
-    }
-    file.close();
-}
+// // Helper function to export a 2D array to CSV
+// void export_matrix_to_csv(const double* data, int rows, int cols, const std::string& folder, const std::string& filename) {
+//     fs::create_directories(folder);  // Create folder if it doesn't exist
+//     std::ofstream file(folder + "/" + filename);
+//     for (int i = 0; i < rows; ++i) {
+//         for (int j = 0; j < cols; ++j) {
+//             file << data[i * cols + j];  // Access 2D array stored in 1D
+//             if (j < cols - 1) {
+//                 file << ",";
+//             }
+//         }
+//         file << "\n";
+//     }
+//     file.close();
+// }
 
 void save_results(const double rho_matrix[time_span], 
-                  const double phi1_middle_matrix[time_span],
-                  const double phi2_middle_matrix[time_span],
-                  const double ci_middle_matrix[time_span][6], 
+                  const double phi_middle_matrix[time_span*2],
+                  const double ci_middle_matrix[time_span*6], 
                   const double temperature_fuel_middle_matrix[time_span],
                   const std::string& folder) {
     // Export each data vector to a CSV file in the specific folder
     export_to_csv(rho_matrix, time_span, folder, "rho_matrix.csv");
 
     // Combine phi1_middle_matrix and phi2_middle_matrix into one matrix for export
-    double phi_middle[time_span][2];
-    for (int i = 0; i < time_span; ++i) {
-        phi_middle[i][0] = phi1_middle_matrix[i];
-        phi_middle[i][1] = phi2_middle_matrix[i];
-    }
-    export_matrix_to_csv(&phi_middle[0][0], time_span, 2, folder, "phi_middle_matrix.csv");
+
+    export_to_csv(phi_middle_matrix, time_span * 2, folder, "phi_middle_matrix.csv");
 
     // Export ci_middle_matrix
-    export_matrix_to_csv(&ci_middle_matrix[0][0], time_span, 6, folder, "ci_middle_matrix.csv");
+    export_to_csv(ci_middle_matrix, time_span * 6, folder, "ci_middle_matrix.csv");
 
     // Export temperature_fuel_middle_matrix
     export_to_csv(temperature_fuel_middle_matrix, time_span, folder, "temperature_fuel_middle_matrix.csv");

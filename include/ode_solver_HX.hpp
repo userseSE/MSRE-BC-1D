@@ -3,9 +3,9 @@
 
 #include "parameters.hpp"
 
-typedef void (*OdeFuncPointer)(double, const double[length_hx], double[length_hx], Parameters &params);
+typedef void (*OdeFuncPointer_hx)(double, const double[length_hx], double[length_hx], Parameters &params);
 
 // Update the signature to use VectorXd instead of state_type
-void ode_solver_hx(double y[length_hx], OdeFuncPointer ode_func, int step, Parameters &params);
+void ode_solver_hx(double y[length_hx], OdeFuncPointer_hx ode_func, int step, Parameters &params);
 
 #endif // ODE_SOLVER_HPP

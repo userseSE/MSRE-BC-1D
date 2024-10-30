@@ -5,26 +5,46 @@
 
 void pde_to_ode_th(double t, const double y[length_th], double dydt[length_th],
                    Parameters &params, const double q_prime[N]) {
+  // for(int i = 0; i < 2*N; ++i){
+  //   std::cout << "dydt[" << i << "]: " << dydt[i] << std::endl;
+  // }
+
   // temperature_fuel_dt
+  // for (int i = 0; i < N; ++i) {
+  //   dydt[i] = 0;
+  //   for (int j = 0; j < N; ++j) {
+  //     dydt[i] += params.a_th * (params.AT[i][j] * y[j]);
+  //   }
+  // }
+  // for (int i = 0; i < N; ++i) {
+  //   dydt[i] += params.b_th * (y[N + i] - y[i]) + params.d_th * q_prime[i];
+  //   // std::cout << "dydt[" << i << "]: " << dydt[i] << std::endl;
+  // }
   for (int i = 0; i < N; ++i) {
+    // Start with the matrix-vector multiplication part
     dydt[i] = 0;
     for (int j = 0; j < N; ++j) {
-      dydt[i] += params.a_th * params.AT[i][j] * y[j];
+        dydt[i] += params.a_th * params.AT[i][j] * y[j];
     }
-  }
-  for (int i = 0; i < N; ++i) {
-    dydt[i] += params.b_th * (y[N + i] - y[i]) + params.d_th * q_prime[i];
-  }
+    // Add the temperature difference term
+    dydt[i] += params.b_th * (y[N+i] - y[i]);
+    // Add the heat source term
+    dydt[i] += params.d_th * q_prime[i];
+    // std::cout << "dydt[" << i << "]: " << dydt[i] << std::endl;
+}
   // temperature_graphite_dt
   for (int i = 0; i < N; ++i) {
     dydt[N + i] = params.c_th * (y[i] - y[N + i]) + params.e_th * q_prime[i];
   }
 
   // Apply time-varying boundary conditions
-  dydt[0] = params.bc_s0 - dydt[0];
-  dydt[N] = params.bc_g0 - dydt[N];
+  dydt[0] = params.bc_s0 - y[0];
+  dydt[N] = params.bc_g0 - y[N];
   dydt[N - 1] = 0;
   dydt[N * 2 - 1] = 0;
+  // for(int i=0;i<N*2;i++){
+  //   std::cout<<"dydt["<<i<<"]"<<dydt[i]<<std::endl;
+  // }
 };
 
 void thermal_hydraulics(double y_th[length_th], const double q_prime[N],

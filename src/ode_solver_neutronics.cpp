@@ -36,10 +36,10 @@ public:
       // Estimate the error and adjust step size
       double error_estimate_norm = 0.0;
       double y_norm = 0.0;
-      stableNorm(error_estimate, error_estimate_norm);
-      stableNorm(y, y_norm);
-      // error_estimate_norm= stableNorm(error_estimate, length_neutr);
-      // y_norm=stableNorm(y, length_neutr);
+      // stableNorm(error_estimate, error_estimate_norm);
+      // stableNorm(y, y_norm);
+      error_estimate_norm= stableNorm(error_estimate, length_neutr);
+      y_norm=stableNorm(y, length_neutr);
       double error_norm = error_estimate_norm / y_norm;
 
       double safety_factor = 0.9; // Safety factor for step-size control
@@ -47,7 +47,9 @@ public:
 
       if (error_norm < tol) {
         t += h;
-        y = y_new;
+        for (int i = 0; i < length_neutr; ++i) {
+          y[i] = y_new[i];
+        }
         // std::cout<<"perform assumption"<<std::endl;
       }
       // Update step size for the next iteration
@@ -98,32 +100,32 @@ private:
   //     norm = std::sqrt(norm);
   // }
 
-  void stableNorm(const double arr[length_neutr], double &norm) {
-    // Step 1: Find the maximum absolute value in the array
-    double maxVal = 0.0;
-    for (int i = 0; i < length_neutr; ++i) {
-      maxVal = (maxVal > std::abs(arr[i]))? maxVal : std::abs(arr[i]);
-    }
+  // void stableNorm(const double arr[length_neutr], double &norm) {
+  //   // Step 1: Find the maximum absolute value in the array
+  //   double maxVal = 0.0;
+  //   for (int i = 0; i < length_neutr; ++i) {
+  //     maxVal = (maxVal > std::abs(arr[i]))? maxVal : std::abs(arr[i]);
+  //   }
 
-    // If the maximum value is 0, return 0 as the norm
-    if (maxVal == 0.0) {
-      norm = 0.0;
-    }
-    // Step 2: Scale the array elements by the maximum value and compute the sum
-    // of squares
-    double sumSquares = 0.0;
-    for (int i = 0; i < length_neutr; ++i) {
-      double scaled = arr[i] / maxVal;
-      sumSquares += scaled * scaled;
-    }
-    // Step 3: Compute the norm by multiplying the square root of the sum of
-    // squares by the max value
-    norm = maxVal * std::sqrt(sumSquares);
-  }
-//   double stableNorm(const double* arr, int length_neutr) {
-//     Eigen::Map<const Eigen::VectorXd> eigen_vec(arr, length_neutr); // Map array to Eigen vector
-//     return eigen_vec.stableNorm();
-// }
+  //   // If the maximum value is 0, return 0 as the norm
+  //   if (maxVal == 0.0) {
+  //     norm = 0.0;
+  //   }
+  //   // Step 2: Scale the array elements by the maximum value and compute the sum
+  //   // of squares
+  //   double sumSquares = 0.0;
+  //   for (int i = 0; i < length_neutr; ++i) {
+  //     double scaled = arr[i] / maxVal;
+  //     sumSquares += scaled * scaled;
+  //   }
+  //   // Step 3: Compute the norm by multiplying the square root of the sum of
+  //   // squares by the max value
+  //   norm = maxVal * std::sqrt(sumSquares);
+  // }
+  double stableNorm(const double* arr, int length_neutr) {
+    Eigen::Map<const Eigen::VectorXd> eigen_vec(arr, length_neutr); // Map array to Eigen vector
+    return eigen_vec.stableNorm();
+}
 
   void clamp(double &value, double low, double high) {
     if (value < low) {

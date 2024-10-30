@@ -1,5 +1,6 @@
 #include "reactivity.hpp"
 #include "parameters.hpp"
+#include <iostream>
 
 void reactivity(const double temperature_fuel[N], const double temperature_graphite[N], 
                 int step, int time_span, Parameters& params, double rho[N]) {
@@ -12,7 +13,7 @@ void reactivity(const double temperature_fuel[N], const double temperature_graph
     double reactdata = (step < time_span / 2) ? 0.0 : (rho_insertion / N) * 1e-5;
 
     // Initialize reactivity insertion and reactivity feedback arrays
-    for (int i = 0; i < N; ++i) {
+    for (int i = 0; i < N; ++i) { 
         react[i] = reactdata;
         rho_feedback[i] = 0.0;
     }
@@ -25,6 +26,7 @@ void reactivity(const double temperature_fuel[N], const double temperature_graph
 
         // Sum the fuel and graphite contributions to reactivity feedback
         rho_feedback[i] = fuel_diff + graphite_diff;
+        // std::cout<<graphite_diff<<std::endl;
     }
 
     // Calculate total reactivity: rho_0 + rho_feedback + react

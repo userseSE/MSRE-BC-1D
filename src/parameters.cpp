@@ -107,10 +107,7 @@ double approx_sin(double x) {
 void initialize_thermal_hydraulics(Parameters &params) {
   for (int i = 0; i < N; ++i) {
     double position = static_cast<double>(i) * params.L / (N - 1);
-    params.initialS[i] =
-        params.bc_s0 +
-        (params.bc_sL - params.bc_s0) *
-            ((0.5 + 0.5 * approx_sin(M_PI * position / (params.L * 2))) * 0.8);
+    params.initialS[i] = params.bc_s0 + (params.bc_sL - params.bc_s0) * ((0.5 + 0.5 * approx_sin(M_PI * position / (params.L * 2))) * 0.8);
     params.initialG[i] =
         params.bc_g0 +
         (params.bc_gL - params.bc_g0) *

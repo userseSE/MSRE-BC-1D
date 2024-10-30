@@ -6,15 +6,15 @@
 #include <Eigen>
 
 // Define a class for the Runge-Kutta-Fehlberg (RKF45) method
-class RungeKuttaFehlberg45 {
+class RungeKuttaFehlberg45_th {
 public:
   double tol;          // Tolerance for adaptive step-size control
   double h_min, h_max; // Min and max step sizes
 
-  RungeKuttaFehlberg45(double tolerance = 1e-8, double min_step = 1e-10,
+  RungeKuttaFehlberg45_th(double tolerance = 1e-8, double min_step = 1e-10,
                        double max_step = 0.1) : tol(tolerance), h_min(min_step), h_max(max_step) {}
 
-  void solve(const OdeFuncPointer ode_func, double y[length_th], int step,
+  void solve(const OdeFuncPointer_th ode_func, double y[length_th], int step,
              Parameters &params, const double q_prime[N], double t0 = 0.0,
              double t1 = 1.0) {
     // std::cout << "Neutronics ODE solver called" << std::endl;
@@ -27,15 +27,15 @@ public:
 
       // Perform a single RKF45 step
       double y_new[length_th], error_estimate[length_th];
-      rkf45_step(ode_func, t, y, params, q_prime, h, y_new, error_estimate);
+      rkf45_step_th(ode_func, t, y, params, q_prime, h, y_new, error_estimate);
 
       // Estimate the error and adjust step size
       double error_estimate_norm = 0.0;
       double y_norm = 0.0;
-      stableNorm(error_estimate, error_estimate_norm);
-      stableNorm(y, y_norm);
-      // error_estimate_norm= stableNorm(error_estimate, length_th);
-      // y_norm=stableNorm(y, length_th);
+      // stableNorm(error_estimate, error_estimate_norm);
+      // stableNorm(y, y_norm);
+      error_estimate_norm= stableNorm(error_estimate, length_th);
+      y_norm=stableNorm(y, length_th);
       double error_norm = error_estimate_norm / y_norm;
 
       double safety_factor = 0.9; // Safety factor for step-size control
@@ -43,7 +43,9 @@ public:
 
       if (error_norm < tol) {
         t += h;
-        y = y_new;
+        for (int i = 0; i < length_th; ++i) {
+          y[i] = y_new[i];
+        }
         // std::cout<<"perform assumption"<<std::endl;
       }
       // Update step size for the next iteration
@@ -94,32 +96,32 @@ private:
   //     norm = std::sqrt(norm);
   // }
 
-  void stableNorm(const double arr[length_th], double &norm) {
-    // Step 1: Find the maximum absolute value in the array
-    double maxVal = 0.0;
-    for (int i = 0; i < length_th; ++i) {
-      maxVal = (maxVal > std::abs(arr[i]))? maxVal : std::abs(arr[i]);
-    }
+  // void stableNorm(const double arr[length_th], double &norm) {
+  //   // Step 1: Find the maximum absolute value in the array
+  //   double maxVal = 0.0;
+  //   for (int i = 0; i < length_th; ++i) {
+  //     maxVal = (maxVal > std::abs(arr[i]))? maxVal : std::abs(arr[i]);
+  //   }
 
-    // If the maximum value is 0, return 0 as the norm
-    if (maxVal == 0.0) {
-      norm = 0.0;
-    }
-    // Step 2: Scale the array elements by the maximum value and compute the sum
-    // of squares
-    double sumSquares = 0.0;
-    for (int i = 0; i < length_th; ++i) {
-      double scaled = arr[i] / maxVal;
-      sumSquares += scaled * scaled;
-    }
-    // Step 3: Compute the norm by multiplying the square root of the sum of
-    // squares by the max value
-    norm = maxVal * std::sqrt(sumSquares);
-  }
-//   double stableNorm(const double* arr, int N) {
-//     Eigen::Map<const Eigen::VectorXd> eigen_vec(arr, N); // Map array to Eigen vector
-//     return eigen_vec.stableNorm();
-// }
+  //   // If the maximum value is 0, return 0 as the norm
+  //   if (maxVal == 0.0) {
+  //     norm = 0.0;
+  //   }
+  //   // Step 2: Scale the array elements by the maximum value and compute the sum
+  //   // of squares
+  //   double sumSquares = 0.0;
+  //   for (int i = 0; i < length_th; ++i) {
+  //     double scaled = arr[i] / maxVal;
+  //     sumSquares += scaled * scaled;
+  //   }
+  //   // Step 3: Compute the norm by multiplying the square root of the sum of
+  //   // squares by the max value
+  //   norm = maxVal * std::sqrt(sumSquares);
+  // }
+  double stableNorm(const double* arr, int N) {
+    Eigen::Map<const Eigen::VectorXd> eigen_vec(arr, N); // Map array to Eigen vector
+    return eigen_vec.stableNorm();
+}
 
   void clamp(double &value, double low, double high) {
     if (value < low) {
@@ -129,7 +131,7 @@ private:
     }
   }
 
-  void rkf45_step(const OdeFuncPointer ode_func, double t,
+  void rkf45_step_th(const OdeFuncPointer_th ode_func, double t,
                   const double y[length_th], Parameters &params,
                   const double q_prime[N], double h, double y_new[length_th],
                   double error_estimate[length_th]) {
@@ -233,10 +235,10 @@ private:
     // std::cout << "Neutronics RKF45 step finished" << std::endl;
   }
 };
-void ode_solver_th(double y[length_th], OdeFuncPointer ode_func, int step,
+void ode_solver_th(double y[length_th], OdeFuncPointer_th ode_func, int step,
                       Parameters &params, const double q_prime[N]) {
 
-  RungeKuttaFehlberg45 solver;
+  RungeKuttaFehlberg45_th solver;
 
   solver.solve(ode_func, y, step, params, q_prime);
 }

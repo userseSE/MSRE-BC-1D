@@ -4,8 +4,8 @@
 // Spatial discretization constants
 constexpr int N = 200;  // spatial discretization
 constexpr int Nx = N;   // spatial discretization
-constexpr int time_span = 250;
-constexpr double rho_insertion = 0.0;  // pcm, 50 * N
+constexpr int time_span = 2500;
+constexpr double rho_insertion = 10000.0;  // pcm, 50 * N
 constexpr int length_th = 2 * N;
 constexpr int length_neutr = 8 * N;
 constexpr int length_hx = 2 * Nx;
