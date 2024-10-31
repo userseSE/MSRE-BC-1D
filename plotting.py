@@ -15,7 +15,7 @@ def plot_multiple_sections(data, sections, title, xlabel='', ylabel='', labels=N
     plt.show()
 
 def main():
-    time_span = 2500
+    time_span = 250
     # Get the folder path from the command line argument
     if len(sys.argv) < 2:
         print("Usage: python plotting.py <folder_path>")

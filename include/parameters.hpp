@@ -4,11 +4,20 @@
 // Spatial discretization constants
 constexpr int N = 200;  // spatial discretization
 constexpr int Nx = N;   // spatial discretization
-constexpr int time_span = 2500;
-constexpr double rho_insertion = 10000.0;  // pcm, 50 * N
+constexpr int time_span = 250;
+constexpr double rho_insertion = 0.0;  // pcm, 50 * N
 constexpr int length_th = 2 * N;
 constexpr int length_neutr = 8 * N;
 constexpr int length_hx = 2 * Nx;
+
+// for CSR
+const int MAX_NON_ZERO = 3 * N - 4; // Maximum number of non-zero entries in CSR
+// Define CSR structure using arrays
+struct CSRMatrix {
+    double values[MAX_NON_ZERO];    // Non-zero values
+    int col_indices[MAX_NON_ZERO];  // Column indices of non-zero values
+    int row_pointers[N + 1];        // Row pointers (N + 1 for boundary condition)
+};
 
 struct Parameters {
     // seperate submodules into different structs
@@ -50,6 +59,7 @@ struct Parameters {
     double A2[N][N] = {0};
     double B1[N][N] = {0};
     double B2[N][N] = {0};
+    CSRMatrix A1_csr, A2_csr, A1_csr_inv, A2_csr_inv, B1_csr, B2_csr;
 
     // Thermal-Hydraulics
     static constexpr double c_p_s = 2090;
@@ -79,6 +89,7 @@ struct Parameters {
     double initialS[N] = {0};
     double initialG[N] = {0};
     double AT[N][N] = {0};
+    CSRMatrix AT_csr;
 
     // Heat Exchanger 1
     static constexpr double L_HX = 200;
@@ -101,6 +112,7 @@ struct Parameters {
     double u_init[N] = {0};
     double v_init[N] = {0};
     double A_HX[Nx][Nx] = {0};
+    CSRMatrix A_HX_csr;
 
     // TODO: cosimulation - generate and use 3 sets of temperatures from brayton cycle, min, max, nominal in simulink
     // Heat Exchanger 2
@@ -123,6 +135,7 @@ struct Parameters {
     double u2_init[N] = {0};
     double v2_init[N] = {0};
     double A_HX2[Nx][Nx] = {0};
+    CSRMatrix A_HX2_csr;
 
     // Reactivity
     static constexpr double alpha_f = -5.904e-5;

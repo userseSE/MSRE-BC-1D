@@ -177,6 +177,30 @@ src/HX2.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/HX2.cpp.s
 .PHONY : src/HX2.cpp.s
 
+src/csr_matrix.o: src/csr_matrix.cpp.o
+.PHONY : src/csr_matrix.o
+
+# target to build an object file
+src/csr_matrix.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/csr_matrix.cpp.o
+.PHONY : src/csr_matrix.cpp.o
+
+src/csr_matrix.i: src/csr_matrix.cpp.i
+.PHONY : src/csr_matrix.i
+
+# target to preprocess a source file
+src/csr_matrix.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/csr_matrix.cpp.i
+.PHONY : src/csr_matrix.cpp.i
+
+src/csr_matrix.s: src/csr_matrix.cpp.s
+.PHONY : src/csr_matrix.s
+
+# target to generate assembly for a file
+src/csr_matrix.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/csr_matrix.cpp.s
+.PHONY : src/csr_matrix.cpp.s
+
 src/data_saving.o: src/data_saving.cpp.o
 .PHONY : src/data_saving.o
 
@@ -417,30 +441,6 @@ src/thermal_hydraulics.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/thermal_hydraulics.cpp.s
 .PHONY : src/thermal_hydraulics.cpp.s
 
-src/transport_delay.o: src/transport_delay.cpp.o
-.PHONY : src/transport_delay.o
-
-# target to build an object file
-src/transport_delay.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/transport_delay.cpp.o
-.PHONY : src/transport_delay.cpp.o
-
-src/transport_delay.i: src/transport_delay.cpp.i
-.PHONY : src/transport_delay.i
-
-# target to preprocess a source file
-src/transport_delay.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/transport_delay.cpp.i
-.PHONY : src/transport_delay.cpp.i
-
-src/transport_delay.s: src/transport_delay.cpp.s
-.PHONY : src/transport_delay.s
-
-# target to generate assembly for a file
-src/transport_delay.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/transport_delay.cpp.s
-.PHONY : src/transport_delay.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -456,6 +456,9 @@ help:
 	@echo "... src/HX2.o"
 	@echo "... src/HX2.i"
 	@echo "... src/HX2.s"
+	@echo "... src/csr_matrix.o"
+	@echo "... src/csr_matrix.i"
+	@echo "... src/csr_matrix.s"
 	@echo "... src/data_saving.o"
 	@echo "... src/data_saving.i"
 	@echo "... src/data_saving.s"
@@ -486,9 +489,6 @@ help:
 	@echo "... src/thermal_hydraulics.o"
 	@echo "... src/thermal_hydraulics.i"
 	@echo "... src/thermal_hydraulics.s"
-	@echo "... src/transport_delay.o"
-	@echo "... src/transport_delay.i"
-	@echo "... src/transport_delay.s"
 .PHONY : help
 
 

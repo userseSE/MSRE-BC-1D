@@ -3,5 +3,6 @@
 #include "parameters.hpp"
 
 void invert_LU(double A[N][N]);
+// void inverse_sparse(const CSRMatrix &A_csr, CSRMatrix &A_inv) ;
 
 #endif // MATRIX_INVERSE_HPP

@@ -17,7 +17,6 @@ public:
   void solve(const OdeFuncPointer ode_func, double y[length_neutr], int step,
              Parameters &params, const double Keff[N], double t0 = 0.0,
              double t1 = 1.0) {
-    // std::cout << "Neutronics ODE solver called" << std::endl;
     double t = t0;
     double h = (t1 - t0) / 100; // Initial step size (can be adjusted)
 
@@ -29,15 +28,9 @@ public:
       double y_new[length_neutr], error_estimate[length_neutr];
       rkf45_step(ode_func, t, y, params, Keff, h, y_new, error_estimate);
 
-      // for (int i = 0; i < length_neutr; ++i) {
-      //   std::cout <<"["<<i<<"]"<<error_estimate[i] << std::endl;
-      // }
-
       // Estimate the error and adjust step size
       double error_estimate_norm = 0.0;
       double y_norm = 0.0;
-      // stableNorm(error_estimate, error_estimate_norm);
-      // stableNorm(y, y_norm);
       error_estimate_norm= stableNorm(error_estimate, length_neutr);
       y_norm=stableNorm(y, length_neutr);
       double error_norm = error_estimate_norm / y_norm;
@@ -50,78 +43,13 @@ public:
         for (int i = 0; i < length_neutr; ++i) {
           y[i] = y_new[i];
         }
-        // std::cout<<"perform assumption"<<std::endl;
       }
-      // Update step size for the next iteration
-      // Clamp the scaling factor to avoid drastic step-size changes
-      // clamp(scale, 0.5, 2.0);
-      // // Update 'h' by multiplying by the clamped scale
-      // h *= scale;
-      // // Clamp 'h' to ensure it stays within the bounds 'h_min' and 'h_max'
-      // clamp(h, h_min, h_max);
       h *= std::clamp(scale, 0.5,2.0);
       h = std::clamp(h, h_min, h_max);
-      // std::cout << "t: " << t << ", h: " << h << std::endl;
     }
-    // std::cout <<"out the loop: "<< "t: " << t << ", h: " << h << std::endl;
   }
 
 private:
-  // void compute_norm(double arr[length_neutr], double &norm) {
-  //   norm = 0.0;
-  //   for (int i = 0; i < length_neutr; ++i) {
-  //     norm += arr[i] * arr[i];
-  //   }
-  //   if (norm < 0.0) {
-  //     norm = -1.0;
-  //   } else if (norm == 0.0) {
-  //     norm = 0.0;
-  //   } else {
-  //     double guess = norm;
-  //     double eplsilon = 1e-7;
-  //     while (true) {
-  //       double next_guess = 0.5 * (guess + norm / guess);
-  //       if (abs(next_guess - guess) < eplsilon) {
-  //         break;
-  //       }
-  //       guess = next_guess;
-  //     }
-  //   }
-  // }
-  //   void compute_norm(double arr[length_neutr], double &norm) {
-  //     norm = 0.0;
-
-  //     // Sum of squares of each element in the array
-  //     for (int i = 0; i < length_neutr; ++i) {
-  //         norm += arr[i] * arr[i];
-  //     }
-
-  //     // Take the square root of the sum of squares
-  //     norm = std::sqrt(norm);
-  // }
-
-  // void stableNorm(const double arr[length_neutr], double &norm) {
-  //   // Step 1: Find the maximum absolute value in the array
-  //   double maxVal = 0.0;
-  //   for (int i = 0; i < length_neutr; ++i) {
-  //     maxVal = (maxVal > std::abs(arr[i]))? maxVal : std::abs(arr[i]);
-  //   }
-
-  //   // If the maximum value is 0, return 0 as the norm
-  //   if (maxVal == 0.0) {
-  //     norm = 0.0;
-  //   }
-  //   // Step 2: Scale the array elements by the maximum value and compute the sum
-  //   // of squares
-  //   double sumSquares = 0.0;
-  //   for (int i = 0; i < length_neutr; ++i) {
-  //     double scaled = arr[i] / maxVal;
-  //     sumSquares += scaled * scaled;
-  //   }
-  //   // Step 3: Compute the norm by multiplying the square root of the sum of
-  //   // squares by the max value
-  //   norm = maxVal * std::sqrt(sumSquares);
-  // }
   double stableNorm(const double* arr, int length_neutr) {
     Eigen::Map<const Eigen::VectorXd> eigen_vec(arr, length_neutr); // Map array to Eigen vector
     return eigen_vec.stableNorm();
@@ -193,9 +121,6 @@ private:
       result[i] = y[i] + b4[0] * h * k1[i] + b4[1] * h * k2[i] + b4[2] * h * k3[i];
     }
     ode_func(t + a4 * h, result, k4, params, Keff);
-    // for(int i=0; i<length_neutr; ++i){
-    //   std::cout << "k4[" << i << "]: " << k4[i] << std::endl;
-    // }
     // Compute intermediate results for k5
     for (int i = 0; i < length_neutr; ++i) {
       result[i] = y[i] + b5[0] * h * k1[i] + b5[1] * h * k2[i] + b5[2] * h * k3[i] + b5[3] * h * k4[i];
@@ -207,42 +132,18 @@ private:
       result[i] = y[i] + b6[0] * h * k1[i] + b6[1] * h * k2[i] + b6[2] * h * k3[i] + b6[3] * h * k4[i] + b6[4] * h * k5[i];
     }
     ode_func(t + a6 * h, result, k6, params, Keff);
-    // for(int i=0; i<length_neutr; ++i){
-    //   std::cout << "k6[" << i << "]: " << k6[i] << std::endl;
-    // }
 
     // Compute the 4th and 5th order estimates (y_new and y_star)
     double y_star[length_neutr];
-    // for (int i = 0; i < length_neutr; ++i) {
-    //   y_new[i] = y[i] + h * (c[0] * k1[i] + c[2] * k3[i] + c[3] * k4[i] + c[4] * k5[i] + c[5] * k6[i]);
-    //   y_star[i] = y[i] + h * (c_star[0] * k1[i] + c_star[2] * k3[i] + c_star[3] * k4[i] + c_star[4] * k5[i]);
-    // }
-    // Step 1: Convert arrays to Eigen vectors
-    Eigen::Map<const Eigen::VectorXd> y_vec(y, length_neutr);
-    Eigen::Map<const Eigen::VectorXd> k1_vec(k1, length_neutr);
-    Eigen::Map<const Eigen::VectorXd> k3_vec(k3, length_neutr);
-    Eigen::Map<const Eigen::VectorXd> k4_vec(k4, length_neutr);
-    Eigen::Map<const Eigen::VectorXd> k5_vec(k5, length_neutr);
-    Eigen::Map<const Eigen::VectorXd> k6_vec(k6, length_neutr);
-    // Step 2: Perform computations using Eigen
-    Eigen::VectorXd y_new_vec = y_vec + h * (c[0] * k1_vec + c[2] * k3_vec + c[3] * k4_vec + c[4] * k5_vec + c[5] * k6_vec);
-    Eigen::VectorXd y_star_vec = y_vec + h * (c_star[0] * k1_vec + c_star[2] * k3_vec + c_star[3] * k4_vec + c_star[4] * k5_vec);
-    // Step 3: Copy results back to arrays
-    Eigen::Map<Eigen::VectorXd>(y_new, length_neutr) = y_new_vec;
-    Eigen::Map<Eigen::VectorXd>(y_star, length_neutr) = y_star_vec;
-    // for (int i = 0; i<length_neutr; ++i) {
-    //   std::cout << "y_new[" << i << "]: " << y_new[i] << std::endl;
-    // }
-    // for (int i = 0; i<length_neutr; ++i) {
-    //   std::cout << "y_star[" << i << "]: " << y_star[i] << std::endl;
-    // }
+    for (int i = 0; i < length_neutr; ++i) {
+      y_new[i] = y[i] + h * (c[0] * k1[i] + c[2] * k3[i] + c[3] * k4[i] + c[4] * k5[i] + c[5] * k6[i]);
+      y_star[i] = y[i] + h * (c_star[0] * k1[i] + c_star[2] * k3[i] + c_star[3] * k4[i] + c_star[4] * k5[i]);
+    }
 
     // Estimate the local error
     for (int i = 0; i < length_neutr; ++i) {
       error_estimate[i] = y_new[i] - y_star[i];
-      // std::cout << "error_estimate[" << i << "]: " << error_estimate[i] << std::endl;
     }
-    // std::cout << "Neutronics RKF45 step finished" << std::endl;
   }
 };
 void ode_solver_neutr(double y[length_neutr], OdeFuncPointer ode_func, int step,

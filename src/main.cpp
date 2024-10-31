@@ -5,7 +5,6 @@
 #include "parameters.hpp"
 #include "reactivity.hpp"
 #include "thermal_hydraulics.hpp"
-#include "transport_delay.hpp"
 
 #include <ctime>
 #include <iostream>

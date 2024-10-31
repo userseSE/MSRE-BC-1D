@@ -5,21 +5,6 @@
 
 void pde_to_ode_th(double t, const double y[length_th], double dydt[length_th],
                    Parameters &params, const double q_prime[N]) {
-  // for(int i = 0; i < 2*N; ++i){
-  //   std::cout << "dydt[" << i << "]: " << dydt[i] << std::endl;
-  // }
-
-  // temperature_fuel_dt
-  // for (int i = 0; i < N; ++i) {
-  //   dydt[i] = 0;
-  //   for (int j = 0; j < N; ++j) {
-  //     dydt[i] += params.a_th * (params.AT[i][j] * y[j]);
-  //   }
-  // }
-  // for (int i = 0; i < N; ++i) {
-  //   dydt[i] += params.b_th * (y[N + i] - y[i]) + params.d_th * q_prime[i];
-  //   // std::cout << "dydt[" << i << "]: " << dydt[i] << std::endl;
-  // }
   for (int i = 0; i < N; ++i) {
     // Start with the matrix-vector multiplication part
     dydt[i] = 0;
