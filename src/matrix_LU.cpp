@@ -1,13 +1,15 @@
 #include "matrix_LU.hpp"
-#include "parameters.hpp"
+// #include "parameters.hpp"
 // #include <cstring>
 // #include <stdexcept>
 // #include <cmath>
 #include <Eigen/Dense>
 
+
+
 void invert_LU(float A[N][N]) {
     // Step 1: Convert the input array to an Eigen matrix (try using dynamic-size MatrixXd)
-    Eigen::MatrixXd eigen_A(N, N);
+    Eigen::MatrixXd eigen_A(200, 200);
     for (int i = 0; i < N; ++i) {
         for (int j = 0; j < N; ++j) {
             eigen_A(i, j) = A[i][j];

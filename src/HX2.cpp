@@ -1,8 +1,8 @@
 #include "HX2.hpp"
 #include "parameters.hpp"
-#include "ode_solver_HX.hpp"
+#include "ode_solver_HX2.hpp"
 
-void pde_to_ode_hx2(float t, const float y[length_hx], float dydt[length_hx], Parameters &params) {
+void pde_to_ode_hx2(float t, const float y[length_hx], float dydt[length_hx], Param_HX2 &params) {
     // Split the input state vector y into u and v
     const float* u = &y[0];    // u is the first half of y
     const float* v = &y[Nx];   // v is the second half of y
@@ -33,7 +33,7 @@ void pde_to_ode_hx2(float t, const float y[length_hx], float dydt[length_hx], Pa
     }
 }
 
-void HX2(float y_hx2[length_hx], float Ts_HX2_L, int step, Parameters &params) {
+void HX2(float y_hx2[length_hx], float Ts_HX2_L, int step, Param_HX2 &params) {
     // Set boundary conditions
     y_hx2[Nx + 1] = params.v2_L;    // Fixed boundary condition at v[0]
     y_hx2[length_hx - 1] = params.v2_H; // Fixed boundary condition at v[L]
@@ -66,7 +66,7 @@ void HX2(float y_hx2[length_hx], float Ts_HX2_L, int step, Parameters &params) {
     }
 
     // Solve the system of ODEs
-    ode_solver_hx(y0, pde_to_ode_hx2, step, params);
+    ode_solver_hx2(y0, pde_to_ode_hx2, step, params);
 
     // Update y_hx2 with the solution from the ODE solver
     for (int i = 0; i < length_hx; ++i) {

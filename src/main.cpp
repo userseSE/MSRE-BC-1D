@@ -1,6 +1,6 @@
 #include "HX1.hpp"
 #include "HX2.hpp"
-#include "data_saving.hpp"
+// #include "data_saving.hpp"
 #include "neutronics.hpp"
 #include "parameters.hpp"
 #include "reactivity.hpp"
@@ -9,8 +9,16 @@
 #include <iostream>
 
 void run_simulation(int simulation_id) {
-  Parameters params;
-  initialize_parameters(params);
+  Param_Neutronics params_neutr;
+  Param_Thermal params_th;
+  Param_HX1 params_hx1;
+  Param_HX2 params_hx2;
+  Param_React params_react;
+  initialize_neutronics(params_neutr);
+  initialize_thermal_hydraulics(params_th);
+  initialize_heat_exchanger_1(params_hx1);
+  initialize_heat_exchanger_2(params_hx2);
+  initialize_reactivity(params_react);
   // Initialization
   float rho[N];
   float y_n[length_neutr];
@@ -46,10 +54,10 @@ void run_simulation(int simulation_id) {
 
   for (int step = 0; step < time_span; ++step) {
     std::cout << "Simulation " << simulation_id << " - Time step: " << step << std::endl;
-    neutronics(y_n, rho, step, params);
+    neutronics(y_n, rho, step, params_neutr);
     std::cout << "y_n[100]: " << y_n[100] << std::endl;
     for (int i = 0; i < N; ++i) {
-      q_prime[i] = (y_n[i] + y_n[N + i]) * params.sigma_f * params.A / params.flux_to_power;
+      q_prime[i] = (y_n[i] + y_n[N + i]) * params_neutr.sigma_f * params_neutr.A / params_neutr.flux_to_power;
     }
     std::cout << "q_prime[N/2]: " << q_prime[N/2] << std::endl;
     phi_middle_matrix[step] = y_n[N / 2];
@@ -58,61 +66,35 @@ void run_simulation(int simulation_id) {
       ci_middle_matrix[step + i*time_span] = y_n[(i * N + (i + 1) * N) / 2 + 2 * N];
     }
 
-    // float Ts_core_0 = transport_delay(Ts_HX1_0, params.tau_hx_c, params.Ts_in,
-    //                                    buffer_hx_c, step);
-    thermal_hydraulics(y_th, q_prime,Ts_HX1_0, step, params);
+    thermal_hydraulics(y_th, q_prime,Ts_HX1_0, step, params_th);
     std::cout << "fuel_th[N/2]: " << y_th[N/4] << std::endl;
     float Ts_core_L = y_th[N - 1];
     temperature_fuel_middle_matrix[step] = y_th[N / 4];
 
-    // float Ts_HX1_L = transport_delay(Ts_core_L, params.tau_c_hx, params.Ts_out,
-    //                                   buffer_c_hx, step);
-    // Tss_HX1_0 = transport_delay(Tss_HX2_0, params.tau_r_hx, params.Tss_in,
-    //                             buffer_r_hx, step);
-
-    HX1(y_hx1, Ts_core_L, Tss_HX1_0, step, params);
-    // Ts_HX1 = y_hx1.head(Nx);
-    // Tss_HX1 = y_hx1.tail(Nx);
+    HX1(y_hx1, Ts_core_L, Tss_HX1_0, step, params_hx1);
     Ts_HX1_0 = y_hx1[0];
     float Tss_HX1_L = y_hx1[Nx - 1];
 
-    // float Tss_HX2_L = transport_delay(Tss_HX1_L, params.tau_hx_r,
-    //                                    params.Ts_out, buffer_hx_r, step);
-    // Tsss_HX2_0 = transport_delay(Tsss_pp_0, tau_pp_r, Tsss_in, buffer_pp_r,
-    // step);
 
-    HX2(y_hx2, Tss_HX1_L, step, params);
-    // Tss_HX2 = y_hx2.head(Nx);
-    // Tsss_HX2 = y_hx2.tail(Nx);
+    HX2(y_hx2, Tss_HX1_L, step, params_hx2);
     Tss_HX2_0 = y_hx2[0];
     float Tsss_HX2_L = y_hx2[Nx - 1];
 
-    // float Tsss_pp_L = transport_delay(Tsss_HX2_L, params.tau_r_pp,
-    //                                    params.Tsss_out, buffer_r_pp, step);
-    // float y_pp = power_plant_temp(Tsss_pp_L, step);
-    // Tsss_pp_0 = y_pp;
-    // for (int i = 0; i < N; ++i) {
-    //   std::cout <<y_th[i] << " ";
-    // }
-    // std::cout << std::endl;
-    reactivity(y_th, y_th + N, step, time_span, params, rho);
+    reactivity(y_th, y_th + N, step, params_react, rho);
     std::cout << "rho[N/2]: " << rho[N/2] << std::endl;
     for (int i = 0; i < N; i++){
       rho_matrix[step] += rho[i];
     }
     rho_matrix[step] = (rho_matrix[step]/N) * 1e5;
-    // rho_matrix[step] = (std::accumulate(rho, rho + N, 0.0) / N) * 1e5;
-    // rho_matrix[step] = rho[N / 2] * 1e5;
   }
 
   // Save results for this simulation in a specific folder
   std::string folder = "results/simulation_" + std::to_string(simulation_id);
-  save_results(rho_matrix, phi_middle_matrix,
-               ci_middle_matrix, temperature_fuel_middle_matrix, folder);
+  // save_results(rho_matrix, phi_middle_matrix, ci_middle_matrix, temperature_fuel_middle_matrix, folder);
   for (int i = 0; i < N; ++i) {
     rho[i] = rho[i] * 1e5;
   }
-  save_spacial_results(rho, y_n, y_th, y_hx1, y_hx2, folder);
+  // save_spacial_results(rho, y_n, y_th, y_hx1, y_hx2, folder);
 }
 
 int main() {

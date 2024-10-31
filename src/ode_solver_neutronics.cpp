@@ -10,8 +10,7 @@ public:
 
   RungeKuttaFehlberg45(float tolerance = 1e-8, float min_step = 1e-10, float max_step = 0.1) : tol(tolerance), h_min(min_step), h_max(max_step) {}
 
-  void solve(const OdeFuncPointer ode_func, float y[length_neutr], int step,
-             Parameters &params, const float Keff[N], float t0 = 0.0,
+  void solve(const OdeFuncPointer ode_func, float y[length_neutr], int step, Param_Neutronics &params, const float Keff[N], float t0 = 0.0,
              float t1 = 1.0) {
     float t = t0;
     float h = (t1 - t0) / 100; // Initial step size (can be adjusted)
@@ -78,7 +77,7 @@ void clamp(float& result, const float& value, const float& min_val, const float&
   // }
 
   void rkf45_step(const OdeFuncPointer ode_func, float t,
-                  const float y[length_neutr], Parameters &params,
+                  const float y[length_neutr], Param_Neutronics &params,
                   const float Keff[N], float h, float y_new[length_neutr],
                   float error_estimate[length_neutr]) {
     // std::cout << "Neutronics RKF45 step called" << std::endl;
@@ -161,7 +160,7 @@ void clamp(float& result, const float& value, const float& min_val, const float&
   }
 };
 void ode_solver_neutr(float y[length_neutr], OdeFuncPointer ode_func, int step,
-                      Parameters &params, const float Keff[N]) {
+                      Param_Neutronics &params, const float Keff[N]) {
 
   RungeKuttaFehlberg45 solver;
 

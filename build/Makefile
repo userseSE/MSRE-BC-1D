@@ -297,29 +297,53 @@ src/neutronics.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/neutronics.cpp.s
 .PHONY : src/neutronics.cpp.s
 
-src/ode_solver_HX.o: src/ode_solver_HX.cpp.o
-.PHONY : src/ode_solver_HX.o
+src/ode_solver_HX1.o: src/ode_solver_HX1.cpp.o
+.PHONY : src/ode_solver_HX1.o
 
 # target to build an object file
-src/ode_solver_HX.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/ode_solver_HX.cpp.o
-.PHONY : src/ode_solver_HX.cpp.o
+src/ode_solver_HX1.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/ode_solver_HX1.cpp.o
+.PHONY : src/ode_solver_HX1.cpp.o
 
-src/ode_solver_HX.i: src/ode_solver_HX.cpp.i
-.PHONY : src/ode_solver_HX.i
+src/ode_solver_HX1.i: src/ode_solver_HX1.cpp.i
+.PHONY : src/ode_solver_HX1.i
 
 # target to preprocess a source file
-src/ode_solver_HX.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/ode_solver_HX.cpp.i
-.PHONY : src/ode_solver_HX.cpp.i
+src/ode_solver_HX1.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/ode_solver_HX1.cpp.i
+.PHONY : src/ode_solver_HX1.cpp.i
 
-src/ode_solver_HX.s: src/ode_solver_HX.cpp.s
-.PHONY : src/ode_solver_HX.s
+src/ode_solver_HX1.s: src/ode_solver_HX1.cpp.s
+.PHONY : src/ode_solver_HX1.s
 
 # target to generate assembly for a file
-src/ode_solver_HX.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/ode_solver_HX.cpp.s
-.PHONY : src/ode_solver_HX.cpp.s
+src/ode_solver_HX1.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/ode_solver_HX1.cpp.s
+.PHONY : src/ode_solver_HX1.cpp.s
+
+src/ode_solver_HX2.o: src/ode_solver_HX2.cpp.o
+.PHONY : src/ode_solver_HX2.o
+
+# target to build an object file
+src/ode_solver_HX2.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/ode_solver_HX2.cpp.o
+.PHONY : src/ode_solver_HX2.cpp.o
+
+src/ode_solver_HX2.i: src/ode_solver_HX2.cpp.i
+.PHONY : src/ode_solver_HX2.i
+
+# target to preprocess a source file
+src/ode_solver_HX2.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/ode_solver_HX2.cpp.i
+.PHONY : src/ode_solver_HX2.cpp.i
+
+src/ode_solver_HX2.s: src/ode_solver_HX2.cpp.s
+.PHONY : src/ode_solver_HX2.s
+
+# target to generate assembly for a file
+src/ode_solver_HX2.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/ode_solver_HX2.cpp.s
+.PHONY : src/ode_solver_HX2.cpp.s
 
 src/ode_solver_neutronics.o: src/ode_solver_neutronics.cpp.o
 .PHONY : src/ode_solver_neutronics.o
@@ -471,9 +495,12 @@ help:
 	@echo "... src/neutronics.o"
 	@echo "... src/neutronics.i"
 	@echo "... src/neutronics.s"
-	@echo "... src/ode_solver_HX.o"
-	@echo "... src/ode_solver_HX.i"
-	@echo "... src/ode_solver_HX.s"
+	@echo "... src/ode_solver_HX1.o"
+	@echo "... src/ode_solver_HX1.i"
+	@echo "... src/ode_solver_HX1.s"
+	@echo "... src/ode_solver_HX2.o"
+	@echo "... src/ode_solver_HX2.i"
+	@echo "... src/ode_solver_HX2.s"
 	@echo "... src/ode_solver_neutronics.o"
 	@echo "... src/ode_solver_neutronics.i"
 	@echo "... src/ode_solver_neutronics.s"

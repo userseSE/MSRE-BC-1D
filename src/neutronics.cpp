@@ -10,7 +10,7 @@
 
 // Standalone function definition
 void pde_to_ode_neutronics(float t, const float y[length_neutr],
-                           float dydt[length_neutr], Parameters &params,
+                           float dydt[length_neutr], Param_Neutronics &params,
                            const float Keff[N]) {
   // std::cout << "Neutronics PDE to ODE solver called" << std::endl;
   float lambda_ci[N]; // For summing contributions
@@ -153,7 +153,7 @@ void pde_to_ode_neutronics(float t, const float y[length_neutr],
 
 // Modified neutronics function using the function pointer
 void neutronics(float y_n[length_neutr], const float rho[N], int step,
-                Parameters &params) {
+                Param_Neutronics &params) {
   // std::cout << "Neutronics is called for step " << step << std::endl;
   float Keff[N] = {0};
   for (int i = 0; i < N; ++i) {

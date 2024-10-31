@@ -3,7 +3,7 @@
 #include "parameters.hpp"
 
 void pde_to_ode_th(float t, const float y[length_th], float dydt[length_th],
-                   Parameters &params, const float q_prime[N]) {
+                   Param_Thermal &params, const float q_prime[N]) {
   for (int i = 0; i < N; ++i) {
     // Start with the matrix-vector multiplication part
     dydt[i] = 0;
@@ -32,7 +32,7 @@ void pde_to_ode_th(float t, const float y[length_th], float dydt[length_th],
 };
 
 void thermal_hydraulics(float y_th[length_th], const float q_prime[N],
-                        float Ts_core_0, int step, Parameters &params) {
+                        float Ts_core_0, int step, Param_Thermal &params) {
   // std::cout << "thermal_hydraulics called" << std::endl;
   // Set boundary conditions
   y_th[0] = Ts_core_0;

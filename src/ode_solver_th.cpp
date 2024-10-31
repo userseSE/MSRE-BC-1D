@@ -12,7 +12,7 @@ public:
                        float max_step = 0.1) : tol(tolerance), h_min(min_step), h_max(max_step) {}
 
   void solve(const OdeFuncPointer_th ode_func, float y[length_th], int step,
-             Parameters &params, const float q_prime[N], float t0 = 0.0,
+             Param_Thermal &params, const float q_prime[N], float t0 = 0.0,
              float t1 = 1.0) {
     // std::cout << "Neutronics ODE solver called" << std::endl;
     float t = t0;
@@ -74,7 +74,7 @@ void calculateNorm(const float arr[length_th], float &norm) {
   // }
 
   void rkf45_step_th(const OdeFuncPointer_th ode_func, float t,
-                  const float y[length_th], Parameters &params,
+                  const float y[length_th], Param_Thermal &params,
                   const float q_prime[N], float h, float y_new[length_th],
                   float error_estimate[length_th]) {
     // std::cout << "Neutronics RKF45 step called" << std::endl;
@@ -154,7 +154,7 @@ void calculateNorm(const float arr[length_th], float &norm) {
   }
 };
 void ode_solver_th(float y[length_th], OdeFuncPointer_th ode_func, int step,
-                      Parameters &params, const float q_prime[N]) {
+                      Param_Thermal &params, const float q_prime[N]) {
 
   RungeKuttaFehlberg45_th solver;
 
