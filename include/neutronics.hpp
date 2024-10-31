@@ -4,6 +4,6 @@
 #include "parameters.hpp"
 
 // Function to solve the neutronics problem
-void neutronics(double y_n[length_neutr], const double rho[N], int step, Parameters &params);
+void neutronics(float y_n[length_neutr], const float rho[N], int step, Parameters &params);
 
 #endif // NEUTRONICS_HPP

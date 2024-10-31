@@ -1,7 +1,7 @@
 #include "csr_matrix.hpp"
 
 // Convert a dense matrix with only main diagonal and one-off diagonals to CSR format
-void sparse_csr(double dense[N][N], CSRMatrix& csr) {
+void sparse_csr(float dense[N][N], CSRMatrix& csr) {
     int value_index = 0;            // Index to track position in values and col_indices
     csr.row_pointers[0] = 0;        // Start the first row pointer at 0
 

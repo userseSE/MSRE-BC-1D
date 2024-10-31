@@ -2,7 +2,7 @@
 #ifndef REACTIVITY_HPP
 #define REACTIVITY_HPP
 
-void reactivity(const double temperature_fuel[N], const double temperature_graphite[N], 
-                int step, int time_span, Parameters& params, double rho[N]);
+void reactivity(const float temperature_fuel[N], const float temperature_graphite[N], 
+                int step, int time_span, Parameters& params, float rho[N]);
 
 #endif // REACTIVITY_HPP

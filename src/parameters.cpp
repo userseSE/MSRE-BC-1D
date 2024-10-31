@@ -8,8 +8,8 @@
 void initialize_neutronics(Parameters &params) {
 
   for (int i = 0; i < N; ++i) {
-    params.phi1_0[i] = 1.0e13; // Initial neutron flux
-    params.phi2_0[i] = 0.5e13; // Initial neutron flux
+    params.phi1_0[i] = 1.0e13f; // Initial neutron flux
+    params.phi2_0[i] = 0.5e13f; // Initial neutron flux
     params.c1[i] = ((params.beta[0] * (params.nu_sigma_f1)) / (params.lambda_i[0] / 6)) * (params.phi1_0[i] + params.phi2_0[i]);
     params.c2[i] = ((params.beta[1] * (params.nu_sigma_f1)) / (params.lambda_i[1] / 6)) * (params.phi1_0[i] + params.phi2_0[i]);
     params.c3[i] = ((params.beta[2] * (params.nu_sigma_f1)) / (params.lambda_i[2] / 6)) * (params.phi1_0[i] + params.phi2_0[i]);
@@ -19,7 +19,7 @@ void initialize_neutronics(Parameters &params) {
   }
 
   // Finite difference matrix for the second derivative using Crank-Nicolson
-  double D3[N][N];
+  float D3[N][N];
   // Initialize D3 to zero and set the main diagonal and off-diagonals
   for (int i = 0; i < N; ++i) {
     for (int j = 0; j < N; ++j) {
@@ -39,7 +39,7 @@ void initialize_neutronics(Parameters &params) {
   }
   D3[0][0] = 1.0 / (params.dz * params.dz);
   D3[N - 1][N - 1] = 1.0 / (params.dz * params.dz);
-  double I[N][N];
+  float I[N][N];
   for (int i = 0; i < N; ++i) {
     for (int j = 0; j < N; ++j) {
       I[i][j] = (i == j) ? 1.0 : 0.0;
@@ -61,15 +61,15 @@ void initialize_neutronics(Parameters &params) {
 }
 
 // Simple sine approximation function (using a few terms from the Taylor series)
-double approx_sin(double x) {
+float approx_sin(float x) {
   // Sin(x) ≈ x - x^3 / 6 + x^5 / 120 (valid for small x)
-  double x2 = x * x;
+  float x2 = x * x;
   return x - (x2 * x) / 6.0 + (x2 * x2 * x) / 120.0;
 }
 
 void initialize_thermal_hydraulics(Parameters &params) {
   for (int i = 0; i < N; ++i) {
-    double position = static_cast<double>(i) * params.L / (N - 1);
+    float position = static_cast<float>(i) * params.L / (N - 1);
     params.initialS[i] = params.bc_s0 + (params.bc_sL - params.bc_s0) * ((0.5 + 0.5 * approx_sin(M_PI * position / (params.L * 2))) * 0.8);
     params.initialG[i] = params.bc_g0 + (params.bc_gL - params.bc_g0) * ((0.5 + 0.5 * approx_sin(M_PI * position / (params.L * 2))) * 1.05);
   }
@@ -96,7 +96,7 @@ void initialize_thermal_hydraulics(Parameters &params) {
 
 void initialize_heat_exchanger_1(Parameters &params) {
   for (int i = 0; i < Nx; ++i) {
-    double position = static_cast<double>(i) * params.L_HX / (Nx - 1);
+    float position = static_cast<float>(i) * params.L_HX / (Nx - 1);
     params.u_init[i] = params.u_L + (params.u_L - params.u_H) * (0.5 + 0.5 * approx_sin(M_PI * (position / params.L_HX)));
     params.v_init[i] = params.v_L + (params.v_L - params.v_H) * (0.5 + 0.5 * approx_sin(M_PI * (position / params.L_HX)) * 1.05);
   }
@@ -116,7 +116,7 @@ void initialize_heat_exchanger_1(Parameters &params) {
 
 void initialize_heat_exchanger_2(Parameters &params) {
   for (int i = 0; i < Nx; ++i) {
-    double position = static_cast<double>(i) * params.L_HX2 / (Nx - 1);
+    float position = static_cast<float>(i) * params.L_HX2 / (Nx - 1);
     params.u2_init[i] = params.u2_L + (params.u2_H - params.u2_L) * (0.5 + 0.7 * approx_sin(M_PI * (position / params.L_HX2)));
     params.v2_init[i] = params.v2_L + (params.v2_H - params.v2_L) * (0.5 + 0.7 * approx_sin(M_PI * (position / params.L_HX2)) * 1.05);
   }

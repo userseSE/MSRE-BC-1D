@@ -1,15 +1,15 @@
 #include "reactivity.hpp"
 #include "parameters.hpp"
 
-void reactivity(const double temperature_fuel[N], const double temperature_graphite[N], 
-                int step, int time_span, Parameters& params, double rho[N]) {
+void reactivity(const float temperature_fuel[N], const float temperature_graphite[N], 
+                int step, int time_span, Parameters& params, float rho[N]) {
 
-    double rho_feedback[N]; // Array for reactivity feedback
-    double react[N];   // Array for reactivity insertion
-    double max_rho_change = params.max_rho_change;
+    float rho_feedback[N]; // Array for reactivity feedback
+    float react[N];   // Array for reactivity insertion
+    float max_rho_change = params.max_rho_change;
 
     // Determine the reactivity insertion based on the step
-    double reactdata = (step < time_span / 2) ? 0.0 : (rho_insertion / N) * 1e-5;
+    float reactdata = (step < time_span / 2) ? 0.0 : (rho_insertion / N) * 1e-5;
 
     // Initialize reactivity insertion and reactivity feedback arrays
     for (int i = 0; i < N; ++i) { 
@@ -20,8 +20,8 @@ void reactivity(const double temperature_fuel[N], const double temperature_graph
     // Calculate reactivity feedback based on temperature differences
     for (int i = 0; i < N; ++i) {
         // Calculate fuel and graphite temperature differences
-        double fuel_diff = (temperature_fuel[i] - params.initialS[i]) * params.alpha_f;
-        double graphite_diff = (temperature_graphite[i] - params.initialG[i]) * params.alpha_g;
+        float fuel_diff = (temperature_fuel[i] - params.initialS[i]) * params.alpha_f;
+        float graphite_diff = (temperature_graphite[i] - params.initialG[i]) * params.alpha_g;
 
         // Sum the fuel and graphite contributions to reactivity feedback
         rho_feedback[i] = fuel_diff + graphite_diff;

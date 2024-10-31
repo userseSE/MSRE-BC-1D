@@ -5,7 +5,7 @@
 // #include <cmath>
 #include <Eigen/Dense>
 
-void invert_LU(double A[N][N]) {
+void invert_LU(float A[N][N]) {
     // Step 1: Convert the input array to an Eigen matrix (try using dynamic-size MatrixXd)
     Eigen::MatrixXd eigen_A(N, N);
     for (int i = 0; i < N; ++i) {
@@ -25,8 +25,8 @@ void invert_LU(double A[N][N]) {
     }
 }
 // // Function to convert CSR matrix to Eigen sparse matrix
-// void csr_multiply(const CSRMatrix &A, const double *x, double *result) {
-//     memset(result, 0, N * sizeof(double)); // Initialize result vector to zero
+// void csr_multiply(const CSRMatrix &A, const float *x, float *result) {
+//     memset(result, 0, N * sizeof(float)); // Initialize result vector to zero
 //     for (int i = 0; i < N; ++i) {
 //         for (int j = A.row_pointers[i]; j < A.row_pointers[i + 1]; ++j) {
 //             result[i] += A.values[j] * x[A.col_indices[j]];
@@ -36,33 +36,33 @@ void invert_LU(double A[N][N]) {
 
 // // Jacobi method for inverting sparse matrices in CSR format
 // void jacobi_inverse_sparse(const CSRMatrix &A, CSRMatrix &A_inv) {
-//     double x[N];           // Solution vector for each column of the inverse
-//     double b[N];           // Identity column vector
-//     double r[N];           // Residual
+//     float x[N];           // Solution vector for each column of the inverse
+//     float b[N];           // Identity column vector
+//     float r[N];           // Residual
 //     const int max_iter = 1000;   // Maximum iterations
-//     const double tolerance = 1e-6; // Tolerance for convergence
+//     const float tolerance = 1e-6; // Tolerance for convergence
     
 //     // Iterate over each column to compute each column of the inverse
 //     for (int k = 0; k < N; ++k) {
 //         // Initialize b as the k-th column of the identity matrix
-//         memset(b, 0, N * sizeof(double));
+//         memset(b, 0, N * sizeof(float));
 //         b[k] = 1.0;
 
 //         // Initial guess x = 0
-//         memset(x, 0, N * sizeof(double));
+//         memset(x, 0, N * sizeof(float));
 
 //         // Jacobi iteration
 //         for (int iter = 0; iter < max_iter; ++iter) {
 //             bool converged = true;
 
 //             for (int i = 0; i < N; ++i) {
-//                 double sum = 0.0;
+//                 float sum = 0.0;
 //                 for (int j = A.row_pointers[i]; j < A.row_pointers[i + 1]; ++j) {
 //                     if (A.col_indices[j] != i) {
 //                         sum += A.values[j] * x[A.col_indices[j]];
 //                     }
 //                 }
-//                 double new_xi = (b[i] - sum) / A.values[A.row_pointers[i]]; // A(i, i) is the diagonal
+//                 float new_xi = (b[i] - sum) / A.values[A.row_pointers[i]]; // A(i, i) is the diagonal
 //                 if (std::fabs(new_xi - x[i]) > tolerance) {
 //                     converged = false;
 //                 }

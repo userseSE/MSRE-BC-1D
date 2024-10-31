@@ -2,8 +2,8 @@
 #include "ode_solver_th.hpp"
 #include "parameters.hpp"
 
-void pde_to_ode_th(double t, const double y[length_th], double dydt[length_th],
-                   Parameters &params, const double q_prime[N]) {
+void pde_to_ode_th(float t, const float y[length_th], float dydt[length_th],
+                   Parameters &params, const float q_prime[N]) {
   for (int i = 0; i < N; ++i) {
     // Start with the matrix-vector multiplication part
     dydt[i] = 0;
@@ -31,8 +31,8 @@ void pde_to_ode_th(double t, const double y[length_th], double dydt[length_th],
   // }
 };
 
-void thermal_hydraulics(double y_th[length_th], const double q_prime[N],
-                        double Ts_core_0, int step, Parameters &params) {
+void thermal_hydraulics(float y_th[length_th], const float q_prime[N],
+                        float Ts_core_0, int step, Parameters &params) {
   // std::cout << "thermal_hydraulics called" << std::endl;
   // Set boundary conditions
   y_th[0] = Ts_core_0;
@@ -40,7 +40,7 @@ void thermal_hydraulics(double y_th[length_th], const double q_prime[N],
   y_th[2 * N - 1] = params.fixed_boundary_gL;
 
   // Initial condition vector
-  double y0[2 * N];
+  float y0[2 * N];
   if (step == 0) {
     for (int i = 0; i < N; ++i) {
       y_th[i] = params.initialS[i];

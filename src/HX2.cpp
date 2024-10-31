@@ -2,13 +2,13 @@
 #include "parameters.hpp"
 #include "ode_solver_HX.hpp"
 
-void pde_to_ode_hx2(double t, const double y[length_hx], double dydt[length_hx], Parameters &params) {
+void pde_to_ode_hx2(float t, const float y[length_hx], float dydt[length_hx], Parameters &params) {
     // Split the input state vector y into u and v
-    const double* u = &y[0];    // u is the first half of y
-    const double* v = &y[Nx];   // v is the second half of y
+    const float* u = &y[0];    // u is the first half of y
+    const float* v = &y[Nx];   // v is the second half of y
 
-    double du_dt[Nx] = {0};    // Array to store the derivative of u
-    double dv_dt[Nx] = {0};    // Array to store the derivative of v
+    float du_dt[Nx] = {0};    // Array to store the derivative of u
+    float dv_dt[Nx] = {0};    // Array to store the derivative of v
 
     // Compute du_dt and dv_dt using the provided constants
     for (int i = 0; i < Nx; ++i) {
@@ -33,12 +33,12 @@ void pde_to_ode_hx2(double t, const double y[length_hx], double dydt[length_hx],
     }
 }
 
-void HX2(double y_hx2[length_hx], double Ts_HX2_L, int step, Parameters &params) {
+void HX2(float y_hx2[length_hx], float Ts_HX2_L, int step, Parameters &params) {
     // Set boundary conditions
     y_hx2[Nx + 1] = params.v2_L;    // Fixed boundary condition at v[0]
     y_hx2[length_hx - 1] = params.v2_H; // Fixed boundary condition at v[L]
 
-    double u[Nx], v[Nx];
+    float u[Nx], v[Nx];
     if (step == 0) {
         for (int i = 0; i < Nx; ++i) {
             u[i] = params.u2_init[i];
@@ -53,7 +53,7 @@ void HX2(double y_hx2[length_hx], double Ts_HX2_L, int step, Parameters &params)
     u[Nx - 1] = Ts_HX2_L;
 
     // Initial condition vector y0
-    double y0[length_hx];
+    float y0[length_hx];
     if (step == 0) {
         for (int i = 0; i < Nx; ++i) {
             y0[i] = params.u2_init[i];

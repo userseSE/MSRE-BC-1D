@@ -5,36 +5,36 @@
 // Define a class for the Runge-Kutta-Fehlberg (RKF45) method
 class RungeKuttaFehlberg45 {
 public:
-  double tol;          // Tolerance for adaptive step-size control
-  double h_min, h_max; // Min and max step sizes
+  float tol;          // Tolerance for adaptive step-size control
+  float h_min, h_max; // Min and max step sizes
 
-  RungeKuttaFehlberg45(double tolerance = 1e-8, double min_step = 1e-10, double max_step = 0.1) : tol(tolerance), h_min(min_step), h_max(max_step) {}
+  RungeKuttaFehlberg45(float tolerance = 1e-8, float min_step = 1e-10, float max_step = 0.1) : tol(tolerance), h_min(min_step), h_max(max_step) {}
 
-  void solve(const OdeFuncPointer ode_func, double y[length_neutr], int step,
-             Parameters &params, const double Keff[N], double t0 = 0.0,
-             double t1 = 1.0) {
-    double t = t0;
-    double h = (t1 - t0) / 100; // Initial step size (can be adjusted)
+  void solve(const OdeFuncPointer ode_func, float y[length_neutr], int step,
+             Parameters &params, const float Keff[N], float t0 = 0.0,
+             float t1 = 1.0) {
+    float t = t0;
+    float h = (t1 - t0) / 100; // Initial step size (can be adjusted)
 
     while (t < t1) {
       if (t + h > t1)
         h = t1 - t; // Adjust final step size to reach t1
 
       // Perform a single RKF45 step
-      double y_new[length_neutr], error_estimate[length_neutr];
+      float y_new[length_neutr], error_estimate[length_neutr];
       rkf45_step(ode_func, t, y, params, Keff, h, y_new, error_estimate);
 
       // Estimate the error and adjust step size
-      double error_estimate_norm = 0.0;
-      double y_norm = 0.0;
+      float error_estimate_norm = 0.0;
+      float y_norm = 0.0;
       // error_estimate_norm= stableNorm(error_estimate, length_neutr);
       // y_norm=stableNorm(y, length_neutr);
       calculateNorm(error_estimate, error_estimate_norm);
       calculateNorm(y, y_norm);
-      double error_norm = error_estimate_norm / y_norm;
+      float error_norm = error_estimate_norm / y_norm;
 
-      double safety_factor = 0.9; // Safety factor for step-size control
-      double scale = safety_factor * std::pow(tol / error_norm, 0.25);
+      float safety_factor = 0.9; // Safety factor for step-size control
+      float scale = safety_factor * std::pow(tol / error_norm, 0.25);
 
       if (error_norm < tol) {
         t += h;
@@ -42,20 +42,26 @@ public:
           y[i] = y_new[i];
         }
       }
-      double h_temp=0.0;
+      float h_temp=0.0;
       clamp(h_temp, scale, 0.5,2.0);
       h *= h_temp;
       clamp(h,h, h_min, h_max);
+      // h *= std::clamp(scale, 0.5f, 2.0f);
+      // h = std::clamp(h, h_min, h_max);
     }
   }
 
 private:
-void clamp(double& result, const double& value, const double& min_val, const double& max_val) {
+void clamp(float& result, const float& value, const float& min_val, const float& max_val) {
     if (value < min_val) result= min_val;
     if (value > max_val) result= max_val;
     if (value >=min_val && value<=max_val) result= value;
 }
-  void calculateNorm(const double arr[length_neutr], double &norm) {
+//  float stableNorm(const float* arr, int N) {
+//     Eigen::Map<const Eigen::VectorXf> eigen_vec(arr, N); // Map array to Eigen vector
+//     return eigen_vec.stableNorm();
+//  }
+  void calculateNorm(const float arr[length_neutr], float &norm) {
     norm = 0.0;
     for (int i = 0; i < length_neutr; ++i) {
         norm += arr[i] * arr[i];
@@ -63,41 +69,41 @@ void clamp(double& result, const double& value, const double& min_val, const dou
     norm = std::sqrt(norm);
 }
 
-  void clamp(double &value, double low, double high) {
-    if (value < low) {
-      value = low;
-    } else if (value > high) {
-      value = high;
-    }
-  }
+  // void clamp(float &value, float low, float high) {
+  //   if (value < low) {
+  //     value = low;
+  //   } else if (value > high) {
+  //     value = high;
+  //   }
+  // }
 
-  void rkf45_step(const OdeFuncPointer ode_func, double t,
-                  const double y[length_neutr], Parameters &params,
-                  const double Keff[N], double h, double y_new[length_neutr],
-                  double error_estimate[length_neutr]) {
+  void rkf45_step(const OdeFuncPointer ode_func, float t,
+                  const float y[length_neutr], Parameters &params,
+                  const float Keff[N], float h, float y_new[length_neutr],
+                  float error_estimate[length_neutr]) {
     // std::cout << "Neutronics RKF45 step called" << std::endl;
 
     // RKF45 coefficients
-    static const double a2 = 0.25, a3 = 3.0 / 8.0, a4 = 12.0 / 13.0, a5 = 1.0,
+    static const float a2 = 0.25, a3 = 3.0 / 8.0, a4 = 12.0 / 13.0, a5 = 1.0,
                         a6 = 0.5;
-    static const double b2 = 0.25;
-    static const double b3[] = {3.0 / 32.0, 9.0 / 32.0};
-    static const double b4[] = {1932.0 / 2197.0, -7200.0 / 2197.0,
+    static const float b2 = 0.25;
+    static const float b3[] = {3.0 / 32.0, 9.0 / 32.0};
+    static const float b4[] = {1932.0 / 2197.0, -7200.0 / 2197.0,
                                 7296.0 / 2197.0};
-    static const double b5[] = {439.0 / 216.0, -8.0, 3680.0 / 513.0,
+    static const float b5[] = {439.0 / 216.0, -8.0, 3680.0 / 513.0,
                                 -845.0 / 4104.0};
-    static const double b6[] = {-8.0 / 27.0, 2.0, -3544.0 / 2565.0,
+    static const float b6[] = {-8.0 / 27.0, 2.0, -3544.0 / 2565.0,
                                 1859.0 / 4104.0, -11.0 / 40.0};
 
-    static const double c[] = {16.0 / 135.0,      0.0,         6656.0 / 12825.0,
+    static const float c[] = {16.0 / 135.0,      0.0,         6656.0 / 12825.0,
         28561.0 / 56430.0, -9.0 / 50.0, 2.0 / 55.0}; // 5th order solution
-    static const double c_star[] = {25.0 / 216.0,    0.0,
+    static const float c_star[] = {25.0 / 216.0,    0.0,
                                     1408.0 / 2565.0, 2197.0 / 4104.0,
                                     -1.0 / 5.0,      0.0}; // 4th order solution
 
     // Compute the stages
-    double k1[length_neutr], k2[length_neutr], k3[length_neutr], k4[length_neutr], k5[length_neutr], k6[length_neutr];
-    double result[length_neutr];
+    float k1[length_neutr], k2[length_neutr], k3[length_neutr], k4[length_neutr], k5[length_neutr], k6[length_neutr];
+    float result[length_neutr];
 
     // Ensure k1, k2, etc. are properly initialized to zero
     for (int i = 0; i < length_neutr; ++i) {
@@ -142,7 +148,7 @@ void clamp(double& result, const double& value, const double& min_val, const dou
     ode_func(t + a6 * h, result, k6, params, Keff);
 
     // Compute the 4th and 5th order estimates (y_new and y_star)
-    double y_star[length_neutr];
+    float y_star[length_neutr];
     for (int i = 0; i < length_neutr; ++i) {
       y_new[i] = y[i] + h * (c[0] * k1[i] + c[2] * k3[i] + c[3] * k4[i] + c[4] * k5[i] + c[5] * k6[i]);
       y_star[i] = y[i] + h * (c_star[0] * k1[i] + c_star[2] * k3[i] + c_star[3] * k4[i] + c_star[4] * k5[i]);
@@ -154,8 +160,8 @@ void clamp(double& result, const double& value, const double& min_val, const dou
     }
   }
 };
-void ode_solver_neutr(double y[length_neutr], OdeFuncPointer ode_func, int step,
-                      Parameters &params, const double Keff[N]) {
+void ode_solver_neutr(float y[length_neutr], OdeFuncPointer ode_func, int step,
+                      Parameters &params, const float Keff[N]) {
 
   RungeKuttaFehlberg45 solver;
 

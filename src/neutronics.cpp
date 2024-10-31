@@ -5,22 +5,22 @@
 #include "parameters.hpp"
 
 // Define the function pointer type
-// typedef void (*OdeFuncPointer)(double, const double[length_neutr],
-// double[length_neutr], Parameters &params, const double Keff[N]);
+// typedef void (*OdeFuncPointer)(float, const float[length_neutr],
+// float[length_neutr], Parameters &params, const float Keff[N]);
 
 // Standalone function definition
-void pde_to_ode_neutronics(double t, const double y[length_neutr],
-                           double dydt[length_neutr], Parameters &params,
-                           const double Keff[N]) {
+void pde_to_ode_neutronics(float t, const float y[length_neutr],
+                           float dydt[length_neutr], Parameters &params,
+                           const float Keff[N]) {
   // std::cout << "Neutronics PDE to ODE solver called" << std::endl;
-  double lambda_ci[N]; // For summing contributions
+  float lambda_ci[N]; // For summing contributions
   // Initialize lambda_ci to zero
   for (int i = 0; i < N; ++i) {
     lambda_ci[i] = 0.0;
   }
   // Delayed neutron precursor contributions
   for (int i = 0; i < 6; ++i) {
-    const double *ci = &y[(i + 2) * N]; // Access ci for each group
+    const float *ci = &y[(i + 2) * N]; // Access ci for each group
     for (int j = 0; j < N; ++j) {
       lambda_ci[j] +=
           params.lambda_i[i] * ci[j]; // Sum contributions to lambda_ci
@@ -28,7 +28,7 @@ void pde_to_ode_neutronics(double t, const double y[length_neutr],
   }
 
   // Compute the right-hand side for phi1 (fast group)
-  // double rhs_phi1[N];
+  // float rhs_phi1[N];
   // for (int i = 0; i < N; ++i) {
   //     rhs_phi1[i] = 0.0;
   //     for (int j = 0; j < N; ++j) {
@@ -42,7 +42,7 @@ void pde_to_ode_neutronics(double t, const double y[length_neutr],
   //     params.Beta) * ((params.nu_sigma_f1 + params.nu_sigma_f2) /
   //     Keff[i]))<<std::endl;
   // }
-  double rhs_phi1[N];
+  float rhs_phi1[N];
   for (int i = 0; i < N; ++i) {
     rhs_phi1[i] = 0.0;
     // Perform sparse matrix-vector multiplication for B1_csr * y
@@ -66,7 +66,7 @@ void pde_to_ode_neutronics(double t, const double y[length_neutr],
   // }
 
   // Compute the right-hand side for phi2 (thermal group)
-    // double rhs_phi2[N];
+    // float rhs_phi2[N];
     // for (int i = 0; i < N; ++i) {
     //   rhs_phi2[i] = 0.0;
     //   for (int j = 0; j < N; ++j) {
@@ -76,7 +76,7 @@ void pde_to_ode_neutronics(double t, const double y[length_neutr],
     //   rhs_phi2[i] += params.dt * params.V2 *
     //                  (-params.sigma_a2 * y[N + i] + params.sigma_s12 * y[i]);
     // }
-  double rhs_phi2[N];
+  float rhs_phi2[N];
   for (int i = 0; i < N; ++i) {
     rhs_phi2[i] = 0.0;
 
@@ -95,32 +95,32 @@ void pde_to_ode_neutronics(double t, const double y[length_neutr],
   // }
 
   // Solve for the new fluxes (phi1_new and phi2_new)
-    // double phi1_new[N];
-    // double phi2_new[N];
-    // for (int i = 0; i < N; ++i) {
-    //   phi1_new[i] = 0.0;
-    //   phi2_new[i] = 0.0;
-    //   for (int j = 0; j < N; ++j) {
-    //     phi1_new[i] += params.A1[i][j] * rhs_phi1[j]; // Solve A1 * rhs_phi1
-    //     phi2_new[i] += params.A2[i][j] * rhs_phi2[j]; // Solve A2 * rhs_phi2
-    //   }
-    // }
-  double phi1_new[N];
-  double phi2_new[N];
-  for (int i = 0; i < N; ++i) {
-    phi1_new[i] = 0.0;
-    phi2_new[i] = 0.0;
-    // Sparse matrix-vector multiplication for A1_csr * rhs_phi1
-    for (int idx = params.A1_csr_inv.row_pointers[i]; idx < params.A1_csr_inv.row_pointers[i + 1]; ++idx) {
-      int j = params.A1_csr_inv.col_indices[idx];
-      phi1_new[i] += params.A1_csr_inv.values[idx] * rhs_phi1[j];
+    float phi1_new[N];
+    float phi2_new[N];
+    for (int i = 0; i < N; ++i) {
+      phi1_new[i] = 0.0;
+      phi2_new[i] = 0.0;
+      for (int j = 0; j < N; ++j) {
+        phi1_new[i] += params.A1[i][j] * rhs_phi1[j]; // Solve A1 * rhs_phi1
+        phi2_new[i] += params.A2[i][j] * rhs_phi2[j]; // Solve A2 * rhs_phi2
+      }
     }
-    // Sparse matrix-vector multiplication for A2_csr * rhs_phi2
-    for (int idx = params.A2_csr_inv.row_pointers[i]; idx < params.A2_csr_inv.row_pointers[i + 1]; ++idx) {
-      int j = params.A2_csr_inv.col_indices[idx];
-      phi2_new[i] += params.A2_csr_inv.values[idx] * rhs_phi2[j];
-    }
-  }
+  // float phi1_new[N];
+  // float phi2_new[N];
+  // for (int i = 0; i < N; ++i) {
+  //   phi1_new[i] = 0.0;
+  //   phi2_new[i] = 0.0;
+  //   // Sparse matrix-vector multiplication for A1_csr * rhs_phi1
+  //   for (int idx = params.A1_csr_inv.row_pointers[i]; idx < params.A1_csr_inv.row_pointers[i + 1]; ++idx) {
+  //     int j = params.A1_csr_inv.col_indices[idx];
+  //     phi1_new[i] += params.A1_csr_inv.values[idx] * rhs_phi1[j];
+  //   }
+  //   // Sparse matrix-vector multiplication for A2_csr * rhs_phi2
+  //   for (int idx = params.A2_csr_inv.row_pointers[i]; idx < params.A2_csr_inv.row_pointers[i + 1]; ++idx) {
+  //     int j = params.A2_csr_inv.col_indices[idx];
+  //     phi2_new[i] += params.A2_csr_inv.values[idx] * rhs_phi2[j];
+  //   }
+  // }
 
   // for (int i = 0; i < N; ++i) {
   //     for (int j = 0; j < N; ++j) {
@@ -137,7 +137,7 @@ void pde_to_ode_neutronics(double t, const double y[length_neutr],
 
   // Compute dci/dt for delayed neutron precursors
   for (int i = 0; i < 6; ++i) {
-    // double *dci_dt = &dydt[(i + 2) * N];
+    // float *dci_dt = &dydt[(i + 2) * N];
     for (int j = 0; j < N; ++j) {
       dydt[(i + 2) * N + j] = params.beta[i] *
                                   (params.nu_sigma_f1 + params.nu_sigma_f2) *
@@ -152,10 +152,10 @@ void pde_to_ode_neutronics(double t, const double y[length_neutr],
 }
 
 // Modified neutronics function using the function pointer
-void neutronics(double y_n[length_neutr], const double rho[N], int step,
+void neutronics(float y_n[length_neutr], const float rho[N], int step,
                 Parameters &params) {
   // std::cout << "Neutronics is called for step " << step << std::endl;
-  double Keff[N] = {0};
+  float Keff[N] = {0};
   for (int i = 0; i < N; ++i) {
     Keff[i] = (1.0 / (1.0 + rho[i]));
   }

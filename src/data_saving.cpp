@@ -10,7 +10,7 @@
 namespace fs = std::filesystem;
 
 // Helper function to export a 1D array to CSV
-void export_to_csv(const double* data, int size, const std::string& folder, const std::string& filename) {
+void export_to_csv(const float* data, int size, const std::string& folder, const std::string& filename) {
     std::cout << "Exporting to CSV file: " << folder << "/" << filename << std::endl;
     fs::create_directories(folder);  // Create folder if it doesn't exist
     std::ofstream file(folder + "/" + filename);
@@ -21,7 +21,7 @@ void export_to_csv(const double* data, int size, const std::string& folder, cons
 }
 
 // // Helper function to export a 2D array to CSV
-// void export_matrix_to_csv(const double* data, int rows, int cols, const std::string& folder, const std::string& filename) {
+// void export_matrix_to_csv(const float* data, int rows, int cols, const std::string& folder, const std::string& filename) {
 //     fs::create_directories(folder);  // Create folder if it doesn't exist
 //     std::ofstream file(folder + "/" + filename);
 //     for (int i = 0; i < rows; ++i) {
@@ -36,10 +36,10 @@ void export_to_csv(const double* data, int size, const std::string& folder, cons
 //     file.close();
 // }
 
-void save_results(const double rho_matrix[time_span], 
-                  const double phi_middle_matrix[time_span*2],
-                  const double ci_middle_matrix[time_span*6], 
-                  const double temperature_fuel_middle_matrix[time_span],
+void save_results(const float rho_matrix[time_span], 
+                  const float phi_middle_matrix[time_span*2],
+                  const float ci_middle_matrix[time_span*6], 
+                  const float temperature_fuel_middle_matrix[time_span],
                   const std::string& folder) {
     // Export each data vector to a CSV file in the specific folder
     export_to_csv(rho_matrix, time_span, folder, "rho_matrix.csv");
@@ -57,11 +57,11 @@ void save_results(const double rho_matrix[time_span],
     std::cout << "Results saved to CSV files in " << folder << "." << std::endl;
 }
 
-void save_spacial_results(const double rho[N], 
-                          const double y_n[length_neutr], 
-                          const double y_th[length_th], 
-                          const double y_hx1[length_hx], 
-                          const double y_hx2[length_hx], 
+void save_spacial_results(const float rho[N], 
+                          const float y_n[length_neutr], 
+                          const float y_th[length_th], 
+                          const float y_hx1[length_hx], 
+                          const float y_hx2[length_hx], 
                           const std::string& folder) {
     // Export the 1D arrays to CSV
     export_to_csv(rho, N, folder, "rho.csv");
