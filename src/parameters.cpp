@@ -4,7 +4,6 @@
 #include "matrix_LU.hpp"
 #include "parameters.hpp"
 #include "csr_matrix.hpp"
-#include <iostream>
 
 void initialize_neutronics(Parameters &params) {
 

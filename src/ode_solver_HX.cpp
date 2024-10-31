@@ -1,9 +1,6 @@
 #include "ode_solver_HX.hpp"
 #include "parameters.hpp"
-#include <algorithm>
 #include <cmath>
-#include <iostream>
-#include <Eigen>
 // Define a class for the Runge-Kutta-Fehlberg (RKF45) method
 class RungeKuttaFehlberg45_hx {
 public:
@@ -31,8 +28,10 @@ public:
       // Estimate the error and adjust step size
       double error_estimate_norm = 0.0;
       double y_norm = 0.0;
-      error_estimate_norm= stableNorm(error_estimate, length_hx);
-      y_norm=stableNorm(y, length_hx);
+      // error_estimate_norm= stableNorm(error_estimate, length_hx);
+      // y_norm=stableNorm(y, length_hx);
+      calculateNorm(error_estimate, error_estimate_norm);
+      calculateNorm(y, y_norm);
       double error_norm = error_estimate_norm / y_norm;
 
       double safety_factor = 0.9; // Safety factor for step-size control
@@ -44,17 +43,26 @@ public:
           y[i] = y_new[i];
         }
       }
-      h *= std::clamp(scale, 0.5,2.0);
-      h = std::clamp(h, h_min, h_max);
+      double h_temp=0.0;
+      clamp(h_temp, scale, 0.5,2.0);
+      h *= h_temp;
+      clamp(h,h, h_min, h_max);
     }
   }
 
 private:
-  double stableNorm(const double* arr, int N) {
-    Eigen::Map<const Eigen::VectorXd> eigen_vec(arr, N); // Map array to Eigen vector
-    return eigen_vec.stableNorm();
+void clamp(double& result, const double& value, const double& min_val, const double& max_val) {
+    if (value < min_val) result= min_val;
+    if (value > max_val) result= max_val;
+    if (value >=min_val && value<=max_val) result= value;
 }
-
+void calculateNorm(const double arr[length_hx], double &norm) {
+    norm = 0.0;
+    for (int i = 0; i < length_hx; ++i) {
+        norm += arr[i] * arr[i];
+    }
+    norm = std::sqrt(norm);
+}
   void clamp(double &value, double low, double high) {
     if (value < low) {
       value = low;

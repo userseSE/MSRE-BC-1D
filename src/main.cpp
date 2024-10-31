@@ -6,9 +6,7 @@
 #include "reactivity.hpp"
 #include "thermal_hydraulics.hpp"
 
-#include <ctime>
 #include <iostream>
-#include <numeric>
 
 void run_simulation(int simulation_id) {
   Parameters params;
@@ -99,7 +97,11 @@ void run_simulation(int simulation_id) {
     // std::cout << std::endl;
     reactivity(y_th, y_th + N, step, time_span, params, rho);
     std::cout << "rho[N/2]: " << rho[N/2] << std::endl;
-    rho_matrix[step] = (std::accumulate(rho, rho + N, 0.0) / N) * 1e5;
+    for (int i = 0; i < N; i++){
+      rho_matrix[step] += rho[i];
+    }
+    rho_matrix[step] = (rho_matrix[step]/N) * 1e5;
+    // rho_matrix[step] = (std::accumulate(rho, rho + N, 0.0) / N) * 1e5;
     // rho_matrix[step] = rho[N / 2] * 1e5;
   }
 

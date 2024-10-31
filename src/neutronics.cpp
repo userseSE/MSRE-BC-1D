@@ -1,5 +1,4 @@
 #include <cmath>
-#include <iostream>
 
 #include "neutronics.hpp"
 #include "ode_solver_neutronics.hpp"
@@ -155,7 +154,7 @@ void pde_to_ode_neutronics(double t, const double y[length_neutr],
 // Modified neutronics function using the function pointer
 void neutronics(double y_n[length_neutr], const double rho[N], int step,
                 Parameters &params) {
-  std::cout << "Neutronics is called for step " << step << std::endl;
+  // std::cout << "Neutronics is called for step " << step << std::endl;
   double Keff[N] = {0};
   for (int i = 0; i < N; ++i) {
     Keff[i] = (1.0 / (1.0 + rho[i]));

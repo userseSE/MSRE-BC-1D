@@ -1,4 +1,3 @@
-#include <iostream>
 #include "HX2.hpp"
 #include "parameters.hpp"
 #include "ode_solver_HX.hpp"
@@ -35,7 +34,6 @@ void pde_to_ode_hx2(double t, const double y[length_hx], double dydt[length_hx],
 }
 
 void HX2(double y_hx2[length_hx], double Ts_HX2_L, int step, Parameters &params) {
-    std::cout<<"HX2 is called"<<std::endl;
     // Set boundary conditions
     y_hx2[Nx + 1] = params.v2_L;    // Fixed boundary condition at v[0]
     y_hx2[length_hx - 1] = params.v2_H; // Fixed boundary condition at v[L]

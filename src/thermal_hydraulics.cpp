@@ -1,7 +1,6 @@
 #include "thermal_hydraulics.hpp"
 #include "ode_solver_th.hpp"
 #include "parameters.hpp"
-#include <iostream>
 
 void pde_to_ode_th(double t, const double y[length_th], double dydt[length_th],
                    Parameters &params, const double q_prime[N]) {
@@ -34,7 +33,7 @@ void pde_to_ode_th(double t, const double y[length_th], double dydt[length_th],
 
 void thermal_hydraulics(double y_th[length_th], const double q_prime[N],
                         double Ts_core_0, int step, Parameters &params) {
-  std::cout << "thermal_hydraulics called" << std::endl;
+  // std::cout << "thermal_hydraulics called" << std::endl;
   // Set boundary conditions
   y_th[0] = Ts_core_0;
   y_th[N - 1] = params.fixed_boundary_sL;
