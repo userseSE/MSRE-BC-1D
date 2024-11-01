@@ -43,14 +43,10 @@ void save_results(const float rho_matrix[time_span],
                   const std::string& folder) {
     // Export each data vector to a CSV file in the specific folder
     export_to_csv(rho_matrix, time_span, folder, "rho_matrix.csv");
-
     // Combine phi1_middle_matrix and phi2_middle_matrix into one matrix for export
-
     export_to_csv(phi_middle_matrix, time_span * 2, folder, "phi_middle_matrix.csv");
-
     // Export ci_middle_matrix
     export_to_csv(ci_middle_matrix, time_span * 6, folder, "ci_middle_matrix.csv");
-
     // Export temperature_fuel_middle_matrix
     export_to_csv(temperature_fuel_middle_matrix, time_span, folder, "temperature_fuel_middle_matrix.csv");
 

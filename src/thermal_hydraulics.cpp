@@ -6,9 +6,10 @@ void pde_to_ode_th(float t, const float y[length_th], float dydt[length_th],
                    Param_Thermal &params, const float q_prime[N]) {
   for (int i = 0; i < N; ++i) {
     // Start with the matrix-vector multiplication part
-    dydt[i] = 0;
-    for (int j = 0; j < N; ++j) {
-        dydt[i] += params.a_th * params.AT[i][j] * y[j];
+    dydt[i] = 0.0;
+    for (int idx = params.AT_csr.row_pointers[i]; idx < params.AT_csr.row_pointers[i + 1]; ++idx) {
+      int j = params.AT_csr.col_indices[idx];
+        dydt[i] += params.a_th * params.AT_csr.values[idx] * y[j];
     }
     // Add the temperature difference term
     dydt[i] += params.b_th * (y[N+i] - y[i]);
@@ -31,9 +32,13 @@ void pde_to_ode_th(float t, const float y[length_th], float dydt[length_th],
   // }
 };
 
-void thermal_hydraulics(float y_th[length_th], const float q_prime[N],
+void thermal_hydraulics(float y_th[length_th], const float y_n[length_neutr],
                         float Ts_core_0, int step, Param_Thermal &params) {
   // std::cout << "thermal_hydraulics called" << std::endl;
+  float q_prime[N];
+  for (int i = 0; i < N; ++i) {
+      q_prime[i] = (y_n[i] + y_n[N + i]) * params.sigma_f * params.A / params.flux_to_power;
+  }
   // Set boundary conditions
   y_th[0] = Ts_core_0;
   y_th[N - 1] = params.fixed_boundary_sL;

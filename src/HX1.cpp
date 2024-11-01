@@ -12,9 +12,12 @@ void pde_to_ode_hx1(float t, const float y[length_hx], float dydt[length_hx], Pa
 
     // Compute du_dt and dv_dt using the provided constants
     for (int i = 0; i < Nx; ++i) {
-        for (int j = 0; j < Nx; ++j) {
-            du_dt[i] += params.C1_1 * params.A_HX[i][j] * u[j];
-            dv_dt[i] += params.C3_1 * params.A_HX[i][j] * v[j];
+        for (int idx = params.A_HX_csr.row_pointers[i]; idx < params.A_HX_csr.row_pointers[i + 1]; ++idx) {
+            int j = params.A_HX_csr.col_indices[idx];
+            du_dt[i] += params.A_HX_csr.values[idx] * u[j];
+            dv_dt[i] += params.A_HX_csr.values[idx] * v[j];
+            // du_dt[i] += params.C1_1 * params.A_HX[i][j] * u[j];
+            // dv_dt[i] += params.C3_1 * params.A_HX[i][j] * v[j];
         }
         du_dt[i] += params.C2_1 * (u[i] - v[i]);
         dv_dt[i] += params.C4_1 * (u[i] - v[i]);

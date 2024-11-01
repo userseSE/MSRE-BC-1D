@@ -14,15 +14,14 @@ void run_simulation(int simulation_id) {
   Param_HX1 params_hx1;
   Param_HX2 params_hx2;
   Param_React params_react;
-  initialize_neutronics(params_neutr);
-  initialize_thermal_hydraulics(params_th);
-  initialize_heat_exchanger_1(params_hx1);
-  initialize_heat_exchanger_2(params_hx2);
-  initialize_reactivity(params_react);
+  // initialize_neutronics(params_neutr);
+  // initialize_thermal_hydraulics(params_th);
+  // initialize_heat_exchanger_1(params_hx1);
+  // initialize_heat_exchanger_2(params_hx2);
+  // initialize_reactivity(params_react);
   // Initialization
   float rho[N];
   float y_n[length_neutr];
-
   float q_prime[N];
   float y_th[length_th];
   float y_hx1[length_hx];
@@ -56,17 +55,17 @@ void run_simulation(int simulation_id) {
     std::cout << "Simulation " << simulation_id << " - Time step: " << step << std::endl;
     neutronics(y_n, rho, step, params_neutr);
     std::cout << "y_n[100]: " << y_n[100] << std::endl;
-    for (int i = 0; i < N; ++i) {
-      q_prime[i] = (y_n[i] + y_n[N + i]) * params_neutr.sigma_f * params_neutr.A / params_neutr.flux_to_power;
-    }
-    std::cout << "q_prime[N/2]: " << q_prime[N/2] << std::endl;
+    // for (int i = 0; i < N; ++i) {
+    //   q_prime[i] = (y_n[i] + y_n[N + i]) * params_neutr.sigma_f * params_neutr.A / params_neutr.flux_to_power;
+    // }
+    // std::cout << "q_prime[N/2]: " << q_prime[N/2] << std::endl;
     phi_middle_matrix[step] = y_n[N / 2];
     phi_middle_matrix[step + time_span] = y_n[N / 2 + N];
     for (int i = 0; i < 6; ++i) {
       ci_middle_matrix[step + i*time_span] = y_n[(i * N + (i + 1) * N) / 2 + 2 * N];
     }
 
-    thermal_hydraulics(y_th, q_prime,Ts_HX1_0, step, params_th);
+    thermal_hydraulics(y_th, y_n,Ts_HX1_0, step, params_th);
     std::cout << "fuel_th[N/2]: " << y_th[N/4] << std::endl;
     float Ts_core_L = y_th[N - 1];
     temperature_fuel_middle_matrix[step] = y_th[N / 4];

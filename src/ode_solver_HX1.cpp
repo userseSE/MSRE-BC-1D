@@ -127,8 +127,7 @@ void calculateNorm(const float arr[length_hx], float &norm) {
 
     // Compute intermediate results for k4
     for (int i = 0; i < length_hx; ++i) {
-      result[i] =
-          y[i] + b4[0] * h * k1[i] + b4[1] * h * k2[i] + b4[2] * h * k3[i];
+      result[i] = y[i] + b4[0] * h * k1[i] + b4[1] * h * k2[i] + b4[2] * h * k3[i];
     }
     ode_func(t + a4 * h, result, k4, params);
 
