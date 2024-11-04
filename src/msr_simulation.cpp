@@ -1,10 +1,10 @@
+#include "msr_simulation.hpp"
 #include "HX1.hpp"
 #include "HX2.hpp"
 #include "neutronics.hpp"
 #include "parameters.hpp"
 #include "reactivity.hpp"
 #include "thermal_hydraulics.hpp"
-// #include <iostream>
 
 void msr_simulation() {
   Param_Neutronics params_neutr;
