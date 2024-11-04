@@ -33,13 +33,8 @@ void pde_to_ode_neutronics(float t, const float y[length_neutr],
       rhs_phi1[i] += params_neutr.B1_csr.values[idx] * y[j];
     }
     // Add the remaining terms as before
-    rhs_phi1[i] +=
-        params_neutr.dt * params_neutr.V1 *
-        (((-params_neutr.sigma_a1 +
-           (1.0 - params_neutr.Beta) *
-               ((params_neutr.nu_sigma_f1 + params_neutr.nu_sigma_f2) / Keff[i])) *
-          y[i]) +
-         lambda_ci[i]);
+    rhs_phi1[i] += params_neutr.dt * params_neutr.V1 * (((-params_neutr.sigma_a1 +
+           (1.0 - params_neutr.Beta) * ((params_neutr.nu_sigma_f1 + params_neutr.nu_sigma_f2) / Keff[i])) * y[i]) + lambda_ci[i]);
   }
   float rhs_phi2[N];
   for (int i = 0; i < N; ++i) {
@@ -72,10 +67,8 @@ void pde_to_ode_neutronics(float t, const float y[length_neutr],
   for (int i = 0; i < 6; ++i) {
     // float *dci_dt = &dydt[(i + 2) * N];
     for (int j = 0; j < N; ++j) {
-      dydt[(i + 2) * N + j] = params_neutr.beta[i] *
-                                  (params_neutr.nu_sigma_f1 + params_neutr.nu_sigma_f2) *
-                                  (y[j] + y[N + j]) -
-                              params_neutr.lambda_i[i] * y[(i + 2) * N + j];
+      dydt[(i + 2) * N + j] = params_neutr.beta[i] * (params_neutr.nu_sigma_f1 + params_neutr.nu_sigma_f2) *
+                                  (y[j] + y[N + j]) - params_neutr.lambda_i[i] * y[(i + 2) * N + j];
     }
   }
 }

@@ -4,9 +4,7 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/include",
-                "${workspaceFolder}/**",
-                "${workspaceFolder}/thirdparty/eigen",
-                "${workspaceFolder}/thirdparty/stdBLAS"
+                "${workspaceFolder}/**"
             ],
             "defines": [],
             "macFrameworkPath": [
@@ -14,8 +12,8 @@
                 "/Library/Frameworks"
             ],
             "compilerPath": "/usr/bin/clang++ -I${workspaceFolder}/include",
-            "cStandard": "c17",
-            "cppStandard": "c++17",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
             "intelliSenseMode": "macos-clang-x64"
         }
     ],

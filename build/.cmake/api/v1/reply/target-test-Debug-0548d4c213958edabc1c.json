@@ -11,8 +11,7 @@
 		"commands" : 
 		[
 			"add_executable",
-			"include_directories",
-			"target_include_directories"
+			"include_directories"
 		],
 		"files" : 
 		[
@@ -26,31 +25,19 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 22,
+				"line" : 17,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 12,
+				"line" : 10,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 15,
-				"parent" : 0
-			},
-			{
-				"command" : 1,
-				"file" : 0,
-				"line" : 16,
-				"parent" : 0
-			},
-			{
-				"command" : 2,
-				"file" : 0,
-				"line" : 29,
+				"line" : 11,
 				"parent" : 0
 			}
 		]
@@ -61,26 +48,18 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -fmessage-length=0 -isystem /Users/ouuyou/miniforge/include -g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
+					"fragment" : "-ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -stdlib=libc++ -fvisibility-inlines-hidden -fmessage-length=0 -isystem /Users/ouuyou/miniforge/include -g -std=gnu++14 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
 				}
 			],
 			"includes" : 
 			[
 				{
 					"backtrace" : 2,
-					"path" : "/Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen/Eigen"
-				},
-				{
-					"backtrace" : 3,
 					"path" : "/Users/ouuyou/Project/Projects_development/MSR1DCpp/include"
 				},
 				{
-					"backtrace" : 4,
+					"backtrace" : 3,
 					"path" : "/Users/ouuyou/Project/Projects_development/MSR1DCpp/dataset"
-				},
-				{
-					"backtrace" : 5,
-					"path" : "/Users/ouuyou/Project/Projects_development/MSR1DCpp/thirdparty/eigen"
 				}
 			],
 			"language" : "CXX",
@@ -90,7 +69,7 @@
 				[
 					1
 				],
-				"standard" : "17"
+				"standard" : "14"
 			},
 			"sourceIndexes" : 
 			[
