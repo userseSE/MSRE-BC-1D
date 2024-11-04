@@ -201,6 +201,30 @@ src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/msr_simulation.o: src/msr_simulation.cpp.o
+.PHONY : src/msr_simulation.o
+
+# target to build an object file
+src/msr_simulation.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/msr_simulation.cpp.o
+.PHONY : src/msr_simulation.cpp.o
+
+src/msr_simulation.i: src/msr_simulation.cpp.i
+.PHONY : src/msr_simulation.i
+
+# target to preprocess a source file
+src/msr_simulation.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/msr_simulation.cpp.i
+.PHONY : src/msr_simulation.cpp.i
+
+src/msr_simulation.s: src/msr_simulation.cpp.s
+.PHONY : src/msr_simulation.s
+
+# target to generate assembly for a file
+src/msr_simulation.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/msr_simulation.cpp.s
+.PHONY : src/msr_simulation.cpp.s
+
 src/neutronics.o: src/neutronics.cpp.o
 .PHONY : src/neutronics.o
 
@@ -387,6 +411,9 @@ help:
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/msr_simulation.o"
+	@echo "... src/msr_simulation.i"
+	@echo "... src/msr_simulation.s"
 	@echo "... src/neutronics.o"
 	@echo "... src/neutronics.i"
 	@echo "... src/neutronics.s"
