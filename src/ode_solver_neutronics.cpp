@@ -26,8 +26,6 @@ public:
       // Estimate the error and adjust step size
       float error_estimate_norm = 0.0;
       float y_norm = 0.0;
-      // error_estimate_norm= stableNorm(error_estimate, length_neutr);
-      // y_norm=stableNorm(y, length_neutr);
       calculateNorm(error_estimate, error_estimate_norm);
       calculateNorm(y, y_norm);
       float error_norm = error_estimate_norm / y_norm;
@@ -45,8 +43,6 @@ public:
       clamp(h_temp, scale, 0.5,2.0);
       h *= h_temp;
       clamp(h,h, h_min, h_max);
-      // h *= std::clamp(scale, 0.5f, 2.0f);
-      // h = std::clamp(h, h_min, h_max);
     }
   }
 
@@ -56,10 +52,6 @@ void clamp(float& result, const float& value, const float& min_val, const float&
     if (value > max_val) result= max_val;
     if (value >=min_val && value<=max_val) result= value;
 }
-//  float stableNorm(const float* arr, int N) {
-//     Eigen::Map<const Eigen::VectorXf> eigen_vec(arr, N); // Map array to Eigen vector
-//     return eigen_vec.stableNorm();
-//  }
   void calculateNorm(const float arr[length_neutr], float &norm) {
     norm = 0.0;
     for (int i = 0; i < length_neutr; ++i) {
@@ -67,14 +59,6 @@ void clamp(float& result, const float& value, const float& min_val, const float&
     }
     norm = std::sqrt(norm);
 }
-
-  // void clamp(float &value, float low, float high) {
-  //   if (value < low) {
-  //     value = low;
-  //   } else if (value > high) {
-  //     value = high;
-  //   }
-  // }
 
   void rkf45_step(const OdeFuncPointer ode_func, float t,
                   const float y[length_neutr], Param_Neutronics &params,
@@ -111,18 +95,11 @@ void clamp(float& result, const float& value, const float& min_val, const float&
 
     // First stage (k1)
     ode_func(t, y, k1, params, Keff);
-    // for(int i=0; i<length_neutr; ++i){
-    //   std::cout << "k1[" << i << "]: " << k1[i] << std::endl;
-    // }
     // Compute intermediate results for k2
     for (int i = 0; i < length_neutr; ++i) {
       result[i] = y[i] + b2 * h * k1[i];
     }
     ode_func(t + a2 * h, result, k2, params, Keff);
-    // for(int i=0; i<length_neutr; ++i){
-    //   std::cout << "k2[" << i << "]: " << k2[i] << std::endl;
-    // }
-
     // Compute intermediate results for k3
     for (int i = 0; i < length_neutr; ++i) {
       result[i] = y[i] + b3[0] * h * k1[i] + b3[1] * h * k2[i];

@@ -29,8 +29,6 @@ public:
       // Estimate the error and adjust step size
       float error_estimate_norm = 0.0;
       float y_norm = 0.0;
-      // error_estimate_norm= stableNorm(error_estimate, length_th);
-      // y_norm=stableNorm(y, length_th);
       calculateNorm(error_estimate, error_estimate_norm);
       calculateNorm(y, y_norm);
       float error_norm = error_estimate_norm / y_norm;
@@ -65,13 +63,6 @@ void calculateNorm(const float arr[length_th], float &norm) {
     }
     norm = std::sqrt(norm);
 }
-  // void clamp(float &value, float low, float high) {
-  //   if (value < low) {
-  //     value = low;
-  //   } else if (value > high) {
-  //     value = high;
-  //   }
-  // }
 
   void rkf45_step_th(const OdeFuncPointer_th ode_func, float t,
                   const float y[length_th], Param_Thermal &params,

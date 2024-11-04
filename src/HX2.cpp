@@ -34,7 +34,8 @@ void pde_to_ode_hx2(float t, const float y[length_hx], float dydt[length_hx], Pa
     }
 }
 
-void HX2(float y_hx2[length_hx], float Ts_HX2_L, int step, Param_HX2 &params) {
+void HX2(float y_hx2[length_hx], float Ts_HX2_L, int step) {
+    Param_HX2 params;
     // Set boundary conditions
     y_hx2[Nx + 1] = params.v2_L;    // Fixed boundary condition at v[0]
     y_hx2[length_hx - 1] = params.v2_H; // Fixed boundary condition at v[L]

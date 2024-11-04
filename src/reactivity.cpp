@@ -2,8 +2,8 @@
 #include "parameters.hpp"
 
 void reactivity(const float temperature_fuel[N], const float temperature_graphite[N], 
-                int step, Param_React& params, float rho[N]) {
-
+                int step, float rho[N]) {
+    Param_React params;
     float rho_feedback[N]; // Array for reactivity feedback
     float react[N];   // Array for reactivity insertion
     float max_rho_change = params.max_rho_change;

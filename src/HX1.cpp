@@ -36,7 +36,8 @@ void pde_to_ode_hx1(float t, const float y[length_hx], float dydt[length_hx], Pa
     }
 }
 
-void HX1(float y_hx1[length_hx], float Ts_HX1_L, float Tss_HX1_0, int step, Param_HX1 &params) {
+void HX1(float y_hx1[length_hx], float Ts_HX1_L, int step) {
+    Param_HX1 params;
     // Set boundary conditions
     float u[Nx], v[Nx];
     if (step == 0) {
@@ -51,7 +52,7 @@ void HX1(float y_hx1[length_hx], float Ts_HX1_L, float Tss_HX1_0, int step, Para
         }
     }
     u[Nx - 1] = Ts_HX1_L;
-    v[0] = Tss_HX1_0;
+    // v[0] = Tss_HX1_0;
 
     // Initial condition vector y0
     float y0[length_hx];

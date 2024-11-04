@@ -15,7 +15,6 @@ void pde_to_ode_th(float t, const float y[length_th], float dydt[length_th],
     dydt[i] += params.b_th * (y[N+i] - y[i]);
     // Add the heat source term
     dydt[i] += params.d_th * q_prime[i];
-    // std::cout << "dydt[" << i << "]: " << dydt[i] << std::endl;
 }
   // temperature_graphite_dt
   for (int i = 0; i < N; ++i) {
@@ -27,13 +26,11 @@ void pde_to_ode_th(float t, const float y[length_th], float dydt[length_th],
   dydt[N] = params.bc_g0 - y[N];
   dydt[N - 1] = 0;
   dydt[N * 2 - 1] = 0;
-  // for(int i=0;i<N*2;i++){
-  //   std::cout<<"dydt["<<i<<"]"<<dydt[i]<<std::endl;
-  // }
 };
 
 void thermal_hydraulics(float y_th[length_th], const float y_n[length_neutr],
-                        float Ts_core_0, int step, Param_Thermal &params) {
+                        float Ts_core_0, int step) {
+  Param_Thermal params;
   // std::cout << "thermal_hydraulics called" << std::endl;
   float q_prime[N];
   for (int i = 0; i < N; ++i) {

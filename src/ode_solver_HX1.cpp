@@ -28,8 +28,6 @@ public:
       // Estimate the error and adjust step size
       float error_estimate_norm = 0.0;
       float y_norm = 0.0;
-      // error_estimate_norm= stableNorm(error_estimate, length_hx);
-      // y_norm=stableNorm(y, length_hx);
       calculateNorm(error_estimate, error_estimate_norm);
       calculateNorm(y, y_norm);
       float error_norm = error_estimate_norm / y_norm;
@@ -63,13 +61,6 @@ void calculateNorm(const float arr[length_hx], float &norm) {
     }
     norm = std::sqrt(norm);
 }
-  // void clamp(float &value, float low, float high) {
-  //   if (value < low) {
-  //     value = low;
-  //   } else if (value > high) {
-  //     value = high;
-  //   }
-  // }
 
   void rkf45_step_hx(const OdeFuncPointer_hx1 ode_func, float t,
                   const float y[length_hx], Param_HX1 &params, float h, float y_new[length_hx],
@@ -107,18 +98,11 @@ void calculateNorm(const float arr[length_hx], float &norm) {
 
     // First stage (k1)
     ode_func(t, y, k1, params);
-    // for(int i=0; i<length_hx; ++i){
-    //   std::cout << "k1[" << i << "]: " << k1[i] << std::endl;
-    // }
     // Compute intermediate results for k2
     for (int i = 0; i < length_hx; ++i) {
       result[i] = y[i] + b2 * h * k1[i];
     }
     ode_func(t + a2 * h, result, k2, params);
-    // for(int i=0; i<length_hx; ++i){
-    //   std::cout << "k2[" << i << "]: " << k2[i] << std::endl;
-    // }
-
     // Compute intermediate results for k3
     for (int i = 0; i < length_hx; ++i) {
       result[i] = y[i] + b3[0] * h * k1[i] + b3[1] * h * k2[i];

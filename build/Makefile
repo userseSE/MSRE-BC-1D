@@ -177,54 +177,6 @@ src/HX2.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/HX2.cpp.s
 .PHONY : src/HX2.cpp.s
 
-src/csr_matrix.o: src/csr_matrix.cpp.o
-.PHONY : src/csr_matrix.o
-
-# target to build an object file
-src/csr_matrix.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/csr_matrix.cpp.o
-.PHONY : src/csr_matrix.cpp.o
-
-src/csr_matrix.i: src/csr_matrix.cpp.i
-.PHONY : src/csr_matrix.i
-
-# target to preprocess a source file
-src/csr_matrix.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/csr_matrix.cpp.i
-.PHONY : src/csr_matrix.cpp.i
-
-src/csr_matrix.s: src/csr_matrix.cpp.s
-.PHONY : src/csr_matrix.s
-
-# target to generate assembly for a file
-src/csr_matrix.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/csr_matrix.cpp.s
-.PHONY : src/csr_matrix.cpp.s
-
-src/data_saving.o: src/data_saving.cpp.o
-.PHONY : src/data_saving.o
-
-# target to build an object file
-src/data_saving.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/data_saving.cpp.o
-.PHONY : src/data_saving.cpp.o
-
-src/data_saving.i: src/data_saving.cpp.i
-.PHONY : src/data_saving.i
-
-# target to preprocess a source file
-src/data_saving.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/data_saving.cpp.i
-.PHONY : src/data_saving.cpp.i
-
-src/data_saving.s: src/data_saving.cpp.s
-.PHONY : src/data_saving.s
-
-# target to generate assembly for a file
-src/data_saving.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/data_saving.cpp.s
-.PHONY : src/data_saving.cpp.s
-
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -248,30 +200,6 @@ src/main.s: src/main.cpp.s
 src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
-
-src/matrix_LU.o: src/matrix_LU.cpp.o
-.PHONY : src/matrix_LU.o
-
-# target to build an object file
-src/matrix_LU.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/matrix_LU.cpp.o
-.PHONY : src/matrix_LU.cpp.o
-
-src/matrix_LU.i: src/matrix_LU.cpp.i
-.PHONY : src/matrix_LU.i
-
-# target to preprocess a source file
-src/matrix_LU.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/matrix_LU.cpp.i
-.PHONY : src/matrix_LU.cpp.i
-
-src/matrix_LU.s: src/matrix_LU.cpp.s
-.PHONY : src/matrix_LU.s
-
-# target to generate assembly for a file
-src/matrix_LU.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/matrix_LU.cpp.s
-.PHONY : src/matrix_LU.cpp.s
 
 src/neutronics.o: src/neutronics.cpp.o
 .PHONY : src/neutronics.o
@@ -393,30 +321,6 @@ src/ode_solver_th.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/ode_solver_th.cpp.s
 .PHONY : src/ode_solver_th.cpp.s
 
-src/parameters.o: src/parameters.cpp.o
-.PHONY : src/parameters.o
-
-# target to build an object file
-src/parameters.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/parameters.cpp.o
-.PHONY : src/parameters.cpp.o
-
-src/parameters.i: src/parameters.cpp.i
-.PHONY : src/parameters.i
-
-# target to preprocess a source file
-src/parameters.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/parameters.cpp.i
-.PHONY : src/parameters.cpp.i
-
-src/parameters.s: src/parameters.cpp.s
-.PHONY : src/parameters.s
-
-# target to generate assembly for a file
-src/parameters.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/src/parameters.cpp.s
-.PHONY : src/parameters.cpp.s
-
 src/reactivity.o: src/reactivity.cpp.o
 .PHONY : src/reactivity.o
 
@@ -480,18 +384,9 @@ help:
 	@echo "... src/HX2.o"
 	@echo "... src/HX2.i"
 	@echo "... src/HX2.s"
-	@echo "... src/csr_matrix.o"
-	@echo "... src/csr_matrix.i"
-	@echo "... src/csr_matrix.s"
-	@echo "... src/data_saving.o"
-	@echo "... src/data_saving.i"
-	@echo "... src/data_saving.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
-	@echo "... src/matrix_LU.o"
-	@echo "... src/matrix_LU.i"
-	@echo "... src/matrix_LU.s"
 	@echo "... src/neutronics.o"
 	@echo "... src/neutronics.i"
 	@echo "... src/neutronics.s"
@@ -507,9 +402,6 @@ help:
 	@echo "... src/ode_solver_th.o"
 	@echo "... src/ode_solver_th.i"
 	@echo "... src/ode_solver_th.s"
-	@echo "... src/parameters.o"
-	@echo "... src/parameters.i"
-	@echo "... src/parameters.s"
 	@echo "... src/reactivity.o"
 	@echo "... src/reactivity.i"
 	@echo "... src/reactivity.s"
