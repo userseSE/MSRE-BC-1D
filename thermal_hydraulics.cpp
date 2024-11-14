@@ -3,6 +3,8 @@
 #include "parameters.hpp"
 
 void pde_to_ode_th(float t, const float y[length_th], float dydt[length_th], Param_Thermal &params, const float q_prime[N]) {
+#pragma HLS INLINE
+#pragma HLS ARRAY_PARTITION dim=1 type=complete variable=y
   for (int i = 0; i < N; ++i) {
 #pragma HLS UNROLL
     // Start with the matrix-vector multiplication part

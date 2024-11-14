@@ -57,6 +57,7 @@ void clamp(float& result, const float& value, const float& min_val, const float&
     if (value >=min_val && value<=max_val) result= value;
 }
   void calculateNorm(const float arr[length_neutr], float &norm) {
+#pragma HLS ARRAY_PARTITION dim=1 type=complete variable=arr
     norm = 0.0;
     for (int i = 0; i < length_neutr; ++i) {
         norm += arr[i] * arr[i];

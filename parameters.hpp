@@ -4,7 +4,7 @@
 // Spatial discretization constants
 #define N 200  // spatial discretization
 #define Nx 200   // spatial discretization
-#define time_span 2500
+#define time_span 1200
 #define length_th 400  //2 * N
 #define length_neutr 1600  //8 * N;
 #define length_hx 400 // 2 * Nx;

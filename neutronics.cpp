@@ -5,9 +5,10 @@
 
 // Standalone function definition
 void pde_to_ode_neutronics(const float y[length_neutr], float dydt[length_neutr], Param_Neutronics &params_neutr, const float Keff[N]) {
+#pragma HLS ARRAY_PARTITION dim=1 type=complete variable=y
 
   float lambda_ci[N]; // For summing contributions
-  // Initialize lambda_ci to zero
+  // Initialize lambda_ci to zeross
   for (int i = 0; i < N; ++i) {
 #pragma HLS UNROLL
     lambda_ci[i] = 0.0;
