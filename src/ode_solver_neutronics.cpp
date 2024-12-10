@@ -10,14 +10,18 @@ public:
 
   RungeKuttaFehlberg45(float tolerance = 1e-8, float min_step = 1e-10, float max_step = 0.1) : tol(tolerance), h_min(min_step), h_max(max_step) {}
 
-  void solve(const OdeFuncPointer ode_func, float y[length_neutr], int step, Param_Neutronics &params, const float Keff[N], float t0 = 0.0,
+  void solve(const OdeFuncPointer ode_func, float y[length_neutr], int step, Param_Neutronics &params, const float Keff[N], float min_step_neutr, float t0 = 0.0,
              float t1 = 1.0) {
     float t = t0;
     float h = (t1 - t0) / 100; // Initial step size (can be adjusted)
 
     while (t < t1) {
-      if (t + h > t1)
+      if (t + h > t1){
         h = t1 - t; // Adjust final step size to reach t1
+      }
+      if(h < min_step_neutr){
+        min_step_neutr = h;
+      }
 
       // Perform a single RKF45 step
       float y_new[length_neutr], error_estimate[length_neutr];
@@ -94,34 +98,34 @@ void clamp(float& result, const float& value, const float& min_val, const float&
     }
 
     // First stage (k1)
-    ode_func(t, y, k1, params, Keff);
+    ode_func(y, k1, params, Keff);
     // Compute intermediate results for k2
     for (int i = 0; i < length_neutr; ++i) {
       result[i] = y[i] + b2 * h * k1[i];
     }
-    ode_func(t + a2 * h, result, k2, params, Keff);
+    ode_func(result, k2, params, Keff);
     // Compute intermediate results for k3
     for (int i = 0; i < length_neutr; ++i) {
       result[i] = y[i] + b3[0] * h * k1[i] + b3[1] * h * k2[i];
     }
-    ode_func(t + a3 * h, result, k3, params, Keff);
+    ode_func(result, k3, params, Keff);
 
     // Compute intermediate results for k4
     for (int i = 0; i < length_neutr; ++i) {
       result[i] = y[i] + b4[0] * h * k1[i] + b4[1] * h * k2[i] + b4[2] * h * k3[i];
     }
-    ode_func(t + a4 * h, result, k4, params, Keff);
+    ode_func(result, k4, params, Keff);
     // Compute intermediate results for k5
     for (int i = 0; i < length_neutr; ++i) {
       result[i] = y[i] + b5[0] * h * k1[i] + b5[1] * h * k2[i] + b5[2] * h * k3[i] + b5[3] * h * k4[i];
     }
-    ode_func(t + a5 * h, result, k5, params, Keff);
+    ode_func(result, k5, params, Keff);
 
     // Compute intermediate results for k6
     for (int i = 0; i < length_neutr; ++i) {
       result[i] = y[i] + b6[0] * h * k1[i] + b6[1] * h * k2[i] + b6[2] * h * k3[i] + b6[3] * h * k4[i] + b6[4] * h * k5[i];
     }
-    ode_func(t + a6 * h, result, k6, params, Keff);
+    ode_func(result, k6, params, Keff);
 
     // Compute the 4th and 5th order estimates (y_new and y_star)
     float y_star[length_neutr];
@@ -137,9 +141,9 @@ void clamp(float& result, const float& value, const float& min_val, const float&
   }
 };
 void ode_solver_neutr(float y[length_neutr], OdeFuncPointer ode_func, int step,
-                      Param_Neutronics &params, const float Keff[N]) {
+                      Param_Neutronics &params, const float Keff[N], float min_step_neutr) {
 
   RungeKuttaFehlberg45 solver;
 
-  solver.solve(ode_func, y, step, params, Keff);
+  solver.solve(ode_func, y, step, params, Keff, min_step_neutr);
 }

@@ -11,15 +11,19 @@ public:
                        float max_step = 0.1) : tol(tolerance), h_min(min_step), h_max(max_step) {}
 
   void solve(const OdeFuncPointer_hx1 ode_func, float y[length_hx], int step,
-             Param_HX1 &params, float t0 = 0.0,
-             float t1 = 1.0) {
-    // std::cout << "Neutronics ODE solver called" << std::endl;
+             Param_HX1 &params, float min_step, float t0 = 0.0, float t1 = 1.0) {
+
     float t = t0;
     float h = (t1 - t0) / 100; // Initial step size (can be adjusted)
 
     while (t < t1) {
-      if (t + h > t1)
+      if (t + h > t1){
         h = t1 - t; // Adjust final step size to reach t1
+      }
+
+      if(h<min_step){
+        min_step=h;
+      }
 
       // Perform a single RKF45 step
       float y_new[length_hx], error_estimate[length_hx];
@@ -140,9 +144,9 @@ void calculateNorm(const float arr[length_hx], float &norm) {
   }
 };
 void ode_solver_hx1(float y[length_hx], OdeFuncPointer_hx1 ode_func, int step,
-                      Param_HX1 &params) {
+                      Param_HX1 &params, float min_step) {
 
   RungeKuttaFehlberg45_hx solver;
 
-  solver.solve(ode_func, y, step, params);
+  solver.solve(ode_func, y, step, params, min_step);
 }

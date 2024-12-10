@@ -40,20 +40,6 @@ void HX2(float y_hx2[length_hx], float Ts_HX2_L, int step) {
     y_hx2[Nx + 1] = params.v2_L;    // Fixed boundary condition at v[0]
     y_hx2[length_hx - 1] = params.v2_H; // Fixed boundary condition at v[L]
 
-    float u[Nx], v[Nx];
-    if (step == 0) {
-        for (int i = 0; i < Nx; ++i) {
-            u[i] = params.u2_init[i];
-            v[i] = params.v2_init[i];
-        }
-    } else {
-        for (int i = 0; i < Nx; ++i) {
-            u[i] = y_hx2[i];
-            v[i] = y_hx2[Nx + i];
-        }
-    }
-    u[Nx - 1] = Ts_HX2_L;
-
     // Initial condition vector y0
     float y0[length_hx];
     if (step == 0) {

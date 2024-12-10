@@ -18,8 +18,9 @@ public:
     float h = (t1 - t0) / 100; // Initial step size (can be adjusted)
 
     while (t < t1) {
-      if (t + h > t1)
+      if (t + h > t1){
         h = t1 - t; // Adjust final step size to reach t1
+      }
 
       // Perform a single RKF45 step
       float y_new[length_hx], error_estimate[length_hx];

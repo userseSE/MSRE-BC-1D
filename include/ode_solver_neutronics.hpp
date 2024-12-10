@@ -3,9 +3,9 @@
 
 #include "parameters.hpp"
 
-typedef void (*OdeFuncPointer)(float, const float[length_neutr], float[length_neutr], Param_Neutronics &params, const float Keff[N]);
+typedef void (*OdeFuncPointer)(const float[length_neutr], float[length_neutr], Param_Neutronics &params, const float Keff[N]);
 
 // Update the signature to use VectorXd instead of state_type
-void ode_solver_neutr(float y[length_neutr], OdeFuncPointer ode_func, int step, Param_Neutronics &params, const float Keff[N]);
+void ode_solver_neutr(float y[length_neutr], OdeFuncPointer ode_func, int step, Param_Neutronics &params, const float Keff[N], float min_step_neutr);
 
 #endif // ODE_SOLVER_HPP
