@@ -43,7 +43,7 @@ def neutronics(y_n, rho, step, params):
 
     # Compute Keff (effective multiplication factor)
     Keff = 1 / (np.ones(N) - rho)
-    print(f"Keff(N/2): {Keff[int(N/2)]}, Keff(0): {Keff[0]}, Keff(N-1): {Keff[N-1]}, Keff(avg): {Keff.mean()}")  
+    # print(f"Keff(N/2): {Keff[int(N/2)]}, Keff(0): {Keff[0]}, Keff(N-1): {Keff[N-1]}, Keff(avg): {Keff.mean()}")  
 
     def pde_to_ode_neutronics(t, y):
         phi = y[:N]
