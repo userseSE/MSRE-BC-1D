@@ -34,11 +34,12 @@ def HX2(y_hx2, Ts_HX2_L, Tss_HX2_0, params, step):
     # A_HX2[0, 0] = 1 / dx
     # A_HX2[-1, -1] = 1 / dx
 
-    A_HX2 = np.diag(-2 * np.ones(Nx)) + np.diag(np.ones(Nx-1), 1) + np.diag(np.ones(Nx-1), -1)
-    A_HX2[0, 0] = A_HX2[-1, -1] = -1
-    A_HX2[0, 1] = A_HX2[-1, -2] = 0
-    # A_HX2 = A_HX2 / dx**2
-    A_HX2_sparse = csc_matrix(A_HX2) / dx**2
+    A_HX2_sparse = params.get('A_HX2_sparse')
+    if A_HX2_sparse is None:
+        A_HX2 = np.diag(-2 * np.ones(Nx)) + np.diag(np.ones(Nx - 1), 1) + np.diag(np.ones(Nx - 1), -1)
+        A_HX2[0, 0] = A_HX2[-1, -1] = -1
+        A_HX2[0, 1] = A_HX2[-1, -2] = 0
+        A_HX2_sparse = csc_matrix(A_HX2) / dx**2
     
     y_hx2[:Nx,-1]=Ts_HX2_L
     y_hx2[Nx:,0]=Tss_HX2_0

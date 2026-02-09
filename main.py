@@ -2,6 +2,7 @@ import numpy as np
 import os
 from joblib import Parallel, delayed
 import matplotlib.pyplot as plt
+from collections import deque
 
 from parameters import generate_parameters
 from reactivity import reactivity
@@ -13,9 +14,12 @@ from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
 def run_simulation(params, index):
-    time_span = 2000
+    time_span = 600
     N = params['N']
     Nx = params['Nx']
+    mid_idx = N // 2
+    verbose = params.get('verbose', False)
+    log_every = params.get('log_every', 1)
     initialS = params['initialS']
     initialG = params['initialG']
 
@@ -33,12 +37,12 @@ def run_simulation(params, index):
     Ts_HX1_0 = 0
     Tss_HX1_0 = 0
     Tsss_pp_0 = 0
-    buffer_hx_c = []
-    buffer_c_hx = []
-    buffer_r_hx = []
-    buffer_hx_r = []
-    buffer_r_pp = []
-    buffer_pp_r = []
+    buffer_hx_c = deque()
+    buffer_c_hx = deque()
+    buffer_r_hx = deque()
+    buffer_hx_r = deque()
+    buffer_r_pp = deque()
+    buffer_pp_r = deque()
     Ts_in = params['Ts_in']
     Ts_out = params['Ts_out']
     Tss_in = params['Tss_in']
@@ -66,18 +70,18 @@ def run_simulation(params, index):
         q_prime = q_prime * params['sigma_f'] * params['A'] / (params['flux_to_power'])
         phi = y_n[:N, -1].T
         ci = y_n[N:, -1].T
-        phi_middle_matrix[step] = phi[int(N / 2)]
-        neutron_dt_matrix[step] = (phi[int(N / 2)] - phi_middle_matrix[step - 1]) * 100
+        phi_middle_matrix[step] = phi[mid_idx]
+        neutron_dt_matrix[step] = (phi[mid_idx] - phi_middle_matrix[step - 1]) * 100
 
         if step in save_steps:
             saved_data.append({
                 'step': step,
-                'neutron_flux': phi[int(N / 2)],
+                'neutron_flux': phi[mid_idx],
                 'neutron_flux_change': neutron_dt_matrix[step]
             })
 
-        for i in range(6):
-            ci_middle_matrix[step, i] = ci[int((i * N + (i + 1) * N) / 2)]
+        ci_groups = ci.reshape(6, N)
+        ci_middle_matrix[step, :] = ci_groups[:, mid_idx]
 
         Ts_core_0 = transport_delay(Ts_HX1_0, params['tau_hx_c'], Ts_in, buffer_hx_c, step)
         y_th = thermal_hydraulics(y_th, q_prime, Ts_core_0, params, step)
@@ -87,7 +91,7 @@ def run_simulation(params, index):
         temperature_fuel = y_th[:N, -1].T
         temperature_graphite = y_th[N:, -1].T
         Ts_core_L = y_th[-1, -1]
-        temperature_fuel_middle_matrix[step] = temperature_fuel[int(N / 2)]
+        temperature_fuel_middle_matrix[step] = temperature_fuel[mid_idx]
 
         Ts_HX1_L = transport_delay(Ts_core_L, params['tau_c_hx'], Ts_out, buffer_c_hx, step)
         Tss_HX1_0 = transport_delay(Tss_HX2_0, params['tau_r_hx'], Tss_in, buffer_r_hx, step)

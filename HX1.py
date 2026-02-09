@@ -37,16 +37,12 @@ def HX1(y_hx1, Ts_HX1_L, Tss_HX1_0, params, step):
     C3 = V_he_ss
     C4 = U_hx / (M_he_ss * c_p_ss)
 
-    # Discretize the spatial domain
-    # A_HX=np.diag(-np.ones(Nx))+ np.diag(np.ones(Nx-1), 1) / dx
-    # # A_HX = (-2*np.diag(np.ones(Nx)) + np.diag(np.ones(Nx - 1), 1) + np.diag(np.ones(Nx - 1), -1)) / dx
-    # A_HX[0, 0] = 1 / dx
-    # A_HX[-1, -1] = 1 / dx
-    A_HX = np.diag(-2 * np.ones(Nx)) + np.diag(np.ones(Nx-1), 1) + np.diag(np.ones(Nx-1), -1)
-    A_HX[0, 0] = A_HX[-1, -1] = -1
-    A_HX[0, 1] = A_HX[-1, -2] = 0
-    # A_HX = A_HX / dx**2
-    A_HX_sparse = csc_matrix(A_HX) / dx**2
+    A_HX_sparse = params.get('A_HX_sparse')
+    if A_HX_sparse is None:
+        A_HX = np.diag(-2 * np.ones(Nx)) + np.diag(np.ones(Nx - 1), 1) + np.diag(np.ones(Nx - 1), -1)
+        A_HX[0, 0] = A_HX[-1, -1] = -1
+        A_HX[0, 1] = A_HX[-1, -2] = 0
+        A_HX_sparse = csc_matrix(A_HX) / dx**2
     
     y_hx1[:Nx,-1]=Ts_HX1_L
     y_hx1[Nx:,0]=Tss_HX1_0

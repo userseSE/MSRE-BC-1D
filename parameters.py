@@ -1,7 +1,10 @@
 import numpy as np
+from scipy.sparse import csc_matrix
 
 def generate_parameters(
     # Neutronics
+    v_core=0.2,
+    inlet_mode='fresh',
     dt=0.1, # fixed time step, 0.5
     L = 172,  # Length of the spatial domain, cm
     # L = 22.9
@@ -165,8 +168,38 @@ def generate_parameters(
     Tss_out=v_H
     Tsss_in=v2_L
     Tsss_out=v2_H
+
+    # Precompute sparse matrices used repeatedly in time loops.
+    main_diag = -2 * np.ones(N)
+    off_diag = np.ones(N - 1)
+    D2 = (np.diag(main_diag) + np.diag(off_diag, 1) + np.diag(off_diag, -1)) / dz**2
+    D2[0, :] = 0
+    D2[-1, :] = 0
+    D2[0, 0] = 1
+    D2[-1, -1] = 1
+    D2_sparse = csc_matrix(D2)
+    I = np.eye(N)
+    A_neutronics = csc_matrix(I - 0.5 * dt * V * D * D2_sparse)
+    B_neutronics = csc_matrix(I + 0.5 * dt * V * D * D2_sparse)
+
+    AT = np.diag(-2 * np.ones(N)) + np.diag(np.ones(N - 1), 1) + np.diag(np.ones(N - 1), -1)
+    AT[0, 0] = AT[-1, -1] = 1
+    AT[0, 1] = AT[-1, -2] = 0
+    AT_sparse = csc_matrix(AT) / dz**2
+
+    A_HX = np.diag(-2 * np.ones(Nx)) + np.diag(np.ones(Nx - 1), 1) + np.diag(np.ones(Nx - 1), -1)
+    A_HX[0, 0] = A_HX[-1, -1] = -1
+    A_HX[0, 1] = A_HX[-1, -2] = 0
+    A_HX_sparse = csc_matrix(A_HX) / dx**2
+
+    A_HX2 = np.diag(-2 * np.ones(Nx)) + np.diag(np.ones(Nx - 1), 1) + np.diag(np.ones(Nx - 1), -1)
+    A_HX2[0, 0] = A_HX2[-1, -1] = -1
+    A_HX2[0, 1] = A_HX2[-1, -2] = 0
+    A_HX2_sparse = csc_matrix(A_HX2) / dx**2
     
     return {
+        'v_core': v_core,
+        'inlet_mode': inlet_mode,
         'dt': dt,
         'L': L,
         # 'volume': volume,
@@ -250,6 +283,14 @@ def generate_parameters(
         'initialS': initialS,
         'initialG': initialG,
         'scale': scale  
+        ,
+        'A_neutronics': A_neutronics,
+        'B_neutronics': B_neutronics,
+        'AT_sparse': AT_sparse,
+        'A_HX_sparse': A_HX_sparse,
+        'A_HX2_sparse': A_HX2_sparse,
+        'beta_np': np.asarray(beta, dtype=float),
+        'lambda_i_np': np.asarray(lambda_i, dtype=float)
     }
 
 # Generate default parameters
