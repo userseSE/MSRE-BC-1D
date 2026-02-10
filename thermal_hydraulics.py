@@ -72,10 +72,8 @@ def thermal_hydraulics(y_th, q_prime, Ts_core_0, params, step):
     # print("y0shape: "+str(y0.shape))
     
     bc=[]
-    solution_y_th = ode_solver(y0, bc, pde_to_ode_th, params)
-    
-    y_th = solution_y_th.y
-    
+    y_th = ode_solver(y0, bc, pde_to_ode_th, params)
+
     # print(y_th.shape)
 
     return y_th

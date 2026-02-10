@@ -140,6 +140,13 @@ def generate_parameters(
     tau_r_pp = 6, # TODO:delay from HX2 to the power plant, to be fixed
     tau_pp_r = 6, # TODO:delay from the power plant to HX2, to be fixed
     scale = 1,
+    ode_horizon = 1.0,
+    ode_rtol = 1e-4,
+    ode_atol = 1e-6,
+    ode_initial_h = 0.05,
+    ode_h_min = 1e-5,
+    ode_h_max = 0.25,
+    ode_max_steps = 100000,
     ):
     
     dz = L / (N - 1)  # Spatial step size, m
@@ -284,6 +291,13 @@ def generate_parameters(
         'initialG': initialG,
         'scale': scale  
         ,
+        'ode_horizon': ode_horizon,
+        'ode_rtol': ode_rtol,
+        'ode_atol': ode_atol,
+        'ode_initial_h': ode_initial_h,
+        'ode_h_min': ode_h_min,
+        'ode_h_max': ode_h_max,
+        'ode_max_steps': ode_max_steps,
         'A_neutronics': A_neutronics,
         'B_neutronics': B_neutronics,
         'AT_sparse': AT_sparse,

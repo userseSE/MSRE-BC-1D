@@ -77,10 +77,9 @@ def HX1(y_hx1, Ts_HX1_L, Tss_HX1_0, params, step):
         
     # solution_y_hx1 = solve_ivp(pde_to_ode_hx1, (step, step+1), y0, t_eval=t, method='RK45')     
     bc=[]
-    solution_y_hx1 = ode_solver(y0, bc, pde_to_ode_hx1, params)
-        
+    y_hx1 = ode_solver(y0, bc, pde_to_ode_hx1, params)
+    
     # y_hx1 is a vector at time step+1
-    y_hx1 = solution_y_hx1.y   
     # print("testHX1")
     # print(y_hx1.shape)
     return y_hx1

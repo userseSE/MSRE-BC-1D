@@ -100,8 +100,8 @@ def neutronics(y_n, rho, step, params):
     solution_y_n = ode_solver(y0, bc, pde_to_ode_neutronics, params)
 
     # Extract the solution
-    phi = solution_y_n.y[:N, -1].T
+    phi = solution_y_n[:N, -1].T
     q_prime = phi
-    y_n = solution_y_n.y
+    y_n = solution_y_n
 
     return y_n, q_prime
