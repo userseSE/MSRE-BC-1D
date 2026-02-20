@@ -13,8 +13,31 @@ from HX2 import HX2
 from transport_delay import transport_delay
 from power_plant import power_plant_temp
 
+def save_ci_groups_csv(selected_step, ci_groups_at_step, params, index):
+    os.makedirs('simulation_results', exist_ok=True)
+
+    dt = params.get('dt', 1.0)
+    time_value = selected_step * dt
+    n_points = ci_groups_at_step.shape[1]
+    z = np.linspace(0.0, params['L'], n_points)
+
+    csv_path = f'simulation_results/ci_groups_step_{selected_step}_sim_{index}.csv'
+    header = 'simulation_index,step,time,point_index,z,C1,C2,C3,C4,C5,C6'
+
+    rows = np.zeros((n_points, 11), dtype=float)
+    rows[:, 0] = index
+    rows[:, 1] = selected_step
+    rows[:, 2] = time_value
+    rows[:, 3] = np.arange(n_points)
+    rows[:, 4] = z
+    rows[:, 5:] = ci_groups_at_step.T
+
+    np.savetxt(csv_path, rows, delimiter=',', header=header, comments='')
+    print(f"Saved Ci groups at step {selected_step} to {csv_path}")
+    
 def run_simulation(params, index):
     time_span = 600
+    selected_step = 599
     N = params['N']
     Nx = params['Nx']
     mid_idx = N // 2
@@ -62,6 +85,7 @@ def run_simulation(params, index):
     # Steps to save data (0, 1/3, 1/2, 2/3, 1 of total steps)
     save_steps = [0, time_span//3, time_span//2, 2*time_span//3, time_span-1]
     saved_data = []
+    ci_groups_selected_step = None
 
     for step in range(time_span):
         print(f'Step {step}/{time_span}')
@@ -82,6 +106,8 @@ def run_simulation(params, index):
 
         ci_groups = ci.reshape(6, N)
         ci_middle_matrix[step, :] = ci_groups[:, mid_idx]
+        if step == selected_step:
+            ci_groups_selected_step = ci_groups.copy()
 
         Ts_core_0 = transport_delay(Ts_HX1_0, params['tau_hx_c'], Ts_in, buffer_hx_c, step)
         y_th = thermal_hydraulics(y_th, q_prime, Ts_core_0, params, step)
@@ -149,6 +175,7 @@ def run_simulation(params, index):
     
     # Save specific data points
     save_specific_data(saved_data, index)
+    save_ci_groups_csv(selected_step, ci_groups_selected_step, params, index)
 
 def plot_results(z, phi, ci, rho, rho_matrix, temperature_fuel, temperature_graphite,
                  Ts_HX1_matrix, Tss_HX1, Tss_HX2, Tsss_HX2, phi_middle_matrix,

@@ -3,7 +3,7 @@ from scipy.sparse import csc_matrix
 
 def generate_parameters(
     # Neutronics
-    v_core=0.2,
+    v_core=1.0,
     inlet_mode='fresh',
     dt=0.1, # fixed time step, 0.5
     L = 172,  # Length of the spatial domain, cm
@@ -30,7 +30,8 @@ def generate_parameters(
     # Beta = 0.0045
     # delta=Beta*nu_sigma_f
     # beta2 = [0.000228, 0.000788, 0.000664, 0.000736, 0.000136, 0.000088]
-    lambda_i = [0.0126, 0.0337, 0.139, 0.325, 1.13, 2.5],    # Decay constants
+    # lambda_i = [0.0126, 0.0337, 0.139, 0.325, 1.13, 2.5],    # Decay constants
+    lambda_i = [0.0127, 0.032, 0.128, 0.304, 1.349, 3.629],
     # lambda_i = [0.08, 0.08, 0.08, 0.08, 0.08, 0.08]    # Decay constants
     # sum(lambda_i) = 4.1403        # 0.08
     # initial condition
@@ -40,7 +41,8 @@ def generate_parameters(
     # Thermal-Hydraulics
     c_p_s = 2090,  # 1983, Specific heat of primary salt, J/kgK
     c_p_g = 1757,    # 1757, Specific heat of graphite, J/kg K
-    Vc = 0.2,    # Salt velocity in the core, m/s
+    # Vc = 0.2,    # Salt velocity in the core, m/s
+    Vc = 1.0,
     # Vc = 20,
     Ms = 1448,   # 1448, Fuel salt mass in the core, kg
     Mg = 3687,   # 3687, Mass of graphite in the core, kg

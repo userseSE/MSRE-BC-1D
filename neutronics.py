@@ -22,7 +22,7 @@ def neutronics(y_n, rho, step, params):
     Beta = float(beta.sum())
 
     # --- NEW (minimal): drift settings ---
-    v_core = params.get('v_core', 0.2)              # m/s
+    v_core = params.get('v_core', 1.0)              # m/s
     inlet_mode = params.get('inlet_mode', 'copy')   # 'fresh' or 'copy'
     if inlet_mode not in ('fresh', 'copy'):
         raise ValueError("params['inlet_mode'] must be 'fresh' or 'copy'")
@@ -63,20 +63,37 @@ def neutronics(y_n, rho, step, params):
         phi_new = spsolve(A, rhs_phi)
         dphi_dt = (phi_new - phi) / dt
 
-        # ---------- NEW: precursor update with upwind drift ----------
+        # ---------- Precursor advection in face-flux form ----------
         # Eq: dCi/dt + d/dz(v Ci) = beta_i * nuSigF*(1+rho)*phi - lambda_i*Ci
         # => dCi/dt = production - lambda_i*Ci - d/dz(v Ci)
-        # upwind derivative for v>0: d/dz(vC) ~ v*(C[j]-C[j-1])/dz
-        # (If v<0, you should switch to downwind; but MSRE core flow is typically positive z here.)
+        # Discretization: adv_j = (F_{j+1/2} - F_{j-1/2})/dz, F = v * C_upwind.
+        # Boundary policy:
+        # - Inlet face: prescribe F via inlet concentration C_in (fresh/copy).
+        # - Outlet face: natural outflow (upwind value from the boundary cell).
         v = float(v_core)
-        C_im1 = np.empty_like(C)
-        C_im1[:, 1:] = C[:, :-1]
-        if inlet_mode == 'fresh':
-            C_im1[:, 0] = 0.0
-        else:  # 'copy'
-            C_im1[:, 0] = C[:, 0]
+        F = np.empty((6, N + 1), dtype=C.dtype)
+        if v >= 0.0:
+            # Left face is inlet, right face is outlet.
+            if inlet_mode == 'fresh':
+                C_in_left = 0.0
+            else:  # 'copy'
+                C_in_left = C[:, 0]
 
-        adv = v * (C - C_im1) / dz
+            F[:, 0] = v * C_in_left
+            F[:, 1:N] = v * C[:, :-1]
+            F[:, N] = v * C[:, -1]
+        else:
+            # Right face is inlet, left face is outlet.
+            if inlet_mode == 'fresh':
+                C_in_right = 0.0
+            else:  # 'copy'
+                C_in_right = C[:, -1]
+
+            F[:, 0] = v * C[:, 0]
+            F[:, 1:N] = v * C[:, 1:]
+            F[:, N] = v * C_in_right
+
+        adv = (F[:, 1:] - F[:, :-1]) / dz
         production = (beta[:, None] * (nu_sigma_f * (1 + rho)) * phi)
         dci_dt = production - (lambda_i[:, None] * C) - adv
 
