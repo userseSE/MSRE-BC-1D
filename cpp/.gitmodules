@@ -1,0 +1,14 @@
+[submodule "extern/pybind11"]
+	path = extern/pybind11
+	url = ../../pybind/pybind11
+	branch = stable
+[submodule "thirdparty/pybind11"]
+	path = thirdparty/pybind11
+	url = ../../pybind/pybind11
+	branch = stable
+[submodule "thirdparty/eigen"]
+	path = thirdparty/eigen
+	url = https://github.com/headmyshoulder/odeint-v2.git
+[submodule "thirdparty/odeint"]
+	path = thirdparty/odeint
+	url = https://github.com/headmyshoulder/odeint-v2.git
