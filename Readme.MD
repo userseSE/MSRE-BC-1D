@@ -51,7 +51,7 @@ This project solves that problem using:
 ### Integrated Multiphysics System
 
 <p align="center">
-  <img src="docs/images/system_overview.png" width="75%">
+  <img src="docs/images/system_overview.png" width="65%">
 </p>
 
 
@@ -62,7 +62,7 @@ The MSRE core is coupled with two heat exchangers and a Brayton cycle energy con
 ### Solver & Data Flow
 
 <p align="center">
-  <img src="docs/images/cosim_flow.png" width="65%">
+  <img src="docs/images/cosim_flow.png" width="55%">
 </p>
 
 - CN discretization for diffusion terms  
@@ -81,7 +81,9 @@ The MSRE core is coupled with two heat exchangers and a Brayton cycle energy con
 - Unified 0.01 s hardware time step
 - Pipelined task-level parallelism
 
-![Parallelism](docs/images/parallelism.png)
+<p align="center">
+  <img src="docs/images/parallelism.png" width="85%">
+</p>
 
 ---
 
@@ -101,7 +103,7 @@ The FPGA implementation runs at 300 MHz on a Xilinx VCU118 platform.
 ### Hardware Setup
 
 <p align="center">
-  <img src="docs/images/hardware_setup.png" width="65%">
+  <img src="docs/images/hardware_setup.png" width="55%">
 </p>
 
 Hardware-in-the-loop configuration:
@@ -117,7 +119,7 @@ Hardware-in-the-loop configuration:
 ### Transient Stability (+50 pcm perturbation)
 
 <p align="center">
-  <img src="docs/images/transient_response.png" width="65%">
+  <img src="docs/images/transient_response.png" width="45%">
 </p>
 
 The system stabilizes rapidly under positive and negative reactivity insertions.
