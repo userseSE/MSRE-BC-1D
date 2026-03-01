@@ -50,7 +50,10 @@ This project solves that problem using:
 
 ### Integrated Multiphysics System
 
-![System Overview](docs/images/system_overview.png)
+<p align="center">
+  <img src="docs/images/system_overview.png" width="75%">
+</p>
+
 
 The MSRE core is coupled with two heat exchangers and a Brayton cycle energy conversion system.
 
@@ -58,7 +61,9 @@ The MSRE core is coupled with two heat exchangers and a Brayton cycle energy con
 
 ### Solver & Data Flow
 
-![Data Flow](docs/images/cosim_flow.png)
+<p align="center">
+  <img src="docs/images/cosim_flow.png" width="65%">
+</p>
 
 - CN discretization for diffusion terms  
 - Sparse tridiagonal operators  
@@ -96,7 +101,7 @@ The FPGA implementation runs at 300 MHz on a Xilinx VCU118 platform.
 ### Hardware Setup
 
 <p align="center">
-  <img src="docs/images/hardware_setup.png" width="75%">
+  <img src="docs/images/hardware_setup.png" width="65%">
 </p>
 
 Hardware-in-the-loop configuration:
@@ -111,7 +116,9 @@ Hardware-in-the-loop configuration:
 
 ### Transient Stability (+50 pcm perturbation)
 
-![Transient Response](docs/images/transient_response.png)
+<p align="center">
+  <img src="docs/images/transient_response.png" width="65%">
+</p>
 
 The system stabilizes rapidly under positive and negative reactivity insertions.
 
@@ -119,7 +126,9 @@ The system stabilizes rapidly under positive and negative reactivity insertions.
 
 ### Spatial Verification (Axial Profiles)
 
-![Steady State](docs/images/steady_state.png)
+<p align="center">
+  <img src="docs/images/steady_state.png" width="75%">
+</p>
 
 Validated against:
 - ORNL 3D MSRE model
